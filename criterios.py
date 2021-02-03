@@ -1,13 +1,25 @@
-#CRITERIOS
-
-#Importamos las librerías necesarias.
-import auxiliares
+from enum import Enum
 import datetime
+import auxiliares
+
+class Criterios(Enum):
+    criterio1 = "integration"
+    criterio2 = "system"
+    criterio3 = "e2e"
+    criterio4 = "itest"
+    criterio5 = "acceptance"
+    criterio6 = "distributed"
+    criterio7 = "end-to-end-test"
+    criterio8 = "docker"
+    criterio9 = "swagger"
+    criterio10 = "criterio10"
+    criterio11 = "criterio11"
 
 date = str(datetime.datetime.now())[0:19].replace(" ", "_")
 carpetalogs = "logs"
 
-def buscarEnRepo(listaRepositorios, criterio):
+# FUNCIONES DE BÚSQUEDA
+def buscarEnRepo(listaRepositorios, criterio, df):
     print("Buscando repositorios recursivamente: '" + criterio +"'")
     repos = []
     log = carpetalogs + "/log_buscarEnRepo_" + criterio + "_" + date + ".log"
@@ -25,6 +37,7 @@ def buscarEnRepo(listaRepositorios, criterio):
                 f.write("Adding " + content_file.path)
                 f.write("\n")
                 repos.append(repo)
+                auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
                 break
             else:
                 if content_file.type == "dir":
@@ -35,7 +48,7 @@ def buscarEnRepo(listaRepositorios, criterio):
     auxiliares.imprimirListaRepositorios(repos)
     return repos
 
-def buscarEnRaiz(listaRepositorios, criterio):
+def buscarEnRaiz(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio +"' en la raiz")
     repos = []
     log = carpetalogs + "/log_buscarEnRaiz_" + criterio + "_" + date + ".log"
@@ -52,6 +65,7 @@ def buscarEnRaiz(listaRepositorios, criterio):
                 f.write("Adding " + content_file.path)
                 f.write("\n")
                 repos.append(repo)
+                auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
                 break
 
     print("Total de repositorios filtrados según el criterio: %d" % len(repos))
@@ -59,7 +73,7 @@ def buscarEnRaiz(listaRepositorios, criterio):
     auxiliares.imprimirListaRepositorios(repos)
     return repos
 
-def buscarEnTests(listaRepositorios, criterio):
+def buscarEnTests(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio + "' en carpeta test/tests")
     repos = []
     log = carpetalogs + "/log_buscarEnTests_" + criterio + "_" + date + ".log"
@@ -88,6 +102,7 @@ def buscarEnTests(listaRepositorios, criterio):
                             f.write("Adding " + content_file.path)
                             f.write("\n")
                             repos.append(repo)
+                            auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
                             break
                 break
         f.write("\n")
@@ -97,7 +112,7 @@ def buscarEnTests(listaRepositorios, criterio):
     auxiliares.imprimirListaRepositorios(repos)
     return repos
 
-def buscarEnSrcTests(listaRepositorios, criterio):
+def buscarEnSrcTests(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio +"' en carpeta src/test")
     repos = []
     log = carpetalogs + "/log_buscarEnSrcTests_" + criterio + "_" + date + ".log"
@@ -134,6 +149,7 @@ def buscarEnSrcTests(listaRepositorios, criterio):
                                             f.write("Adding " + content_file.path)
                                             f.write("\n")
                                             repos.append(repo)
+                                            auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
                                             break
                                         else:
                                             contents.extend(repo.get_contents(content_file.path))
@@ -146,7 +162,7 @@ def buscarEnSrcTests(listaRepositorios, criterio):
     return repos
 
 # Criterio 9:
-def buscarC9(listaRepositorios):
+def buscarC9(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 9...")
     repos = []
     log = carpetalogs + "/log_buscarC9_" + date + ".log"
@@ -164,6 +180,7 @@ def buscarC9(listaRepositorios):
                 f.write("Adding " + content_file.path)
                 f.write("\n")
                 repos.append(repo)
+                auxiliares.actualizarDataFrame(Criterios.criterio9.value, repo.full_name, content_file.path, df)
                 break
             else:
                 if content_file.type == "dir":
@@ -174,7 +191,7 @@ def buscarC9(listaRepositorios):
     return repos
 
 # Criterio 10:
-def buscarC10(listaRepositorios):
+def buscarC10(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 10...")
     repos = []
     log = carpetalogs + "/log_buscarC10_" + date + ".log"
@@ -192,18 +209,24 @@ def buscarC10(listaRepositorios):
                 if content_file.type == "dir":
                     f.write("Accediendo a carpeta " + content_file.path)
                     f.write("\n")
-                    contents.extend(repo.get_contents(content_file.path))
-                    while contents:
-                        content_file = contents.pop(0)
+                    contents2 = repo.get_contents(content_file.path)
+                    while contents2:
+                        content_file = contents2.pop(0)
                         f.write(str(content_file))
                         f.write("\n")
-                        if "it" in content_file.path.lower() \
-                                or "e2e" in content_file.path.lower() \
-                                or "system" in content_file.path.lower() \
-                                or "itest" in content_file.path.lower():
+
+                        # Obtenemos el fichero en el que nos encontramos, no la ruta completa.
+                        fActual = auxiliares.obtenerFicheroIt(content_file.path.lower())
+
+                        if fActual.endswith("it") \
+                                or fActual.startswith("it") \
+                                or "e2e" in fActual \
+                                or "system" in fActual \
+                                or "itest" in fActual:
                             f.write("Adding " + content_file.path)
                             f.write("\n")
                             repos.append(repo)
+                            auxiliares.actualizarDataFrame(Criterios.criterio10.value, repo.full_name, content_file.path, df)
                             break
                 break
 
@@ -212,7 +235,7 @@ def buscarC10(listaRepositorios):
     return repos
 
 # Criterio 11:
-def buscarC11(listaRepositorios):
+def buscarC11(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 11...")
     repos = []
     log = carpetalogs + "/log_buscarC11_" + date + ".log"
@@ -226,22 +249,54 @@ def buscarC11(listaRepositorios):
             content_file = contents.pop(0)
             f.write(str(content_file))
             f.write("\n")
-            if "pom.xml" in content_file.path.lower():
-                isSelenium = 'selenium' in str(repo.get_contents("pom.xml").decoded_content)
-                isRestassured = 'restassured' in str(repo.get_contents("pom.xml").decoded_content)
-                if isSelenium or isRestassured:
-                    f.write("Adding " + content_file.path)
+
+            # Con esto se consigue que busque el fichero "pom.xml" y "build.xml" y no que contenga dichos literales.
+            # Por ejemplo: HolaQueTal_pom.xml no lo tendría en cuenta. ¿Debería tenerlos en cuenta?
+            # Obtenemos el fichero en el que nos encontramos, no la ruta completa.
+            fActual = auxiliares.obtenerFicheroIt(content_file.path.lower())
+
+            if "pom.xml" in fActual:
+                try:
+                    decoded = auxiliares.getFileContent(repo, content_file.path)
+                    isSelenium = 'selenium' in str(decoded)
+                    isRestassured = 'restassured' in str(decoded)
+                    if isSelenium or isRestassured:
+                        f.write("Adding " + content_file.path)
+                        f.write("\n")
+                        repos.append(repo)
+                        auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
+                        break
+                    else:
+                        f.write("Literales 'selenium' y 'restassured' no encontrados")
+                        f.write("\n")
+                        #Con el siguiente break el programa solamente comprobaría el primer 'pom.xml' que encuentre.
+                        #Quitándolo, si el primer 'pom.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'pom.xml' que cumpla la condición.
+                        break
+                except:
+                    f.write("Error obteniendo el contenido del pom.xml")
                     f.write("\n")
-                    repos.append(repo)
-                    break
-            elif "build.xml" in content_file.path.lower():
-                isSelenium = 'selenium' in str(repo.get_contents("build.xml").decoded_content)
-                isRestassured = 'restassured' in str(repo.get_contents("build.xml").decoded_content)
-                if isSelenium or isRestassured:
-                    f.write("Adding " + content_file.path)
+                    raise
+            elif "build.xml" in fActual:
+                try:
+                    decoded = auxiliares.getFileContent(repo, content_file.path)
+                    isSelenium = 'selenium' in str(decoded)
+                    isRestassured = 'restassured' in str(decoded)
+                    if isSelenium or isRestassured:
+                        f.write("Adding " + content_file.path)
+                        f.write("\n")
+                        repos.append(repo)
+                        auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
+                        break
+                    else:
+                        f.write("Literales 'selenium' y 'restassured' no encontrados")
+                        f.write("\n")
+                        # Con el siguiente break el programa solamente comprobaría el primer 'build.xml' que encuentre.
+                        # Quitándolo, si el primer 'build.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'build.xml' que cumpla la condición.
+                        break
+                except:
+                    f.write("Error obteniendo el contenido del build.xml")
                     f.write("\n")
-                    repos.append(repo)
-                    break
+                    raise
             else:
                 if content_file.type == "dir":
                     contents.extend(repo.get_contents(content_file.path))
