@@ -259,7 +259,7 @@ def buscarC11(listaRepositorios, df):
                 try:
                     decoded = auxiliares.getFileContent(repo, content_file.path)
                     isSelenium = 'selenium' in str(decoded)
-                    isRestassured = 'restassured' in str(decoded)
+                    isRestassured = 'rest-assured' in str(decoded)
                     if isSelenium or isRestassured:
                         f.write("Adding " + content_file.path)
                         f.write("\n")
@@ -267,7 +267,7 @@ def buscarC11(listaRepositorios, df):
                         auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
                         break
                     else:
-                        f.write("Literales 'selenium' y 'restassured' no encontrados")
+                        f.write("Literales 'selenium' y 'rest-assured' no encontrados")
                         f.write("\n")
                         #Con el siguiente break el programa solamente comprobaría el primer 'pom.xml' que encuentre.
                         #Quitándolo, si el primer 'pom.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'pom.xml' que cumpla la condición.
@@ -288,7 +288,7 @@ def buscarC11(listaRepositorios, df):
                         auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
                         break
                     else:
-                        f.write("Literales 'selenium' y 'restassured' no encontrados")
+                        f.write("Literales 'selenium' y 'rest-assured' no encontrados")
                         f.write("\n")
                         # Con el siguiente break el programa solamente comprobaría el primer 'build.xml' que encuentre.
                         # Quitándolo, si el primer 'build.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'build.xml' que cumpla la condición.

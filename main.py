@@ -11,12 +11,12 @@ from github import Github
 
 # Variables de configuración
 generarListaRepos = False
-randomizarListaRepos = False
-lapseExe = True
+randomizarListaRepos = True
+lapseExe = False
 doExcel = True
 doCsv = False
 clonarRepositorios = False
-N_RANDOM = 200
+N_RANDOM = 150
 N_LAPSE_REPOS = 20
 
 date = str(datetime.datetime.now())[0:19]
@@ -123,45 +123,45 @@ try:
 
     if len(listaAux) > 0:
         # Aplicamos criterios:
-        #repos1_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio1.value, df)
-        #repos1_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio1.value, df)
+        repos1_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio1.value, df)
+        repos1_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio1.value, df)
         #repos1_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio1.value, df)
 
-        #repos2_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio2.value, df)
-        #repos2_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio2.value, df)
+        repos2_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio2.value, df)
+        repos2_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio2.value, df)
         #repos2_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio2.value, df)
 
-        #repos3_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio3.value, df)
-        #repos3_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio3.value, df)
+        repos3_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio3.value, df)
+        repos3_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio3.value, df)
         #repos3_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio3.value, df)
 
-        #repos4_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio4.value, df)
-        #repos4_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio4.value, df)
+        repos4_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio4.value, df)
+        repos4_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio4.value, df)
         #repos4_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio4.value, df)
 
-        #repos5_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio5.value, df)
-        #repos5_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio5.value, df)
+        repos5_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio5.value, df)
+        repos5_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio5.value, df)
         #repos5_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio5.value, df)
 
-        #repos6_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio6.value, df)
-        #repos6_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio6.value, df)
+        repos6_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio6.value, df)
+        repos6_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio6.value, df)
         #repos6_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio6.value, df)
 
-        #repos7_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio7.value, df)
-        #repos7_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio7.value, df)
+        repos7_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio7.value, df)
+        repos7_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio7.value, df)
         #repos7_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio7.value, df)
 
-        #repos8_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio8.value, df)
-        #repos8_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio8.value, df)
+        repos8_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio8.value, df)
+        repos8_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio8.value, df)
         #repos8_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio8.value, df)
 
-        #repos9_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio9.value, df)
-        #repos9_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio9.value, df)
+        repos9_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio9.value, df)
+        repos9_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio9.value, df)
         #repos9_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio9.value, df)
 
-        #repos10 = criterios.buscarC10(listaAux, df)
+        repos10 = criterios.buscarC10(listaAux, df)
 
-        repos11 = criterios.buscarC11(listaAux, df)
+        #repos11 = criterios.buscarC11(listaAux, df)
     else:
         print("No se han obtenido repositorios del fichero " + fRepos)
 
@@ -171,29 +171,29 @@ try:
     # Generar un DataFrame auxiliar con los contadores de los repositorios encontrados por cada criterio
     columna = "n_encontrados"
 
-    #nC1 = len(repos1_1) #+ len(repos1_2)
-    #nC2 = len(repos2_1) + len(repos2_2)
-    #nC3 = len(repos3_1) + len(repos3_2)
-    #nC4 = len(repos4_1) + len(repos4_2)
-    #nC5 = len(repos5_1) + len(repos5_2)
-    #nC6 = len(repos6_1) + len(repos6_2)
-    #nC7 = len(repos7_1) + len(repos7_2)
-    #nC8 = len(repos8_1) + len(repos8_2)
-    #nC9 = len(repos9_1) + len(repos9_2)
-    #nC10 = len(repos10)
-    nC11 = len(repos11)
+    nC1 = len(repos1_1) + len(repos1_2)
+    nC2 = len(repos2_1) + len(repos2_2)
+    nC3 = len(repos3_1) + len(repos3_2)
+    nC4 = len(repos4_1) + len(repos4_2)
+    nC5 = len(repos5_1) + len(repos5_2)
+    nC6 = len(repos6_1) + len(repos6_2)
+    nC7 = len(repos7_1) + len(repos7_2)
+    nC8 = len(repos8_1) + len(repos8_2)
+    nC9 = len(repos9_1) + len(repos9_2)
+    nC10 = len(repos10)
+    #nC11 = len(repos11)
 
-    #df2.at[criterios.Criterios.criterio1.value, columna] += nC1
-    #df2.at[criterios.Criterios.criterio2.value, columna] += nC2
-    #df2.at[criterios.Criterios.criterio3.value, columna] += nC3
-    #df2.at[criterios.Criterios.criterio4.value, columna] += nC4
-    #df2.at[criterios.Criterios.criterio5.value, columna] += nC5
-    #df2.at[criterios.Criterios.criterio6.value, columna] += nC6
-    #df2.at[criterios.Criterios.criterio7.value, columna] += nC7
-    #df2.at[criterios.Criterios.criterio8.value, columna] += nC8
-    #df2.at[criterios.Criterios.criterio9.value, columna] += nC9
-    #df2.at[criterios.Criterios.criterio10.value, columna] += nC10
-    df2.at[criterios.Criterios.criterio11.value, columna] += nC11
+    df2.at[criterios.Criterios.criterio1.value, columna] += nC1
+    df2.at[criterios.Criterios.criterio2.value, columna] += nC2
+    df2.at[criterios.Criterios.criterio3.value, columna] += nC3
+    df2.at[criterios.Criterios.criterio4.value, columna] += nC4
+    df2.at[criterios.Criterios.criterio5.value, columna] += nC5
+    df2.at[criterios.Criterios.criterio6.value, columna] += nC6
+    df2.at[criterios.Criterios.criterio7.value, columna] += nC7
+    df2.at[criterios.Criterios.criterio8.value, columna] += nC8
+    df2.at[criterios.Criterios.criterio9.value, columna] += nC9
+    df2.at[criterios.Criterios.criterio10.value, columna] += nC10
+    #df2.at[criterios.Criterios.criterio11.value, columna] += nC11
 
     # Transformar DataFrame a Excel/CSV
     auxiliares.generarEXCEL_CSV(df2, "contadores", doExcel, doCsv)

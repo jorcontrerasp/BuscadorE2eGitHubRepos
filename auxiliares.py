@@ -35,8 +35,8 @@ def generarDataFrame(listaRepositorios):
                       index=[repo1.full_name],
                       columns=['criterio1', 'criterio2', 'criterio3', 'criterio4', 'criterio5', 'criterio6',
                                'criterio7', 'criterio8', 'criterio9', 'criterio10', 'criterio11'])
-    del listaRepositorios[0]
-    for repo in listaRepositorios:
+
+    for repo in listaRepositorios[1:len(listaRepositorios)-1]:
         df2 = pd.DataFrame([],
                            index=[repo.full_name],
                            columns=['criterio1', 'criterio2', 'criterio3', 'criterio4', 'criterio5', 'criterio6',
