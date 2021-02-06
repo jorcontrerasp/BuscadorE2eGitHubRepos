@@ -1,7 +1,8 @@
 #TFG (estudio CI/CD GitHub) - PRUEBAS
 import datetime
-import criterios
+import os
 import auxiliares
+import criterios
 from github import Github
 
 date = str(datetime.datetime.now())[0:19]
@@ -12,13 +13,18 @@ user = "userId"
 token = "userToken"
 g = Github(user, token)
 
+carpetaRepositorios = "repositories"
 nombreRepo = "kubernetes/ingress-nginx"
-filtered_repos = [g.get_repo(nombreRepo)]
-auxiliares.imprimirListaRepositorios(filtered_repos)
+repo = g.get_repo(nombreRepo)
+filtered_repos = [repo]
 
-# Aplicamos criterios:
+auxiliares.clonar1ListaRepo(filtered_repos)
+reposEnLocal = os.listdir(carpetaRepositorios)
+
 df = auxiliares.generarDataFrame(filtered_repos)
-repos = criterios.buscarEnTests(filtered_repos, criterios.Criterios.criterio3.value, df)
+repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio3.value, df)
+
+print(repos1)
 
 date = str(datetime.datetime.now())[0:19]
 print(date + " - Prueba finalizada")

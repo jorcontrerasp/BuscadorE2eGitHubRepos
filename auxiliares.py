@@ -33,14 +33,38 @@ def generarDataFrame(listaRepositorios):
     repo1 = listaRepositorios[0]
     df = pd.DataFrame([],
                       index=[repo1.full_name],
-                      columns=['criterio1', 'criterio2', 'criterio3', 'criterio4', 'criterio5', 'criterio6',
-                               'criterio7', 'criterio8', 'criterio9', 'criterio10', 'criterio11'])
+                      columns=["GitHub_URL",
+                               criterios.Criterios.criterio1.name,
+                               criterios.Criterios.criterio2.name,
+                               criterios.Criterios.criterio3.name,
+                               criterios.Criterios.criterio4.name,
+                               criterios.Criterios.criterio5.name,
+                               criterios.Criterios.criterio6.name,
+                               criterios.Criterios.criterio7.name,
+                               criterios.Criterios.criterio8.name,
+                               criterios.Criterios.criterio9.name,
+                               criterios.Criterios.criterio10.name,
+                               criterios.Criterios.criterio11.name,
+                               criterios.Criterios.criterio12.name])
+    df.at[repo1.full_name, "GitHub_URL"] = repo1.html_url
 
-    for repo in listaRepositorios[1:len(listaRepositorios)-1]:
+    for repo in listaRepositorios[1:len(listaRepositorios)]:
         df2 = pd.DataFrame([],
-                           index=[repo.full_name],
-                           columns=['criterio1', 'criterio2', 'criterio3', 'criterio4', 'criterio5', 'criterio6',
-                                    'criterio7', 'criterio8', 'criterio9', 'criterio10', 'criterio11'])
+                          index=[repo.full_name],
+                          columns=["GitHub URL",
+                                   criterios.Criterios.criterio1.name,
+                                   criterios.Criterios.criterio2.name,
+                                   criterios.Criterios.criterio3.name,
+                                   criterios.Criterios.criterio4.name,
+                                   criterios.Criterios.criterio5.name,
+                                   criterios.Criterios.criterio6.name,
+                                   criterios.Criterios.criterio7.name,
+                                   criterios.Criterios.criterio8.name,
+                                   criterios.Criterios.criterio9.name,
+                                   criterios.Criterios.criterio10.name,
+                                   criterios.Criterios.criterio11.name,
+                                   criterios.Criterios.criterio12.name])
+        df2.at[repo.full_name, "GitHub_URL"] = repo.html_url
         df = df.append(df2)
 
     return df
@@ -90,6 +114,10 @@ def actualizarDataFrame(criterio, nombreRepo, path, df):
         criterio11 = criterios.Criterios.criterio11.name.lower()
         actualizarDataFrameAux(criterio11, nombreRepo, path, df)
 
+    elif criterio == criterios.Criterios.criterio12.value:
+        criterio12 = criterios.Criterios.criterio12.name.lower()
+        actualizarDataFrameAux(criterio12, nombreRepo, path, df)
+
     else:
         print("Criterio no definido")
 
@@ -101,7 +129,7 @@ def actualizarDataFrameAux(criterio, nombreRepo, path, df):
         df.at[nombreRepo, criterio] += "[" + path + "] "
 
 def generarDataFrameContadores():
-    df = pd.DataFrame([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    df = pd.DataFrame([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       index=[criterios.Criterios.criterio1.value,
                              criterios.Criterios.criterio2.value,
                              criterios.Criterios.criterio3.value,
@@ -112,7 +140,8 @@ def generarDataFrameContadores():
                              criterios.Criterios.criterio8.value,
                              criterios.Criterios.criterio9.value,
                              criterios.Criterios.criterio10.value,
-                             criterios.Criterios.criterio11.value],
+                             criterios.Criterios.criterio11.value,
+                             criterios.Criterios.criterio12.value],
                       columns=['n_encontrados'])
     return df
 
@@ -175,7 +204,8 @@ def clonar1ListaRepo(repositorios):
 
     # Clonamos los repositorios
     for project in repositorios:
-        project_name = project.full_name.split("/")[1]
+        #project_name = project.full_name.split("/")[1]
+        project_name = project.full_name.replace("/", "*_*")
         project_folder = "%s/%s" % (folder_name, project_name)
 
         # CHECK IF PROJECT EXISTS
@@ -188,6 +218,7 @@ def clonar1ListaRepo(repositorios):
             print(comando)
             os.system(comando)
             print(" -> Project %s cloned!" % project_name)
+
 
 def clonarRepositorios(lRepositorios):
     # Generamos el directorio 'repositories'

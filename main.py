@@ -16,13 +16,15 @@ lapseExe = False
 doExcel = True
 doCsv = False
 clonarRepositorios = False
-N_RANDOM = 150
+N_RANDOM = 30
 N_LAPSE_REPOS = 20
+BUSCAR_EN_LOCAL = True
 
 date = str(datetime.datetime.now())[0:19]
 print(date + " - Iniciando proceso")
 
 fRepos = 'repos.pickle'
+carpetaRepositorios = "repositories"
 
 df = pd.DataFrame
 df2 = pd.DataFrame
@@ -100,14 +102,6 @@ try:
     else:
         listaAux = filtered_repos
 
-        # Generamos nuevos DataFrames mediante la librería "pandas".
-        df = auxiliares.generarDataFrame(listaAux)
-        df2 = auxiliares.generarDataFrameContadores()
-
-        # [PARA PRUEBAS] Generar DataFrames a partir de excels generados con anterioridad.
-        #df = pd.read_excel("research.xlsx", index_col=0)
-        #df2 = pd.read_excel("contadores.xlsx", index_col=0)
-
         if randomizarListaRepos:
             # Seleccionamos k repositorios de manera aleatoria:
             listaAux = random.choices(listaAux, k=N_RANDOM)
@@ -121,47 +115,38 @@ try:
             # Imprimimos la lista de repositorios
             auxiliares.imprimirListaRepositorios(listaAux)
 
+        # Generamos nuevos DataFrames mediante la librería "pandas".
+        df = auxiliares.generarDataFrame(listaAux)
+        df2 = auxiliares.generarDataFrameContadores()
+
+    print(listaAux)
     if len(listaAux) > 0:
-        # Aplicamos criterios:
-        repos1_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio1.value, df)
-        repos1_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio1.value, df)
-        #repos1_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio1.value, df)
+        if BUSCAR_EN_LOCAL:
+            # Clonamos en local los repositorios obtenidos:
+            auxiliares.clonar1ListaRepo(listaAux)
 
-        repos2_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio2.value, df)
-        repos2_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio2.value, df)
-        #repos2_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio2.value, df)
+            # Listamos los repositorios clonados
+            reposEnLocal = os.listdir(carpetaRepositorios)
+            print(reposEnLocal)
 
-        repos3_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio3.value, df)
-        repos3_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio3.value, df)
-        #repos3_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio3.value, df)
-
-        repos4_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio4.value, df)
-        repos4_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio4.value, df)
-        #repos4_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio4.value, df)
-
-        repos5_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio5.value, df)
-        repos5_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio5.value, df)
-        #repos5_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio5.value, df)
-
-        repos6_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio6.value, df)
-        repos6_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio6.value, df)
-        #repos6_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio6.value, df)
-
-        repos7_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio7.value, df)
-        repos7_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio7.value, df)
-        #repos7_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio7.value, df)
-
-        repos8_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio8.value, df)
-        repos8_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio8.value, df)
-        #repos8_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio8.value, df)
-
-        repos9_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio9.value, df)
-        repos9_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio9.value, df)
-        #repos9_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio9.value, df)
-
-        repos10 = criterios.buscarC10(listaAux, df)
-
-        #repos11 = criterios.buscarC11(listaAux, df)
+            # Aplicamos criterios
+            repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio1.value, df)
+            repos2 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio2.value, df)
+            repos3 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio3.value, df)
+            repos4 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio4.value, df)
+            repos5 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio5.value, df)
+            repos6 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio6.value, df)
+            repos7 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio7.value, df)
+            repos8 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio8.value, df)
+            repos9 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio9.value, df)
+            repos10 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio10.value, df)
+            repos11 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio11.value, df)
+            repos12 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio12.value, df)
+        else:
+            # Aplicamos criterios:
+            repos1_1 = criterios.buscarEnRaiz(listaAux, criterios.Criterios.criterio1.value, df)
+            repos1_2 = criterios.buscarEnTests(listaAux, criterios.Criterios.criterio1.value, df)
+            repos1_3 = criterios.buscarEnSrcTests(listaAux, criterios.Criterios.criterio1.value, df)
     else:
         print("No se han obtenido repositorios del fichero " + fRepos)
 
@@ -171,18 +156,37 @@ try:
     # Generar un DataFrame auxiliar con los contadores de los repositorios encontrados por cada criterio
     columna = "n_encontrados"
 
-    nC1 = len(repos1_1) + len(repos1_2)
-    nC2 = len(repos2_1) + len(repos2_2)
-    nC3 = len(repos3_1) + len(repos3_2)
-    nC4 = len(repos4_1) + len(repos4_2)
-    nC5 = len(repos5_1) + len(repos5_2)
-    nC6 = len(repos6_1) + len(repos6_2)
-    nC7 = len(repos7_1) + len(repos7_2)
-    nC8 = len(repos8_1) + len(repos8_2)
-    nC9 = len(repos9_1) + len(repos9_2)
-    nC10 = len(repos10)
-    #nC11 = len(repos11)
+    # Inicializamos contadores
+    nC1 = 0
+    nC2 = 0
+    nC3 = 0
+    nC4 = 0
+    nC5 = 0
+    nC6 = 0
+    nC7 = 0
+    nC8 = 0
+    nC9 = 0
+    nC10 = 0
+    nC11 = 0
+    nC12 = 0
 
+    if BUSCAR_EN_LOCAL:
+        nC1 = len(repos1)
+        nC2 = len(repos2)
+        nC3 = len(repos3)
+        nC4 = len(repos4)
+        nC5 = len(repos5)
+        nC6 = len(repos6)
+        nC7 = len(repos7)
+        nC8 = len(repos8)
+        nC9 = len(repos9)
+        nC10 = len(repos10)
+        nC11 = len(repos11)
+        nC12 = len(repos12)
+    else:
+        nC1 = len(repos1_1) + len(repos1_2) + len(repos1_3)
+
+    # Actualizamos DataFrame de contadores
     df2.at[criterios.Criterios.criterio1.value, columna] += nC1
     df2.at[criterios.Criterios.criterio2.value, columna] += nC2
     df2.at[criterios.Criterios.criterio3.value, columna] += nC3
@@ -193,7 +197,8 @@ try:
     df2.at[criterios.Criterios.criterio8.value, columna] += nC8
     df2.at[criterios.Criterios.criterio9.value, columna] += nC9
     df2.at[criterios.Criterios.criterio10.value, columna] += nC10
-    #df2.at[criterios.Criterios.criterio11.value, columna] += nC11
+    df2.at[criterios.Criterios.criterio11.value, columna] += nC11
+    df2.at[criterios.Criterios.criterio12.value, columna] += nC12
 
     # Transformar DataFrame a Excel/CSV
     auxiliares.generarEXCEL_CSV(df2, "contadores", doExcel, doCsv)

@@ -1,6 +1,7 @@
 from enum import Enum
 import datetime
 import auxiliares
+import os
 
 class Criterios(Enum):
     criterio1 = "integration"
@@ -14,11 +15,163 @@ class Criterios(Enum):
     criterio9 = "swagger"
     criterio10 = "criterio10"
     criterio11 = "criterio11"
+    criterio12 = "ci-files"
 
 date = str(datetime.datetime.now())[0:19].replace(" ", "_")
 carpetalogs = "logs"
+carpetaRepositorios = "repositories"
 
-# FUNCIONES DE BÚSQUEDA
+# FUNCIONES DE BÚSQUEDA LOCAL
+def obtenerRutaCompletaE(origen, lFicheros):
+    content = []
+    for c in lFicheros:
+        content.append(origen + "/" + c)
+
+    return content
+
+def recorrerRepositoriosLocal(listaRepositorios, criterio, df):
+    listaEncontrados = []
+    for repo in listaRepositorios:
+        content = obtenerRutaCompletaE("./" + carpetaRepositorios, [repo])
+        if criterio == Criterios.criterio10.value:
+            log = carpetalogs + "/log_buscarC10Local_" + date + ".log"
+            f = open(log, "w")
+            f.write("--> Analizando repositorio: " + repo)
+            f.write("\n")
+            rutaObtenida = buscarC10_Local(content, f)
+        elif criterio == Criterios.criterio11.value:
+            log = carpetalogs + "/log_buscarC11Local_" + date + ".log"
+            f = open(log, "w")
+            f.write("--> Analizando repositorio: " + repo)
+            f.write("\n")
+            rutaObtenida = buscarC11_Local(content, f)
+        elif criterio == Criterios.criterio12.value:
+            log = carpetalogs + "/log_buscarC12Local_" + date + ".log"
+            f = open(log, "w")
+            f.write("--> Analizando repositorio: " + repo)
+            f.write("\n")
+            rutaObtenida = buscarFicherosCI_Local(content, f)
+        else:
+            log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + date + ".log"
+            f = open(log, "w")
+            f.write("--> Analizando repositorio: " + repo)
+            f.write("\n")
+            rutaObtenida = buscarEnRepoLocal(content, criterio, f)
+
+        if len(rutaObtenida)>0:
+            repo = repo.replace("*_*", "/")
+            auxiliares.actualizarDataFrame(criterio, repo, rutaObtenida, df)
+            listaEncontrados.append(repo)
+
+    f.close()
+    return listaEncontrados
+
+def buscarEnRepoLocal(lFicheros, criterio, f):
+    rutaObtenida = ""
+    while len(lFicheros)>0:
+        e = lFicheros.pop(0)
+        f.write(e)
+        f.write("\n")
+        if os.path.isdir(e):
+            #print(e + "[CARPETA]")
+            if criterio in e.lower():
+                rutaObtenida = e
+                f.write("Adding " + e)
+                f.write("\n")
+                break
+            else:
+                contentAux = os.listdir(e)
+                content = obtenerRutaCompletaE(e, contentAux)
+                for c in content:
+                    lFicheros.insert(0, c)
+        elif os.path.isfile(e):
+            #print(e + "[FICHERO]")
+            if criterio in e.lower():
+                rutaObtenida = e
+                f.write("Adding " + e)
+                f.write("\n")
+                break
+    return rutaObtenida
+
+def buscarC10_Local(lFicheros, f):
+    rutaObtenida = ""
+    while len(lFicheros)>0:
+        e = lFicheros.pop(0)
+        f.write(e)
+        f.write("\n")
+        fActual = auxiliares.obtenerFicheroIt(e.lower())
+        if os.path.isdir(e):
+            #print(e + "[CARPETA]")
+            contentAux = os.listdir(e)
+            content = obtenerRutaCompletaE(e, contentAux)
+            for c in content:
+                lFicheros.insert(0, c)
+        elif os.path.isfile(e):
+            #print(e + "[FICHERO]")
+            if fActual.endswith("it") \
+                    or fActual.startswith("it") \
+                    or "e2e" in fActual \
+                    or "system" in fActual \
+                    or "itest" in fActual:
+                rutaObtenida = e
+                f.write("Adding " + e)
+                f.write("\n")
+                break
+    return rutaObtenida
+
+def buscarC11_Local(lFicheros, f):
+    rutaObtenida = ""
+    while len(lFicheros)>0:
+        e = lFicheros.pop(0)
+        f.write(e)
+        f.write("\n")
+        fActual = auxiliares.obtenerFicheroIt(e.lower())
+        if os.path.isdir(e):
+            #print(e + "[CARPETA]")
+            contentAux = os.listdir(e)
+            content = obtenerRutaCompletaE(e, contentAux)
+            for c in content:
+                lFicheros.insert(0, c)
+        elif os.path.isfile(e):
+            #print(e + "[FICHERO]")
+            if "pom.xml" in fActual or "build.xml" in fActual:
+                fXml = open(e)
+                xmlContent = fXml.read()
+                fXml.close()
+                if "selenium" in xmlContent or "rest-assured" in xmlContent:
+                    rutaObtenida = e
+                    f.write("Adding " + e)
+                    f.write("\n")
+                    break
+    return rutaObtenida
+
+def buscarFicherosCI_Local(lFicheros, f):
+    rutaObtenida = ""
+    while len(lFicheros)>0:
+        e = lFicheros.pop(0)
+        f.write(e)
+        f.write("\n")
+        if os.path.isdir(e):
+            #print(e + "[CARPETA]")
+            contentAux = os.listdir(e)
+            content = obtenerRutaCompletaE(e, contentAux)
+            for c in content:
+                lFicheros.insert(0, c)
+        elif os.path.isfile(e):
+            #print(e + "[FICHERO]")
+            if "Jenkinsfile" in e \
+                    or ".travis-ci.yml" in e \
+                    or ".circle-ci.yml" in e \
+                    or ".github/workflows/pipeline.yml" in e \
+                    or ".azure-pipelines/pipelines.yml" in e \
+                    or ".gitlab-ci.yml" in e:
+                rutaObtenida = e
+                f.write("Adding " + e)
+                f.write("\n")
+                break
+    return rutaObtenida
+
+# FUNCIONES DE BÚSQUEDA (API de GitHub)
 def buscarEnRepo(listaRepositorios, criterio, df):
     print("Buscando repositorios recursivamente: '" + criterio +"'")
     repos = []
@@ -187,6 +340,7 @@ def buscarC9(listaRepositorios, df):
                     contents.extend(repo.get_contents(content_file.path))
 
     print("Total repositories (criterio 9): %d" % len(repos))
+    f.close()
     auxiliares.imprimirListaRepositorios(repos)
     return repos
 
@@ -231,6 +385,7 @@ def buscarC10(listaRepositorios, df):
                 break
 
     print("Total repositories (criterio 10): %d" % len(repos))
+    f.close()
     auxiliares.imprimirListaRepositorios(repos)
     return repos
 
@@ -302,5 +457,6 @@ def buscarC11(listaRepositorios, df):
                     contents.extend(repo.get_contents(content_file.path))
 
     print("Total repositories (criterio 11): %d" % len(repos))
+    f.close()
     auxiliares.imprimirListaRepositorios(repos)
     return repos
