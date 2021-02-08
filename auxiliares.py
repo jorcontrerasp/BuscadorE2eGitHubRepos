@@ -7,10 +7,12 @@ import datetime
 import pickle
 from github import GithubException
 import criterios
+import configuracion
 import openpyxl
 import pandas as pd
+import shutil, logging
+from shutil import rmtree
 
-date = str(datetime.datetime.now())[0:19].replace(" ", "_")
 carpetalogs = "logs"
 
 def imprimirListaRepositorios(repositorios):
@@ -51,7 +53,7 @@ def generarDataFrame(listaRepositorios):
     for repo in listaRepositorios[1:len(listaRepositorios)]:
         df2 = pd.DataFrame([],
                           index=[repo.full_name],
-                          columns=["GitHub URL",
+                          columns=["GitHub_URL",
                                    criterios.Criterios.criterio1.name,
                                    criterios.Criterios.criterio2.name,
                                    criterios.Criterios.criterio3.name,
@@ -121,6 +123,35 @@ def actualizarDataFrame(criterio, nombreRepo, path, df):
     else:
         print("Criterio no definido")
 
+def contarRepositoriosAlMenos1Criterio(df):
+    cont = 0
+    for index, row in df.iterrows():
+        if ("nan" != str(row[criterios.Criterios.criterio1.name]) and len(str(row[criterios.Criterios.criterio1.name])) > 1):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio2.name]) and len(str(row[criterios.Criterios.criterio2.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio3.name]) and len(str(row[criterios.Criterios.criterio3.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio4.name]) and len(str(row[criterios.Criterios.criterio4.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio5.name]) and len(str(row[criterios.Criterios.criterio5.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio6.name]) and len(str(row[criterios.Criterios.criterio6.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio7.name]) and len(str(row[criterios.Criterios.criterio7.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio8.name]) and len(str(row[criterios.Criterios.criterio8.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio9.name]) and len(str(row[criterios.Criterios.criterio9.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio10.name]) and len(str(row[criterios.Criterios.criterio10.name])) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio11.name]) and len(row[criterios.Criterios.criterio11.name]) > 0):
+            cont += 1
+        elif ("nan" != str(row[criterios.Criterios.criterio12.name]) and len(row[criterios.Criterios.criterio12.name]) > 0):
+            cont += 1
+    return cont
+
 def actualizarDataFrameAux(criterio, nombreRepo, path, df):
     valor = str(df.at[nombreRepo, criterio])
     if valor == "nan":
@@ -129,7 +160,7 @@ def actualizarDataFrameAux(criterio, nombreRepo, path, df):
         df.at[nombreRepo, criterio] += "[" + path + "] "
 
 def generarDataFrameContadores():
-    df = pd.DataFrame([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    df = pd.DataFrame([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       index=[criterios.Criterios.criterio1.value,
                              criterios.Criterios.criterio2.value,
                              criterios.Criterios.criterio3.value,
@@ -141,7 +172,8 @@ def generarDataFrameContadores():
                              criterios.Criterios.criterio9.value,
                              criterios.Criterios.criterio10.value,
                              criterios.Criterios.criterio11.value,
-                             criterios.Criterios.criterio12.value],
+                             criterios.Criterios.criterio12.value,
+                             "Totales"],
                       columns=['n_encontrados'])
     return df
 
@@ -155,7 +187,7 @@ def generarEXCEL_CSV(df, nombreFichero, generarExcel, generarCsv):
 def generarPickle(nombreFichero, listaRepositorios):
     with open(nombreFichero, 'wb') as f:
         pickle.dump(listaRepositorios, f)
-    print("Fichero " + nombreFichero + ".pickle generado")
+    print("Fichero " + nombreFichero + " generado")
 
 def cargarRepositorios(fichero):
     with open(fichero, 'rb') as f:
@@ -195,18 +227,17 @@ def obtenerFicheroIt(path):
 
 def clonar1ListaRepo(repositorios):
     # Generamos el directorio 'repositories'
-    folder_name = 'repositories'
-    if not os.path.exists(folder_name):
-        print("Folder %s created!" % folder_name)
-        os.mkdir("repositories")
+    if not os.path.exists(configuracion.Configuracion.carpetaRepositorios):
+        print("Folder %s created!" % configuracion.Configuracion.carpetaRepositorios)
+        os.mkdir(configuracion.Configuracion.carpetaRepositorios)
     else:
-        print("Folder %s already exist" % folder_name)
+        print("Folder %s already exist" % configuracion.Configuracion.carpetaRepositorios)
 
     # Clonamos los repositorios
     for project in repositorios:
         #project_name = project.full_name.split("/")[1]
         project_name = project.full_name.replace("/", "*_*")
-        project_folder = "%s/%s" % (folder_name, project_name)
+        project_folder = "%s/%s" % (configuracion.Configuracion.carpetaRepositorios, project_name)
 
         # CHECK IF PROJECT EXISTS
         if os.path.exists(project_folder):
@@ -222,18 +253,17 @@ def clonar1ListaRepo(repositorios):
 
 def clonarRepositorios(lRepositorios):
     # Generamos el directorio 'repositories'
-    folder_name = 'repositories'
-    if not os.path.exists(folder_name):
-        print("Folder %s created!" % folder_name)
-        os.mkdir("repositories")
+    if not os.path.exists(configuracion.Configuracion.carpetaRepositorios):
+        print("Folder %s created!" % configuracion.Configuracion.carpetaRepositorios)
+        os.mkdir(configuracion.Configuracion.carpetaRepositorios)
     else:
-        print("Folder %s already exist" % folder_name)
+        print("Folder %s already exist" % configuracion.Configuracion.carpetaRepositorios)
 
     # Clonamos los repositorios
     for repositorio in lRepositorios:
         for project in repositorio:
             project_name = project.full_name.split("/")[1]
-            project_folder = "%s/%s" % (folder_name, project_name)
+            project_folder = "%s/%s" % (configuracion.Configuracion.carpetaRepositorios, project_name)
 
             # CHECK IF PROJECT EXISTS
             if os.path.exists(project_folder):
@@ -245,3 +275,16 @@ def clonarRepositorios(lRepositorios):
                 print(comando)
                 os.system(comando)
                 print(" -> Project %s cloned!" % project_name)
+
+def generarZipRepos():
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s : %(levelname)s : %(message)s',
+                        filename='logs/repositories_' + configuracion.Configuracion.fechaEjecucion + '.log',
+                        filemode='w', )
+
+    archivo_zip = shutil.make_archive("repos_snapshots/repositories_" + configuracion.Configuracion.fechaEjecucion,
+                                      "zip",
+                                      base_dir=configuracion.Configuracion.carpetaRepositorios,
+                                      logger=logging)
+
+    rmtree("./" + configuracion.Configuracion.carpetaRepositorios)
