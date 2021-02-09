@@ -5,9 +5,9 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 
 ### Pre-requisitos 📋
 
-pip install PyGithub 
-pip install pandas 
-pip install openpyxl
+<p>pip install PyGithub</p>
+<p>pip install pandas</p>
+<p>pip install openpyxl</p>
 
 ### Variables de configuración 🔧
 
