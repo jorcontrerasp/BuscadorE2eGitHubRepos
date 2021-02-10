@@ -28,4 +28,4 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 
 ## Licencia 📄
 
-Este proyecto está bajo la Licencia (Apache-2.0 License) - mira el archivo [LICENSE.md](https://github.com/jorcontrerasp/BuscadorGitHubRepos/blob/main/LICENSE) para detalles
+Este proyecto está bajo la Licencia (Apache-2.0 License) - mira el archivo [LICENSE](https://github.com/jorcontrerasp/BuscadorGitHubRepos/blob/main/LICENSE) para detalles
