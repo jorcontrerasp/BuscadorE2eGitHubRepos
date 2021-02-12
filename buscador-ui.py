@@ -1,7 +1,6 @@
 import tkinter as tk
 import main
 import configuracion
-
 from pandas.core.resample import method
 
 app = tk.Tk()
