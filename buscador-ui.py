@@ -7,6 +7,8 @@ app = tk.Tk()
 app.title("BuscadorGitHubRepos")
 app.geometry('380x205')
 
+RANDOM_REPOS_INI = 30
+
 nRandomRepos_state = tk.IntVar()
 nLapseRepos_state = tk.IntVar()
 buscarEnLocalCheck_state = tk.BooleanVar()
@@ -30,9 +32,13 @@ def exe():
     configuracion.Configuracion.N_LAPSE_REPOS = 0
     main.exe()
 
-def buscarEnLocalCheck_clicked():
-    if buscarEnLocalCheck_state.get():
-        print("Buscar en local 'activado'")
+def randomizarReposCheck_clicked():
+    if randomizarReposCheck_state.get():
+        nRandomRepos_state.set(RANDOM_REPOS_INI)
+        nRandomRepos.config(state=tk.NORMAL)
+    else:
+        nRandomRepos_state.set(0)
+        nRandomRepos.config(state=tk.DISABLED)
 
 row = 0
 
@@ -46,7 +52,7 @@ buscarEnLocalReposLbl = tk.Label(app, text="Buscar repos en LOCAL")
 buscarEnLocalReposLbl.grid(column=0, row=row)
 #buscarEnLocalReposLbl.pack()
 buscarEnLocalCheck_state.set(True)
-buscarEnLocalCheck = tk.Checkbutton(app, var=buscarEnLocalCheck_state, command=buscarEnLocalCheck_clicked)
+buscarEnLocalCheck = tk.Checkbutton(app, var=buscarEnLocalCheck_state)
 buscarEnLocalCheck.grid(column=1, row=row)
 #buscarEnLocalCheck.pack()
 row+=1
@@ -69,6 +75,7 @@ scriptLapseExeCheck_state.set(True)
 scriptLapseExeCheck = tk.Checkbutton(app, var=scriptLapseExeCheck_state)
 #scriptLapseExeCheck.grid(column=1, row=row)
 #scriptLapseExeCheck.pack()
+#row+=1
 
 # Nº LAPSE REPOS
 #nLapseReposLbl = tk.Label(app, text="Nº lapse repos: ")
@@ -78,7 +85,6 @@ nLapseRepos_state.set(20)
 nLapseRepos = tk.Entry(app,width=5, textvariable=nLapseRepos_state)
 #nLapseRepos.grid(column=2, row=row)
 #nLapseRepos.pack()
-
 row+=1
 
 # RANDOMIZAR REPOSITORIOS
@@ -86,7 +92,7 @@ randomizarReposLbl = tk.Label(app, text="Randomizar repositorios")
 randomizarReposLbl.grid(column=0, row=row)
 #randomizarReposLbl.pack()
 randomizarReposCheck_state.set(True)
-randomizarReposCheck = tk.Checkbutton(app, var=randomizarReposCheck_state)
+randomizarReposCheck = tk.Checkbutton(app, var=randomizarReposCheck_state, command=randomizarReposCheck_clicked)
 randomizarReposCheck.grid(column=1, row=row)
 #randomizarReposCheck.pack()
 
@@ -94,11 +100,10 @@ randomizarReposCheck.grid(column=1, row=row)
 #nRandomReposLbl = tk.Label(app, text="Nº repos random: ")
 #nRandomReposLbl.grid(column=0, row=row)
 #nRandomReposLbl.pack()
-nRandomRepos_state.set(30)
+nRandomRepos_state.set(RANDOM_REPOS_INI)
 nRandomRepos = tk.Entry(app,width=5, textvariable=nRandomRepos_state)
 nRandomRepos.grid(column=2, row=row)
 #nRandomRepos.pack()
-
 row+=1
 
 # CLONAR REPOSITORIOS
@@ -138,5 +143,6 @@ exeButton.grid(column=1, row=row)
 row+=1
 
 #buscarEnLocalCheck_clicked()
+randomizarReposCheck_clicked()
 
 app.mainloop()

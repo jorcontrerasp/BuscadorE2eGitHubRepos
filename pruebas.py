@@ -18,12 +18,13 @@ repo = g.get_repo(nombreRepo)
 filtered_repos = [repo]
 
 auxiliares.clonar1ListaRepo(filtered_repos)
-reposEnLocal = os.listdir(configuracion.Configuracion.carpetaRepositorios)
 
-df = auxiliares.generarDataFrame(filtered_repos)
-repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio3.value, df)
+#reposEnLocal = os.listdir(configuracion.Configuracion.carpetaRepositorios)
 
-print(repos1)
+#df = auxiliares.generarDataFrame(filtered_repos)
+#repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio3.value, df)
+
+#print(repos1)
 
 date = str(datetime.datetime.now())[0:19]
 print(date + " - Prueba finalizada")

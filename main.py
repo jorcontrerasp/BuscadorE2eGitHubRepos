@@ -113,6 +113,9 @@ def exe():
                 # Clonamos en local los repositorios obtenidos:
                 auxiliares.clonar1ListaRepo(listaAux)
 
+                # Rellenamos la columna CommitID del DataFrame con los repositorios ya clonados
+                auxiliares.actualizarDataFrameCommitID(listaAux, df)
+
                 # Listamos los repositorios clonados
                 reposEnLocal = os.listdir(configuracion.Configuracion.carpetaRepositorios)
 

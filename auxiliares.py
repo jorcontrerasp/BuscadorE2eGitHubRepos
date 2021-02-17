@@ -12,6 +12,7 @@ import openpyxl
 import pandas as pd
 import shutil, logging
 from shutil import rmtree
+import subprocess
 
 carpetalogs = "logs"
 
@@ -35,7 +36,7 @@ def generarDataFrame(listaRepositorios):
     repo1 = listaRepositorios[0]
     df = pd.DataFrame([],
                       index=[repo1.full_name],
-                      columns=["GitHub_URL",
+                      columns=["GitHub_URL", "CommitID",
                                criterios.Criterios.criterio1.name,
                                criterios.Criterios.criterio2.name,
                                criterios.Criterios.criterio3.name,
@@ -53,7 +54,7 @@ def generarDataFrame(listaRepositorios):
     for repo in listaRepositorios[1:len(listaRepositorios)]:
         df2 = pd.DataFrame([],
                           index=[repo.full_name],
-                          columns=["GitHub_URL",
+                          columns=["GitHub_URL", "CommitID",
                                    criterios.Criterios.criterio1.name,
                                    criterios.Criterios.criterio2.name,
                                    criterios.Criterios.criterio3.name,
@@ -123,6 +124,10 @@ def actualizarDataFrame(criterio, nombreRepo, path, df):
     else:
         print("Criterio no definido")
 
+def actualizarDataFrameCommitID(listaRepos, df):
+    for repo in listaRepos:
+        df.at[repo.full_name, "CommitID"] = obtenerRepoCommitID(repo.full_name.replace("/", "*_*"))
+
 def contarRepositoriosAlMenos1Criterio(df):
     cont = 0
     for index, row in df.iterrows():
@@ -176,6 +181,13 @@ def generarDataFrameContadores():
                              "Totales"],
                       columns=['n_encontrados'])
     return df
+
+def obtenerRepoCommitID(repo):
+    proyectPath = os.getcwd()
+    os.chdir(proyectPath + "/" + configuracion.Configuracion.carpetaRepositorios + "/" + repo)
+    commitID = subprocess.check_output("git log --pretty=format:'%h' -n 1", shell=True)
+    os.chdir(proyectPath)
+    return commitID.decode()
 
 def generarEXCEL_CSV(df, nombreFichero, generarExcel, generarCsv):
     if generarExcel:

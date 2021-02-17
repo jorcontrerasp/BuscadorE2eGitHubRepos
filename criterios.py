@@ -108,10 +108,9 @@ def buscarC10_Local(lFicheros, f):
         elif os.path.isfile(e):
             #print(e + "[FICHERO]")
             if fActual.endswith("it") \
-                    or fActual.startswith("it") \
                     or "e2e" in fActual \
                     or "system" in fActual \
-                    or "itest" in fActual:
+                    or "integrationtest" in fActual:
                 rutaObtenida = e
                 f.write("Adding " + e)
                 f.write("\n")
