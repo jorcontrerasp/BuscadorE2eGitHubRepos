@@ -31,42 +31,34 @@ def obtenerRutaCompletaE(origen, lFicheros):
 def recorrerRepositoriosLocal(listaRepositorios, criterio, df):
     listaEncontrados = []
     for repo in listaRepositorios:
-        content = obtenerRutaCompletaE("./" + configuracion.Configuracion.carpetaRepositorios, [repo])
-        if criterio == Criterios.criterio10.value:
-            log = carpetalogs + "/log_buscarC10Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
-            f = open(log, "w")
-            f.write("--> Analizando repositorio: " + repo)
-            f.write("\n")
-            rutaObtenida = buscarC10_Local(content, f)
-        elif criterio == Criterios.criterio11.value:
-            log = carpetalogs + "/log_buscarC11Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
-            f = open(log, "w")
-            f.write("--> Analizando repositorio: " + repo)
-            f.write("\n")
-            rutaObtenida = buscarC11_Local(content, f)
-        elif criterio == Criterios.criterio12.value:
-            log = carpetalogs + "/log_buscarC12Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
-            f = open(log, "w")
-            f.write("--> Analizando repositorio: " + repo)
-            f.write("\n")
-            rutaObtenida = buscarFicherosCI_Local(content, f)
-        else:
-            log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
-            f = open(log, "w")
-            f.write("--> Analizando repositorio: " + repo)
-            f.write("\n")
-            rutaObtenida = buscarEnRepoLocal(content, criterio, f)
 
-        if len(rutaObtenida)>0:
-            repo = repo.replace("*_*", "/")
-            auxiliares.actualizarDataFrame(criterio, repo, rutaObtenida, df)
+        content = obtenerRutaCompletaE("./" + configuracion.Configuracion.carpetaRepositorios, [repo])
+
+        if criterio == Criterios.criterio10.value:
+            encontrado = buscarC10_Local(repo, content, df)
+
+        elif criterio == Criterios.criterio11.value:
+            encontrado = buscarC11_Local(repo, content, df)
+
+        elif criterio == Criterios.criterio12.value:
+            encontrado = buscarFicherosCI_Local(repo, content, df)
+
+        else:
+            encontrado = buscarTodaCarpetaEnRepoLocal2(repo, content, criterio, df)
+
+        # Si lo ha encontrado lo añadimos a la listaEncontrados.
+        if encontrado:
             listaEncontrados.append(repo)
 
-    f.close()
     return listaEncontrados
 
-def buscarEnRepoLocal(lFicheros, criterio, f):
-    rutaObtenida = ""
+# El primer fichero o carpeta que cumpla el criterio será el que devuelva
+def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
+    log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    f = open(log, "w")
+    f.write("--> Analizando repositorio: " + repo)
+    f.write("\n")
+    encontrado = True
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -74,9 +66,11 @@ def buscarEnRepoLocal(lFicheros, criterio, f):
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
             if criterio in e.lower():
-                rutaObtenida = e
                 f.write("Adding " + e)
                 f.write("\n")
+                repo = repo.replace("*_*", "/")
+                auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                encontrado = True
                 break
             else:
                 contentAux = os.listdir(e)
@@ -86,14 +80,76 @@ def buscarEnRepoLocal(lFicheros, criterio, f):
         elif os.path.isfile(e):
             #print(e + "[FICHERO]")
             if criterio in e.lower():
-                rutaObtenida = e
                 f.write("Adding " + e)
                 f.write("\n")
+                repo = repo.replace("*_*", "/")
+                auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                encontrado = True
                 break
-    return rutaObtenida
+    return encontrado
 
-def buscarC10_Local(lFicheros, f):
-    rutaObtenida = ""
+# Busca todas las carpetas que coinciden (no que contengan) con el criterio
+def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
+    log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    f = open(log, "w")
+    f.write("--> Analizando repositorio: " + repo)
+    f.write("\n")
+    encontrado = False
+    while len(lFicheros)>0:
+        e = lFicheros.pop(0)
+        f.write(e)
+        f.write("\n")
+        fActual = auxiliares.obtenerFicheroIt(e)
+        if os.path.isdir(e):
+            #print(e + "[CARPETA]")
+            if criterio == fActual:
+                f.write("Adding " + e)
+                f.write("\n")
+                repo = repo.replace("*_*", "/")
+                auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                encontrado = True
+            else:
+                contentAux = os.listdir(e)
+                content = obtenerRutaCompletaE(e, contentAux)
+                for c in content:
+                    lFicheros.insert(0, c)
+    f.close()
+    return encontrado
+
+# Busca todas las carpetas que contengan en su nombre el value del criterio
+def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
+    log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    f = open(log, "w")
+    f.write("--> Analizando repositorio: " + repo)
+    f.write("\n")
+    encontrado = False
+    while len(lFicheros)>0:
+        e = lFicheros.pop(0)
+        f.write(e)
+        f.write("\n")
+        fActual = auxiliares.obtenerFicheroIt(e)
+        if os.path.isdir(e):
+            #print(e + "[CARPETA]")
+            if criterio in e.lower():
+                f.write("Adding " + e)
+                f.write("\n")
+                repo = repo.replace("*_*", "/")
+                auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                encontrado = True
+            else:
+                contentAux = os.listdir(e)
+                content = obtenerRutaCompletaE(e, contentAux)
+                for c in content:
+                    lFicheros.insert(0, c)
+    f.close()
+    return encontrado
+
+def buscarC10_Local(repo, lFicheros, df):
+    log = carpetalogs + "/log_buscarC10Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    f = open(log, "w")
+    f.write("--> Analizando repositorio: " + repo)
+    f.write("\n")
+    encontrado = False
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -110,15 +166,22 @@ def buscarC10_Local(lFicheros, f):
             if fActual.endswith("it") \
                     or "e2e" in fActual \
                     or "system" in fActual \
+                    or "itest" in fActual \
                     or "integrationtest" in fActual:
-                rutaObtenida = e
                 f.write("Adding " + e)
                 f.write("\n")
-                break
-    return rutaObtenida
+                repo = repo.replace("*_*", "/")
+                auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo, e, df)
+                encontrado = True
+                #break
+    return encontrado
 
-def buscarC11_Local(lFicheros, f):
-    rutaObtenida = ""
+def buscarC11_Local(repo, lFicheros, df):
+    log = carpetalogs + "/log_buscarC11Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    f = open(log, "w")
+    f.write("--> Analizando repositorio: " + repo)
+    f.write("\n")
+    encontrado = False
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -137,14 +200,20 @@ def buscarC11_Local(lFicheros, f):
                 xmlContent = fXml.read()
                 fXml.close()
                 if "selenium" in xmlContent or "rest-assured" in xmlContent:
-                    rutaObtenida = e
                     f.write("Adding " + e)
                     f.write("\n")
-                    break
-    return rutaObtenida
+                    repo = repo.replace("*_*", "/")
+                    auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo, e, df)
+                    encontrado = True
+                    #break
+    return encontrado
 
-def buscarFicherosCI_Local(lFicheros, f):
-    rutaObtenida = ""
+def buscarFicherosCI_Local(repo, lFicheros, df):
+    log = carpetalogs + "/log_buscarC12Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    f = open(log, "w")
+    f.write("--> Analizando repositorio: " + repo)
+    f.write("\n")
+    encontrado = False
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -157,17 +226,21 @@ def buscarFicherosCI_Local(lFicheros, f):
                 lFicheros.insert(0, c)
         elif os.path.isfile(e):
             #print(e + "[FICHERO]")
-            if "Jenkinsfile" in e \
-                    or ".travis-ci.yml" in e \
-                    or ".circle-ci.yml" in e \
-                    or ".github/workflows/pipeline.yml" in e \
-                    or ".azure-pipelines/pipelines.yml" in e \
-                    or ".gitlab-ci.yml" in e:
-                rutaObtenida = e
+            if "jenkinsfile" in e.lower() \
+                    or ".travis-ci.yml" in e.lower() \
+                    or ".travis.yml" in e.lower() \
+                    or ".circle-ci.yml" in e.lower() \
+                    or ".circle.yml" in e.lower() \
+                    or ".github/workflows/pipeline.yml" in e.lower() \
+                    or ".azure-pipelines/pipelines.yml" in e.lower() \
+                    or ".gitlab-ci.yml" in e.lower():
                 f.write("Adding " + e)
                 f.write("\n")
-                break
-    return rutaObtenida
+                repo = repo.replace("*_*", "/")
+                auxiliares.actualizarDataFrame(Criterios.criterio12.value, repo, e, df)
+                encontrado = True
+                #break
+    return encontrado
 
 # FUNCIONES DE BÚSQUEDA (API de GitHub)
 def buscarEnRepo(listaRepositorios, criterio, df):
