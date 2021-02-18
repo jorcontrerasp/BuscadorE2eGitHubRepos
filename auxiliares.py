@@ -160,9 +160,9 @@ def contarRepositoriosAlMenos1Criterio(df):
 def actualizarDataFrameAux(criterio, nombreRepo, path, df):
     valor = str(df.at[nombreRepo, criterio])
     if valor == "nan":
-        df.at[nombreRepo, criterio] = "[" + path + "] "
+        df.at[nombreRepo, criterio] = "[" + path + "]\n"
     else:
-        df.at[nombreRepo, criterio] += "[" + path + "] "
+        df.at[nombreRepo, criterio] += "[" + path + "]\n"
 
 def generarDataFrameContadores():
     df = pd.DataFrame([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -259,7 +259,9 @@ def clonar1ListaRepo(repositorios):
             # get_ipython().system('git clone $project.clone_url $project_folder')
             comando = 'git clone ' + project.clone_url + ' ' + project_folder
             print(comando)
-            os.system(comando)
+            p = subprocess.Popen(comando, shell=True)
+            p.wait()
+            #os.system(comando)
             print(" -> Project %s cloned!" % project_name)
 
 
@@ -285,7 +287,9 @@ def clonarRepositorios(lRepositorios):
                 #get_ipython().system('git clone $project.clone_url $project_folder')
                 comando = 'git clone ' + project.clone_url + ' ' + project_folder
                 print(comando)
-                os.system(comando)
+                p = subprocess.Popen(comando, shell=True)
+                p.wait()
+                #os.system(comando)
                 print(" -> Project %s cloned!" % project_name)
 
 def generarZipRepos():

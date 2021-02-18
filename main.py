@@ -89,11 +89,19 @@ def exe():
             del filtered_repos[0:configuracion.Configuracion.N_LAPSE_REPOS-1]
             auxiliares.generarPickle(fRepos, filtered_repos)
         else:
-            listaAux = filtered_repos
+            listaAux = []
+            for r in filtered_repos:
+                if r not in listaAux:
+                    listaAux.append(r)
 
             if configuracion.Configuracion.randomizarListaRepos:
-                # Seleccionamos k repositorios de manera aleatoria:
-                listaAux = random.choices(listaAux, k=configuracion.Configuracion.N_RANDOM)
+                # Seleccionamos N repositorios de manera aleatoria:
+                lRandom = []
+                while len(lRandom) < configuracion.Configuracion.N_RANDOM:
+                    item = random.choice(listaAux)
+                    if item not in lRandom:
+                        lRandom.append(item)
+                listaAux = lRandom
                 print("Random projects: %d" % len(listaAux))
 
                 # Guardamos la información de los repositorios randomizados en un archivo binario de Python.
@@ -110,6 +118,8 @@ def exe():
 
         if len(listaAux) > 0:
             if configuracion.Configuracion.buscarEnLocal:
+
+                print("Nº repos que se van a clonar: " + str(len(listaAux)))
                 # Clonamos en local los repositorios obtenidos:
                 auxiliares.clonar1ListaRepo(listaAux)
 
@@ -120,6 +130,7 @@ def exe():
                 reposEnLocal = os.listdir(configuracion.Configuracion.carpetaRepositorios)
 
                 # Aplicamos criterios
+                print("Nº repos en local: " + str(len(reposEnLocal)))
                 repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio1.value, df)
                 repos2 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio2.value, df)
                 repos3 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio3.value, df)

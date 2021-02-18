@@ -55,7 +55,7 @@ def recorrerRepositoriosLocal(listaRepositorios, criterio, df):
 # El primer fichero o carpeta que cumpla el criterio será el que devuelva
 def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
     log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = True
@@ -91,7 +91,7 @@ def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
 # Busca todas las carpetas que coinciden (no que contengan) con el criterio
 def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
     log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
@@ -119,7 +119,7 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
 # Busca todas las carpetas que contengan en su nombre el value del criterio
 def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
     log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
@@ -146,7 +146,7 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
 
 def buscarC10_Local(repo, lFicheros, df):
     log = carpetalogs + "/log_buscarC10Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
@@ -178,7 +178,7 @@ def buscarC10_Local(repo, lFicheros, df):
 
 def buscarC11_Local(repo, lFicheros, df):
     log = carpetalogs + "/log_buscarC11Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
@@ -210,7 +210,7 @@ def buscarC11_Local(repo, lFicheros, df):
 
 def buscarFicherosCI_Local(repo, lFicheros, df):
     log = carpetalogs + "/log_buscarC12Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
@@ -247,7 +247,7 @@ def buscarEnRepo(listaRepositorios, criterio, df):
     print("Buscando repositorios recursivamente: '" + criterio +"'")
     repos = []
     log = carpetalogs + "/log_buscarEnRepo_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
 
     for repo in listaRepositorios:
         f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -276,7 +276,7 @@ def buscarEnRaiz(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio +"' en la raiz")
     repos = []
     log = carpetalogs + "/log_buscarEnRaiz_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
 
     for repo in listaRepositorios:
         f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -301,7 +301,7 @@ def buscarEnTests(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio + "' en carpeta test/tests")
     repos = []
     log = carpetalogs + "/log_buscarEnTests_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
 
     for repo in listaRepositorios:
         f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -340,7 +340,7 @@ def buscarEnSrcTests(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio +"' en carpeta src/test")
     repos = []
     log = carpetalogs + "/log_buscarEnSrcTests_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
 
     for repo in listaRepositorios:
         f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -390,7 +390,7 @@ def buscarC9(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 9...")
     repos = []
     log = carpetalogs + "/log_buscarC9_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
 
     for repo in listaRepositorios:
         f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -420,7 +420,7 @@ def buscarC10(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 10...")
     repos = []
     log = carpetalogs + "/log_buscarC10_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
 
     for repo in listaRepositorios:
         f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -465,7 +465,7 @@ def buscarC11(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 11...")
     repos = []
     log = carpetalogs + "/log_buscarC11_" + configuracion.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "w")
+    f = open(log, "a")
 
     for repo in listaRepositorios:
         f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
