@@ -1,4 +1,4 @@
 #TFG (estudio CI/CD GitHub) - PRUEBAS2
-import configuracion
+import configuracion as conf
 
-print(configuracion.Configuracion.fechaEjecucion + " - Iniciando prueba")
+print(conf.Configuracion.fechaEjecucion + " - Iniciando prueba")

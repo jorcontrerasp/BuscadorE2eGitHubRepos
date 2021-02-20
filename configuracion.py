@@ -2,6 +2,8 @@ import datetime
 
 # CONFIGURACIÓN
 class Configuracion():
+    user = "jorcontrerasp"
+    token = "13d0c8ee079890afcbf40a712d91bf68146617db"
     fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_")
     buscarEnLocal = True
     generarListaRepos = False
@@ -23,3 +25,11 @@ class FiltrosQuery():
     pushed = ">2020-01-01"
     archived = "false"
     qIs = "public"
+
+    query = "language:" + language + "\n" \
+            + "stars:" + stars + "\n" \
+            + "forks:" + forks + "\n" \
+            + "created:" + created + "\n" \
+            + "pushed:" + pushed + "\n" \
+            + "archived:" + archived + "\n" \
+            + "is:" + qIs + "\n"

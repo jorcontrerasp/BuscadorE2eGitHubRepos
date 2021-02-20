@@ -20,13 +20,14 @@ def exe():
 
     try:
         # Generamos un token para consultar la API de GitHub a través de la librería.
-        user = "userId"
-        token = "userToken"
+        user = conf.Configuracion.user
+        token = conf.Configuracion.token
         g = Github(user, token)
 
         if conf.Configuracion.generarListaRepos:
             print("Generando nueva lista de repositorios")
             # Obtenemos un objeto generador, encargado de realizar las búsquedas al iterar sobre él.
+
             query = """
                 language:java 
                 stars:>=500 
@@ -36,7 +37,9 @@ def exe():
                 archived:false
                 is:public
             """
-            generator = g.search_repositories(query=query)
+
+            print(conf.FiltrosQuery.query)
+            generator = g.search_repositories(query=conf.FiltrosQuery.query)
 
             # Convertimos el generador en una lista de repositorios.
             repositories = list(generator)

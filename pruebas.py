@@ -1,16 +1,16 @@
 #TFG (estudio CI/CD GitHub) - PRUEBAS
-import datetime
-import os
+import configuracion as conf
 import auxiliares
 import criterios
-import configuracion
+import datetime
+import os
 from github import Github
 
-print(configuracion.Configuracion.fechaEjecucion + " - Iniciando prueba")
+print(conf.Configuracion.fechaEjecucion + " - Iniciando prueba")
 
 # Generamos un token para consultar la API de GitHub a través de la librería.
-user = "userId"
-token = "userToken"
+user = conf.Configuracion.user
+token = conf.Configuracion.token
 g = Github(user, token)
 
 nombreRepo = "apache/karaf"
@@ -19,7 +19,7 @@ filtered_repos = [repo]
 
 auxiliares.clonar1ListaRepo(filtered_repos)
 
-reposEnLocal = os.listdir(configuracion.Configuracion.carpetaRepositorios)
+reposEnLocal = os.listdir(conf.Configuracion.carpetaRepositorios)
 
 df = auxiliares.generarDataFrame(filtered_repos)
 #repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio8.value, df)
@@ -27,7 +27,7 @@ df = auxiliares.generarDataFrame(filtered_repos)
 df.at["apache/karaf", "GitHub_URL"] = df.at["apache/karaf", "GitHub_URL"] + "AAA\n"
 df.at["apache/karaf", "GitHub_URL"] = df.at["apache/karaf", "GitHub_URL"] + "BBB\n"
 
-auxiliares.generarEXCEL_CSV(df, "research", configuracion.Configuracion.doExcel, configuracion.Configuracion.doCsv)
+auxiliares.generarEXCEL_CSV(df, "research", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 
 
 #print(repos1)
