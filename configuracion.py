@@ -2,8 +2,8 @@ import datetime
 
 # CONFIGURACIÓN
 class Configuracion():
-    user = "userId"
-    token = "userToken"
+    user = "jorcontrerasp"
+    token = "32ee85d69ba3667b42b4e5c6892e6927ce836c30"
     fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_")
     buscarEnLocal = True
     generarListaRepos = False
@@ -26,10 +26,12 @@ class FiltrosQuery():
     archived = "false"
     qIs = "public"
 
-    query = "language:" + language + "\n" \
-            + "stars:" + stars + "\n" \
-            + "forks:" + forks + "\n" \
-            + "created:" + created + "\n" \
-            + "pushed:" + pushed + "\n" \
-            + "archived:" + archived + "\n" \
-            + "is:" + qIs + "\n"
+    def getQueryIni(self):
+        queryIni = "language:" + self.language + "\n" \
+                + "stars:" + self.stars + "\n" \
+                + "forks:" + self.forks + "\n" \
+                + "created:" + self.created + "\n" \
+                + "pushed:" + self.pushed + "\n" \
+                + "archived:" + self.archived + "\n" \
+                + "is:" + self.qIs + "\n"
+        return queryIni

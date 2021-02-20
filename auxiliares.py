@@ -36,37 +36,39 @@ def generarDataFrame(listaRepositorios):
     repo1 = listaRepositorios[0]
     df = pd.DataFrame([],
                       index=[repo1.full_name],
-                      columns=["GitHub_URL", "CommitID",
-                               criterios.Criterios.criterio1.name,
-                               criterios.Criterios.criterio2.name,
-                               criterios.Criterios.criterio3.name,
-                               criterios.Criterios.criterio4.name,
-                               criterios.Criterios.criterio5.name,
-                               criterios.Criterios.criterio6.name,
-                               criterios.Criterios.criterio7.name,
-                               criterios.Criterios.criterio8.name,
-                               criterios.Criterios.criterio9.name,
-                               criterios.Criterios.criterio10.name,
-                               criterios.Criterios.criterio11.name,
-                               criterios.Criterios.criterio12.name])
+                      columns=["GitHub_URL", "CommitID"
+                               ,criterios.Criterios.criterio1.name
+                               #,criterios.Criterios.criterio2.name
+                               ,criterios.Criterios.criterio3.name
+                               #,criterios.Criterios.criterio4.name
+                               ,criterios.Criterios.criterio5.name
+                               #,criterios.Criterios.criterio6.name
+                               #,criterios.Criterios.criterio7.name
+                               #,criterios.Criterios.criterio8.name
+                               #,criterios.Criterios.criterio9.name
+                               ,criterios.Criterios.criterio10.name
+                               #,criterios.Criterios.criterio11.name
+                               #,criterios.Criterios.criterio12.name
+                               ])
     df.at[repo1.full_name, "GitHub_URL"] = repo1.html_url
 
     for repo in listaRepositorios[1:len(listaRepositorios)]:
         df2 = pd.DataFrame([],
                           index=[repo.full_name],
-                          columns=["GitHub_URL", "CommitID",
-                                   criterios.Criterios.criterio1.name,
-                                   criterios.Criterios.criterio2.name,
-                                   criterios.Criterios.criterio3.name,
-                                   criterios.Criterios.criterio4.name,
-                                   criterios.Criterios.criterio5.name,
-                                   criterios.Criterios.criterio6.name,
-                                   criterios.Criterios.criterio7.name,
-                                   criterios.Criterios.criterio8.name,
-                                   criterios.Criterios.criterio9.name,
-                                   criterios.Criterios.criterio10.name,
-                                   criterios.Criterios.criterio11.name,
-                                   criterios.Criterios.criterio12.name])
+                          columns=["GitHub_URL", "CommitID"
+                                   ,criterios.Criterios.criterio1.name
+                                   #,criterios.Criterios.criterio2.name
+                                   ,criterios.Criterios.criterio3.name
+                                   #,criterios.Criterios.criterio4.name
+                                   ,criterios.Criterios.criterio5.name
+                                   #,criterios.Criterios.criterio6.name
+                                   #,criterios.Criterios.criterio7.name
+                                   #,criterios.Criterios.criterio8.name
+                                   #,criterios.Criterios.criterio9.name
+                                   ,criterios.Criterios.criterio10.name
+                                   #,criterios.Criterios.criterio11.name
+                                   #,criterios.Criterios.criterio12.name
+                                   ])
         df2.at[repo.full_name, "GitHub_URL"] = repo.html_url
         df = df.append(df2)
 
@@ -133,28 +135,28 @@ def contarRepositoriosAlMenos1Criterio(df):
     for index, row in df.iterrows():
         if ("nan" != str(row[criterios.Criterios.criterio1.name]) and len(str(row[criterios.Criterios.criterio1.name])) > 1):
             cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio2.name]) and len(str(row[criterios.Criterios.criterio2.name])) > 0):
-            cont += 1
+        #elif ("nan" != str(row[criterios.Criterios.criterio2.name]) and len(str(row[criterios.Criterios.criterio2.name])) > 0):
+            #cont += 1
         elif ("nan" != str(row[criterios.Criterios.criterio3.name]) and len(str(row[criterios.Criterios.criterio3.name])) > 0):
             cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio4.name]) and len(str(row[criterios.Criterios.criterio4.name])) > 0):
-            cont += 1
+        #elif ("nan" != str(row[criterios.Criterios.criterio4.name]) and len(str(row[criterios.Criterios.criterio4.name])) > 0):
+            #cont += 1
         elif ("nan" != str(row[criterios.Criterios.criterio5.name]) and len(str(row[criterios.Criterios.criterio5.name])) > 0):
             cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio6.name]) and len(str(row[criterios.Criterios.criterio6.name])) > 0):
-            cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio7.name]) and len(str(row[criterios.Criterios.criterio7.name])) > 0):
-            cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio8.name]) and len(str(row[criterios.Criterios.criterio8.name])) > 0):
-            cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio9.name]) and len(str(row[criterios.Criterios.criterio9.name])) > 0):
-            cont += 1
+        #elif ("nan" != str(row[criterios.Criterios.criterio6.name]) and len(str(row[criterios.Criterios.criterio6.name])) > 0):
+            #cont += 1
+        #elif ("nan" != str(row[criterios.Criterios.criterio7.name]) and len(str(row[criterios.Criterios.criterio7.name])) > 0):
+            #cont += 1
+        #elif ("nan" != str(row[criterios.Criterios.criterio8.name]) and len(str(row[criterios.Criterios.criterio8.name])) > 0):
+            #cont += 1
+        #elif ("nan" != str(row[criterios.Criterios.criterio9.name]) and len(str(row[criterios.Criterios.criterio9.name])) > 0):
+            #cont += 1
         elif ("nan" != str(row[criterios.Criterios.criterio10.name]) and len(str(row[criterios.Criterios.criterio10.name])) > 0):
             cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio11.name]) and len(row[criterios.Criterios.criterio11.name]) > 0):
-            cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio12.name]) and len(row[criterios.Criterios.criterio12.name]) > 0):
-            cont += 1
+        #elif ("nan" != str(row[criterios.Criterios.criterio11.name]) and len(row[criterios.Criterios.criterio11.name]) > 0):
+            #cont += 1
+        #elif ("nan" != str(row[criterios.Criterios.criterio12.name]) and len(row[criterios.Criterios.criterio12.name]) > 0):
+            #cont += 1
     return cont
 
 def actualizarDataFrameAux(criterio, nombreRepo, path, df):
@@ -165,20 +167,20 @@ def actualizarDataFrameAux(criterio, nombreRepo, path, df):
         df.at[nombreRepo, criterio] += "[" + path + "]\n"
 
 def generarDataFrameContadores():
-    df = pd.DataFrame([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      index=[criterios.Criterios.criterio1.value,
-                             criterios.Criterios.criterio2.value,
-                             criterios.Criterios.criterio3.value,
-                             criterios.Criterios.criterio4.value,
-                             criterios.Criterios.criterio5.value,
-                             criterios.Criterios.criterio6.value,
-                             criterios.Criterios.criterio7.value,
-                             criterios.Criterios.criterio8.value,
-                             criterios.Criterios.criterio9.value,
-                             criterios.Criterios.criterio10.value,
-                             criterios.Criterios.criterio11.value,
-                             criterios.Criterios.criterio12.value,
-                             "Totales"],
+    df = pd.DataFrame([0, 0, 0, 0, 0],
+                      index=[criterios.Criterios.criterio1.value
+                             #,criterios.Criterios.criterio2.value
+                             ,criterios.Criterios.criterio3.value
+                             #,criterios.Criterios.criterio4.value
+                             ,criterios.Criterios.criterio5.value
+                             #,criterios.Criterios.criterio6.value
+                             #,criterios.Criterios.criterio7.value
+                             #,criterios.Criterios.criterio8.value
+                             #,criterios.Criterios.criterio9.value
+                             ,criterios.Criterios.criterio10.value
+                             #,criterios.Criterios.criterio11.value
+                             #,criterios.Criterios.criterio12.value
+                             ,"Totales"],
                       columns=['n_encontrados'])
     return df
 

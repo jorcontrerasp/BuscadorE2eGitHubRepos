@@ -33,18 +33,19 @@ scriptLapseExeCheck_state = tk.BooleanVar()
 def exe():
     print("Ejecutando proceso desde buscador-UI")
     # Filtros Query:
-    conf.FiltrosQuery.language = str(lenguaje_state).lower()
-    conf.FiltrosQuery.stars = stars_state
-    conf.FiltrosQuery.forks = forks_state
-    conf.FiltrosQuery.created = created_state
-    conf.FiltrosQuery.pushed = pushed_state
+    conf.FiltrosQuery.language = lenguaje_state.get().lower()
+    conf.FiltrosQuery.stars = stars_state.get()
+    print(conf.FiltrosQuery.stars)
+    conf.FiltrosQuery.forks = forks_state.get()
+    conf.FiltrosQuery.created = created_state.get()
+    conf.FiltrosQuery.pushed = pushed_state.get()
 
-    if archivedCheck_state:
+    if archivedCheck_state.get():
         conf.FiltrosQuery.qIs = "true"
     else:
         conf.FiltrosQuery.qIs = "false"
 
-    if publicCheck_state:
+    if publicCheck_state.get():
         conf.FiltrosQuery.qIs = "public"
     else:
         conf.FiltrosQuery.qIs = "private"

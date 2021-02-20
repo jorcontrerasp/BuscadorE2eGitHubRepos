@@ -38,8 +38,10 @@ def exe():
                 is:public
             """
 
-            print(conf.FiltrosQuery.query)
-            generator = g.search_repositories(query=conf.FiltrosQuery.query)
+            print("\n" + "QUERY INICIAL:")
+            queryConf = conf.FiltrosQuery.getQueryIni(self=conf.FiltrosQuery)
+            print(queryConf)
+            generator = g.search_repositories(query=queryConf)
 
             # Convertimos el generador en una lista de repositorios.
             repositories = list(generator)
@@ -135,17 +137,17 @@ def exe():
                 # Aplicamos criterios
                 print("Nº repos en local: " + str(len(reposEnLocal)))
                 repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio1.value, df)
-                repos2 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio2.value, df)
+                #repos2 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio2.value, df)
                 repos3 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio3.value, df)
-                repos4 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio4.value, df)
+                #repos4 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio4.value, df)
                 repos5 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio5.value, df)
-                repos6 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio6.value, df)
-                repos7 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio7.value, df)
-                repos8 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio8.value, df)
-                repos9 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio9.value, df)
+                #repos6 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio6.value, df)
+                #repos7 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio7.value, df)
+                #repos8 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio8.value, df)
+                #repos9 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio9.value, df)
                 repos10 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio10.value, df)
-                repos11 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio11.value, df)
-                repos12 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio12.value, df)
+                #repos11 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio11.value, df)
+                #repos12 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio12.value, df)
 
                 # Generar Zip de los repositorios
                 auxiliares.generarZipRepos()
@@ -180,33 +182,33 @@ def exe():
 
         if conf.Configuracion.buscarEnLocal:
             nC1 = len(repos1)
-            nC2 = len(repos2)
+            #nC2 = len(repos2)
             nC3 = len(repos3)
-            nC4 = len(repos4)
+            #nC4 = len(repos4)
             nC5 = len(repos5)
-            nC6 = len(repos6)
-            nC7 = len(repos7)
-            nC8 = len(repos8)
-            nC9 = len(repos9)
+            #nC6 = len(repos6)
+            #nC7 = len(repos7)
+            #nC8 = len(repos8)
+            #nC9 = len(repos9)
             nC10 = len(repos10)
-            nC11 = len(repos11)
-            nC12 = len(repos12)
+            #nC11 = len(repos11)
+            #nC12 = len(repos12)
         else:
             nC1 = len(repos1_1) + len(repos1_2) + len(repos1_3)
 
         # Actualizamos DataFrame de contadores
         df2.at[criterios.Criterios.criterio1.value, columna] += nC1
-        df2.at[criterios.Criterios.criterio2.value, columna] += nC2
+        #df2.at[criterios.Criterios.criterio2.value, columna] += nC2
         df2.at[criterios.Criterios.criterio3.value, columna] += nC3
-        df2.at[criterios.Criterios.criterio4.value, columna] += nC4
+        #df2.at[criterios.Criterios.criterio4.value, columna] += nC4
         df2.at[criterios.Criterios.criterio5.value, columna] += nC5
-        df2.at[criterios.Criterios.criterio6.value, columna] += nC6
-        df2.at[criterios.Criterios.criterio7.value, columna] += nC7
-        df2.at[criterios.Criterios.criterio8.value, columna] += nC8
-        df2.at[criterios.Criterios.criterio9.value, columna] += nC9
+        #df2.at[criterios.Criterios.criterio6.value, columna] += nC6
+        #df2.at[criterios.Criterios.criterio7.value, columna] += nC7
+        #df2.at[criterios.Criterios.criterio8.value, columna] += nC8
+        #df2.at[criterios.Criterios.criterio9.value, columna] += nC9
         df2.at[criterios.Criterios.criterio10.value, columna] += nC10
-        df2.at[criterios.Criterios.criterio11.value, columna] += nC11
-        df2.at[criterios.Criterios.criterio12.value, columna] += nC12
+        #df2.at[criterios.Criterios.criterio11.value, columna] += nC11
+        #df2.at[criterios.Criterios.criterio12.value, columna] += nC12
         df2.at["Totales", columna] += auxiliares.contarRepositoriosAlMenos1Criterio(df)
 
         # Transformar DataFrame a Excel/CSV

@@ -85,7 +85,7 @@ def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
                 break
     return encontrado
 
-# Busca todas las carpetas que coinciden (no que contengan) con el criterio
+# Busca todas los ficheros/carpetas que coinciden (no que contengan) con el criterio.
 def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
     log = conf.Configuracion.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
@@ -110,10 +110,18 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
                 content = obtenerRutaCompletaE(e, contentAux)
                 for c in content:
                     lFicheros.insert(0, c)
+        elif os.path.isfile(e):
+            #print(e + "[FICHERO]")
+            if criterio == e.lower():
+                f.write("Adding " + e)
+                f.write("\n")
+                repo = repo.replace("*_*", "/")
+                auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                encontrado = True
     f.close()
     return encontrado
 
-# Busca todas las carpetas que contengan en su nombre el value del criterio
+# Busca todas los ficheros/carpetas que contengan en su nombre el value del criterio.
 def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
     log = conf.Configuracion.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
@@ -138,6 +146,14 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
                 content = obtenerRutaCompletaE(e, contentAux)
                 for c in content:
                     lFicheros.insert(0, c)
+        elif os.path.isfile(e):
+            #print(e + "[FICHERO]")
+            if criterio in e.lower():
+                f.write("Adding " + e)
+                f.write("\n")
+                repo = repo.replace("*_*", "/")
+                auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                encontrado = True
     f.close()
     return encontrado
 
@@ -151,7 +167,7 @@ def buscarC10_Local(repo, lFicheros, df):
         e = lFicheros.pop(0)
         f.write(e)
         f.write("\n")
-        fActual = auxiliares.obtenerFicheroIt(e.lower())
+        fActual = auxiliares.obtenerFicheroIt(e)
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
             contentAux = os.listdir(e)
@@ -160,15 +176,14 @@ def buscarC10_Local(repo, lFicheros, df):
                 lFicheros.insert(0, c)
         elif os.path.isfile(e):
             #print(e + "[FICHERO]")
-            if fActual.endswith("it") \
+            if fActual.endswith("IT.java") \
                     or "e2e" in fActual \
-                    or "system" in fActual \
-                    or "itest" in fActual \
+                    or "integration_test" in fActual \
                     or "integrationtest" in fActual:
                 f.write("Adding " + e)
                 f.write("\n")
                 repo = repo.replace("*_*", "/")
-                auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo, e, df)
+                auxiliares.actualizarDataFrame(Criterios.criterio10.value, repo, e, df)
                 encontrado = True
                 #break
     return encontrado
@@ -196,7 +211,7 @@ def buscarC11_Local(repo, lFicheros, df):
                 fXml = open(e, 'r', encoding="ISO-8859-1")
                 xmlContent = fXml.read()
                 fXml.close()
-                if "selenium" in xmlContent or "rest-assured" in xmlContent:
+                if "selenium-java" in xmlContent or "rest-assured" in xmlContent:
                     f.write("Adding " + e)
                     f.write("\n")
                     repo = repo.replace("*_*", "/")
