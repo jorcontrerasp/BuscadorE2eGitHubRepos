@@ -18,6 +18,8 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 - Generar excel: si se marca esta opción se guarda el resultado de la búsqueda en un fichero en formato excel.
 - Generar Csv: si se marca esta opción se guarda el resultado de la búsqueda en un fichero en formato csv.
 
+<img src="interfaz.png" alt=“interfaz” width="1000"/>
+
 ## Construido con 🛠️
 
 * [PyCharm Community](https://www.jetbrains.com/es-es/pycharm/?ref=hackernoon.com)
