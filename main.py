@@ -1,14 +1,14 @@
 #TFG (estudio CI/CD GitHub) - Programa de validación
 
 #Importamos las librerías necesarias.
-import datetime
-import os
-import random
+from github import Github
+import configuracion as conf
 import criterios
 import auxiliares
-import configuracion
 import pandas as pd
-from github import Github
+import datetime
+import random
+import os
 
 def exe():
     fRepos = 'repos.pickle'
@@ -16,7 +16,7 @@ def exe():
     df = pd.DataFrame
     df2 = pd.DataFrame
 
-    print(configuracion.Configuracion.fechaEjecucion + " - Iniciando proceso")
+    print(conf.Configuracion.fechaEjecucion + " - Iniciando proceso")
 
     try:
         # Generamos un token para consultar la API de GitHub a través de la librería.
@@ -24,7 +24,7 @@ def exe():
         token = "userToken"
         g = Github(user, token)
 
-        if configuracion.Configuracion.generarListaRepos:
+        if conf.Configuracion.generarListaRepos:
             print("Generando nueva lista de repositorios")
             # Obtenemos un objeto generador, encargado de realizar las búsquedas al iterar sobre él.
             query = """
@@ -43,7 +43,7 @@ def exe():
             print("Total repos: %d" % len(repositories))
 
             # Guardamos la información de los repositorios recuperados en un archivo binario de Python.
-            fRepos = 'repos_%s.pickle' % configuracion.Configuracion.fechaEjecucion
+            fRepos = 'repos_%s.pickle' % conf.Configuracion.fechaEjecucion
             auxiliares.generarPickle(fRepos, repositories)
             repositories = auxiliares.cargarRepositorios(fRepos)
         else:
@@ -71,7 +71,7 @@ def exe():
         # Imprimimos la lista de repositorios.
         auxiliares.imprimirListaRepositorios(filtered_repos)
 
-        if configuracion.Configuracion.lapseExe:
+        if conf.Configuracion.lapseExe:
             # EXCEL RESEARCH
             if os.path.exists("research.xlsx"):
                 df = pd.read_excel("research.xlsx", index_col=0)
@@ -85,8 +85,8 @@ def exe():
                 # Generamos un nuevo DataFrame mediante la librería "pandas".
                 df2 = auxiliares.generarDataFrameContadores()
 
-            listaAux = filtered_repos[0:configuracion.Configuracion.N_LAPSE_REPOS-1]
-            del filtered_repos[0:configuracion.Configuracion.N_LAPSE_REPOS-1]
+            listaAux = filtered_repos[0:conf.Configuracion.N_LAPSE_REPOS-1]
+            del filtered_repos[0:conf.Configuracion.N_LAPSE_REPOS-1]
             auxiliares.generarPickle(fRepos, filtered_repos)
         else:
             listaAux = []
@@ -94,10 +94,10 @@ def exe():
                 if r not in listaAux:
                     listaAux.append(r)
 
-            if configuracion.Configuracion.randomizarListaRepos:
+            if conf.Configuracion.randomizarListaRepos:
                 # Seleccionamos N repositorios de manera aleatoria:
                 lRandom = []
-                while len(lRandom) < configuracion.Configuracion.N_RANDOM:
+                while len(lRandom) < conf.Configuracion.N_RANDOM:
                     item = random.choice(listaAux)
                     if item not in lRandom:
                         lRandom.append(item)
@@ -105,7 +105,7 @@ def exe():
                 print("Random projects: %d" % len(listaAux))
 
                 # Guardamos la información de los repositorios randomizados en un archivo binario de Python.
-                fRepos = 'random_repos_%s.pickle' % configuracion.Configuracion.fechaEjecucion
+                fRepos = 'random_repos_%s.pickle' % conf.Configuracion.fechaEjecucion
                 auxiliares.generarPickle(fRepos, listaAux)
                 listaAux = auxiliares.cargarRepositorios(fRepos)
 
@@ -117,7 +117,7 @@ def exe():
             df2 = auxiliares.generarDataFrameContadores()
 
         if len(listaAux) > 0:
-            if configuracion.Configuracion.buscarEnLocal:
+            if conf.Configuracion.buscarEnLocal:
 
                 print("Nº repos que se van a clonar: " + str(len(listaAux)))
                 # Clonamos en local los repositorios obtenidos:
@@ -127,7 +127,7 @@ def exe():
                 auxiliares.actualizarDataFrameCommitID(listaAux, df)
 
                 # Listamos los repositorios clonados
-                reposEnLocal = os.listdir(configuracion.Configuracion.carpetaRepositorios)
+                reposEnLocal = os.listdir(conf.Configuracion.cRepositorios)
 
                 # Aplicamos criterios
                 print("Nº repos en local: " + str(len(reposEnLocal)))
@@ -156,7 +156,7 @@ def exe():
             print("No se han obtenido repositorios del fichero " + fRepos)
 
         # Transformar DataFrame a Excel/CSV
-        auxiliares.generarEXCEL_CSV(df, "research", configuracion.Configuracion.doExcel, configuracion.Configuracion.doCsv)
+        auxiliares.generarEXCEL_CSV(df, "research", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 
         # Generar un DataFrame auxiliar con los contadores de los repositorios encontrados por cada criterio
         columna = "n_encontrados"
@@ -175,7 +175,7 @@ def exe():
         nC11 = 0
         nC12 = 0
 
-        if configuracion.Configuracion.buscarEnLocal:
+        if conf.Configuracion.buscarEnLocal:
             nC1 = len(repos1)
             nC2 = len(repos2)
             nC3 = len(repos3)
@@ -207,10 +207,10 @@ def exe():
         df2.at["Totales", columna] += auxiliares.contarRepositoriosAlMenos1Criterio(df)
 
         # Transformar DataFrame a Excel/CSV
-        auxiliares.generarEXCEL_CSV(df2, "contadores", configuracion.Configuracion.doExcel, configuracion.Configuracion.doCsv)
+        auxiliares.generarEXCEL_CSV(df2, "contadores", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 
         # Clonamos repositorios:
-        if configuracion.Configuracion.clonarRepositorios:
+        if conf.Configuracion.clonarRepositorios:
             lAux = []
             #lAux.append(repos1_1)
             auxiliares.clonarRepositorios(lAux)

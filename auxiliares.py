@@ -1,18 +1,18 @@
 #FUNCIONES AUXILIARES
 
 #Importamos las librerías necesarias.
+import configuracion as conf
+import criterios
+import pickle
+import pandas as pd
+import subprocess
 import base64
 import os
-import datetime
-import pickle
-from github import GithubException
-import criterios
-import configuracion
-import openpyxl
-import pandas as pd
-import shutil, logging
+import shutil
 from shutil import rmtree
-import subprocess
+import logging
+from github import GithubException
+import openpyxl
 
 carpetalogs = "logs"
 
@@ -184,7 +184,7 @@ def generarDataFrameContadores():
 
 def obtenerRepoCommitID(repo):
     proyectPath = os.getcwd()
-    os.chdir(proyectPath + "/" + configuracion.Configuracion.carpetaRepositorios + "/" + repo)
+    os.chdir(proyectPath + "/" + conf.Configuracion.cRepositorios + "/" + repo)
     commitID = subprocess.check_output("git log --pretty=format:'%h' -n 1", shell=True)
     os.chdir(proyectPath)
     return commitID.decode()
@@ -239,17 +239,17 @@ def obtenerFicheroIt(path):
 
 def clonar1ListaRepo(repositorios):
     # Generamos el directorio 'repositories'
-    if not os.path.exists(configuracion.Configuracion.carpetaRepositorios):
-        print("Folder %s created!" % configuracion.Configuracion.carpetaRepositorios)
-        os.mkdir(configuracion.Configuracion.carpetaRepositorios)
+    if not os.path.exists(conf.Configuracion.cRepositorios):
+        print("Folder %s created!" % conf.Configuracion.cRepositorios)
+        os.mkdir(conf.Configuracion.cRepositorios)
     else:
-        print("Folder %s already exist" % configuracion.Configuracion.carpetaRepositorios)
+        print("Folder %s already exist" % conf.Configuracion.cRepositorios)
 
     # Clonamos los repositorios
     for project in repositorios:
         #project_name = project.full_name.split("/")[1]
         project_name = project.full_name.replace("/", "*_*")
-        project_folder = "%s/%s" % (configuracion.Configuracion.carpetaRepositorios, project_name)
+        project_folder = "%s/%s" % (conf.Configuracion.cRepositorios, project_name)
 
         # CHECK IF PROJECT EXISTS
         if os.path.exists(project_folder):
@@ -267,17 +267,17 @@ def clonar1ListaRepo(repositorios):
 
 def clonarRepositorios(lRepositorios):
     # Generamos el directorio 'repositories'
-    if not os.path.exists(configuracion.Configuracion.carpetaRepositorios):
-        print("Folder %s created!" % configuracion.Configuracion.carpetaRepositorios)
-        os.mkdir(configuracion.Configuracion.carpetaRepositorios)
+    if not os.path.exists(conf.Configuracion.cRepositorios):
+        print("Folder %s created!" % conf.Configuracion.cRepositorios)
+        os.mkdir(conf.Configuracion.cRepositorios)
     else:
-        print("Folder %s already exist" % configuracion.Configuracion.carpetaRepositorios)
+        print("Folder %s already exist" % conf.Configuracion.cRepositorios)
 
     # Clonamos los repositorios
     for repositorio in lRepositorios:
         for project in repositorio:
             project_name = project.full_name.split("/")[1]
-            project_folder = "%s/%s" % (configuracion.Configuracion.carpetaRepositorios, project_name)
+            project_folder = "%s/%s" % (conf.Configuracion.cRepositorios, project_name)
 
             # CHECK IF PROJECT EXISTS
             if os.path.exists(project_folder):
@@ -295,12 +295,12 @@ def clonarRepositorios(lRepositorios):
 def generarZipRepos():
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s : %(levelname)s : %(message)s',
-                        filename='logs/repositories_' + configuracion.Configuracion.fechaEjecucion + '.log',
+                        filename='logs/repositories_' + conf.Configuracion.fechaEjecucion + '.log',
                         filemode='w', )
 
-    archivo_zip = shutil.make_archive("repos_snapshots/repositories_" + configuracion.Configuracion.fechaEjecucion,
+    archivo_zip = shutil.make_archive("repos_snapshots/repositories_" + conf.Configuracion.fechaEjecucion,
                                       "zip",
-                                      base_dir=configuracion.Configuracion.carpetaRepositorios,
+                                      base_dir=conf.Configuracion.cRepositorios,
                                       logger=logging)
 
-    rmtree("./" + configuracion.Configuracion.carpetaRepositorios)
+    rmtree("./" + conf.Configuracion.cRepositorios)

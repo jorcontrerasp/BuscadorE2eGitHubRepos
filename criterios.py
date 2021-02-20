@@ -1,7 +1,6 @@
 from enum import Enum
-import datetime
+import configuracion as conf
 import auxiliares
-import configuracion
 import os
 
 class Criterios(Enum):
@@ -18,8 +17,6 @@ class Criterios(Enum):
     criterio11 = "criterio11"
     criterio12 = "ci-files"
 
-carpetalogs = "logs"
-
 # FUNCIONES DE BÚSQUEDA LOCAL
 def obtenerRutaCompletaE(origen, lFicheros):
     content = []
@@ -32,7 +29,7 @@ def recorrerRepositoriosLocal(listaRepositorios, criterio, df):
     listaEncontrados = []
     for repo in listaRepositorios:
 
-        content = obtenerRutaCompletaE("./" + configuracion.Configuracion.carpetaRepositorios, [repo])
+        content = obtenerRutaCompletaE("./" + conf.Configuracion.cRepositorios, [repo])
 
         if criterio == Criterios.criterio10.value:
             encontrado = buscarC10_Local(repo, content, df)
@@ -54,7 +51,7 @@ def recorrerRepositoriosLocal(listaRepositorios, criterio, df):
 
 # El primer fichero o carpeta que cumpla el criterio será el que devuelva
 def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
-    log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -90,7 +87,7 @@ def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
 
 # Busca todas las carpetas que coinciden (no que contengan) con el criterio
 def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
-    log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -118,7 +115,7 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
 
 # Busca todas las carpetas que contengan en su nombre el value del criterio
 def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
-    log = carpetalogs + "/log_buscarEnRepoLocal_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -145,7 +142,7 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
     return encontrado
 
 def buscarC10_Local(repo, lFicheros, df):
-    log = carpetalogs + "/log_buscarC10Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarC10Local_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -177,7 +174,7 @@ def buscarC10_Local(repo, lFicheros, df):
     return encontrado
 
 def buscarC11_Local(repo, lFicheros, df):
-    log = carpetalogs + "/log_buscarC11Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarC11Local_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -209,7 +206,7 @@ def buscarC11_Local(repo, lFicheros, df):
     return encontrado
 
 def buscarFicherosCI_Local(repo, lFicheros, df):
-    log = carpetalogs + "/log_buscarC12Local_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarC12Local_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -246,7 +243,7 @@ def buscarFicherosCI_Local(repo, lFicheros, df):
 def buscarEnRepo(listaRepositorios, criterio, df):
     print("Buscando repositorios recursivamente: '" + criterio +"'")
     repos = []
-    log = carpetalogs + "/log_buscarEnRepo_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarEnRepo_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
     for repo in listaRepositorios:
@@ -275,7 +272,7 @@ def buscarEnRepo(listaRepositorios, criterio, df):
 def buscarEnRaiz(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio +"' en la raiz")
     repos = []
-    log = carpetalogs + "/log_buscarEnRaiz_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarEnRaiz_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
     for repo in listaRepositorios:
@@ -300,7 +297,7 @@ def buscarEnRaiz(listaRepositorios, criterio, df):
 def buscarEnTests(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio + "' en carpeta test/tests")
     repos = []
-    log = carpetalogs + "/log_buscarEnTests_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarEnTests_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
     for repo in listaRepositorios:
@@ -339,7 +336,7 @@ def buscarEnTests(listaRepositorios, criterio, df):
 def buscarEnSrcTests(listaRepositorios, criterio, df):
     print("Buscando repositorios: '" + criterio +"' en carpeta src/test")
     repos = []
-    log = carpetalogs + "/log_buscarEnSrcTests_" + criterio + "_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarEnSrcTests_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
     for repo in listaRepositorios:
@@ -389,7 +386,7 @@ def buscarEnSrcTests(listaRepositorios, criterio, df):
 def buscarC9(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 9...")
     repos = []
-    log = carpetalogs + "/log_buscarC9_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarC9_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
     for repo in listaRepositorios:
@@ -419,7 +416,7 @@ def buscarC9(listaRepositorios, df):
 def buscarC10(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 10...")
     repos = []
-    log = carpetalogs + "/log_buscarC10_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarC10_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
     for repo in listaRepositorios:
@@ -464,7 +461,7 @@ def buscarC10(listaRepositorios, df):
 def buscarC11(listaRepositorios, df):
     print("Iniciando criterio de búsqueda nº 11...")
     repos = []
-    log = carpetalogs + "/log_buscarC11_" + configuracion.Configuracion.fechaEjecucion + ".log"
+    log = conf.Configuracion.cLogs + "/log_buscarC11_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
     for repo in listaRepositorios:

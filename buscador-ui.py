@@ -1,6 +1,6 @@
 import tkinter as tk
+import configuracion as conf
 import main
-import configuracion
 from pandas.core.resample import method
 
 app = tk.Tk()
@@ -21,15 +21,15 @@ scriptLapseExeCheck_state = tk.BooleanVar()
 
 def exe():
     print("Ejecutando proceso desde buscador-UI")
-    configuracion.Configuracion.buscarEnLocal = buscarEnLocalCheck_state.get()
-    configuracion.Configuracion.generarListaRepos = generarListaReposCheck_state.get()
-    configuracion.Configuracion.randomizarListaRepos = randomizarReposCheck_state.get()
-    configuracion.Configuracion.lapseExe = False
-    configuracion.Configuracion.clonarRepositorios = clonarReposCheck_state.get()
-    configuracion.Configuracion.doExcel = doExcelCheck_state.get()
-    configuracion.Configuracion.doCsv = doCsvCheck_state.get()
-    configuracion.Configuracion.N_RANDOM = nRandomRepos_state.get()
-    configuracion.Configuracion.N_LAPSE_REPOS = 0
+    conf.Configuracion.buscarEnLocal = buscarEnLocalCheck_state.get()
+    conf.Configuracion.generarListaRepos = generarListaReposCheck_state.get()
+    conf.Configuracion.randomizarListaRepos = randomizarReposCheck_state.get()
+    conf.Configuracion.lapseExe = False
+    conf.Configuracion.clonarRepositorios = clonarReposCheck_state.get()
+    conf.Configuracion.doExcel = doExcelCheck_state.get()
+    conf.Configuracion.doCsv = doCsvCheck_state.get()
+    conf.Configuracion.N_RANDOM = nRandomRepos_state.get()
+    conf.Configuracion.N_LAPSE_REPOS = 0
     main.exe()
 
 def randomizarReposCheck_clicked():
