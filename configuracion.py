@@ -2,7 +2,7 @@ import datetime
 
 # CONFIGURACIÓN
 class Configuracion():
-    user = "userId"
+    user = "jorcontrerasp"
     token = "userToken"
     fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_")
     buscarEnLocal = True
@@ -27,11 +27,26 @@ class FiltrosQuery():
     qIs = "public"
 
     def getQueryIni(self):
-        queryIni = "language:" + self.language + "\n" \
-                + "stars:" + self.stars + "\n" \
-                + "forks:" + self.forks + "\n" \
-                + "created:" + self.created + "\n" \
-                + "pushed:" + self.pushed + "\n" \
-                + "archived:" + self.archived + "\n" \
-                + "is:" + self.qIs
+        queryIni = ""
+        if len(self.language)>0:
+            queryIni += "language:" + self.language + "\n"
+
+        if len(self.stars)>0:
+            queryIni += "stars:" + self.stars + "\n"
+
+        if len(self.forks)>0:
+            queryIni += "forks:" + self.forks + "\n"
+
+        if len(self.created)>0:
+            queryIni += "created:" + self.created + "\n"
+
+        if len(self.pushed)>0:
+            queryIni += "pushed:" + self.pushed + "\n"
+
+        if len(self.archived)>0:
+            queryIni += "archived:" + self.archived + "\n"
+
+        if len(self.qIs)>0:
+            queryIni += "is:" + self.qIs + "\n"
+
         return queryIni
