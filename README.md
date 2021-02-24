@@ -8,6 +8,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 <p>pip install PyGithub</p>
 <p>pip install pandas</p>
 <p>pip install openpyxl</p>
+<p>pip install pillow</p>
 
 ### Variables de configuración 🔧
 
