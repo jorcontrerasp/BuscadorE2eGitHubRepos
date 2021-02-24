@@ -2,12 +2,15 @@ import tkinter as tk
 from tkinter import font
 import configuracion as conf
 import main
+from PIL import Image
+from PIL import ImageTk
 
 app = tk.Tk()
 app.title("BuscadorGitHubRepos")
-width = '420'
-height = '415'
+width = '488'
+height = '480'
 app.geometry(width + 'x' + height)
+app.resizable(False, False)
 
 RANDOM_REPOS_INI = 30
 
@@ -35,7 +38,6 @@ def exe():
     # Filtros Query:
     conf.FiltrosQuery.language = lenguaje_state.get().lower()
     conf.FiltrosQuery.stars = stars_state.get()
-    print(conf.FiltrosQuery.stars)
     conf.FiltrosQuery.forks = forks_state.get()
     conf.FiltrosQuery.created = created_state.get()
     conf.FiltrosQuery.pushed = pushed_state.get()
@@ -72,12 +74,27 @@ def randomizarReposCheck_clicked():
 
 row = 0
 
-# FILTROS QUERY
-filteosQueryLbl = tk.Label(app, text="FILTROS QUERY")
-filteosQueryLbl.grid(column=0, row=row)
-f = font.Font(filteosQueryLbl, filteosQueryLbl.cget("font"))
+# LOGO URJC
+logoUrjcWidth = 120
+logoUrjcHeight = 60
+img = Image.open("imgs/logo_urjc2.png")
+img = img.resize((logoUrjcWidth,logoUrjcHeight), Image.ANTIALIAS)
+photoImg = ImageTk.PhotoImage(img)
+widget = tk.Label(app, image=photoImg)
+widget.grid(column=0, row=row)
+titleAppLbl = tk.Label(app, text="Buscador GitHub repos", font=('Helvetica', 18, 'bold'))
+titleAppLbl.grid(column=1, row=row)
+f = font.Font(titleAppLbl, titleAppLbl.cget("font"))
 f.configure(underline=True)
-filteosQueryLbl.configure(font=f)
+titleAppLbl.configure(font=f)
+row+=1
+
+# FILTROS QUERY
+filtrosQueryLbl = tk.Label(app, text="FILTROS QUERY")
+filtrosQueryLbl.grid(column=0, row=row)
+f = font.Font(filtrosQueryLbl, filtrosQueryLbl.cget("font"))
+f.configure(underline=True)
+filtrosQueryLbl.configure(font=f)
 row+=1
 
 # LENGUAJE

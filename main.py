@@ -38,7 +38,7 @@ def exe():
                 is:public
             """
 
-            print("\n" + "QUERY INICIAL:")
+            print("QUERY INICIAL:")
             queryConf = conf.FiltrosQuery.getQueryIni(self=conf.FiltrosQuery)
             print(queryConf)
             generator = g.search_repositories(query=queryConf)
@@ -161,7 +161,8 @@ def exe():
             print("No se han obtenido repositorios del fichero " + fRepos)
 
         # Transformar DataFrame a Excel/CSV
-        auxiliares.generarEXCEL_CSV(df, "research", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
+        fResearch = "research_" + conf.Configuracion.fechaEjecucion
+        auxiliares.generarEXCEL_CSV(df, fResearch, conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 
         # Generar un DataFrame auxiliar con los contadores de los repositorios encontrados por cada criterio
         columna = "n_encontrados"
@@ -212,7 +213,8 @@ def exe():
         df2.at["Totales", columna] += auxiliares.contarRepositoriosAlMenos1Criterio(df)
 
         # Transformar DataFrame a Excel/CSV
-        auxiliares.generarEXCEL_CSV(df2, "contadores", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
+        fContadores = "contadores_" + conf.Configuracion.fechaEjecucion
+        auxiliares.generarEXCEL_CSV(df2, fContadores, conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 
         # Clonamos repositorios:
         if conf.Configuracion.clonarRepositorios:
