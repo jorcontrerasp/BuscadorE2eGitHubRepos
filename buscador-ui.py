@@ -1,7 +1,7 @@
+import main
+import configuracion as conf
 import tkinter as tk
 from tkinter import font
-import configuracion as conf
-import main
 from PIL import Image
 from PIL import ImageTk
 
