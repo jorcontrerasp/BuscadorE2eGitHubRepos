@@ -3,7 +3,7 @@ import datetime
 # CONFIGURACIÓN
 class Configuracion():
     user = "jorcontrerasp"
-    token = "userToken"
+    token = "6dc204e26cd895a66d5ed1ccb478d60c0d15085e"
     fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_")
     buscarEnLocal = True
     generarListaRepos = False
@@ -16,6 +16,8 @@ class Configuracion():
     N_LAPSE_REPOS = 20
     cRepositorios = "repositories/repositories_" + fechaEjecucion
     cLogs = "logs"
+    cResearch = "research/research_" + fechaEjecucion
+    cContadores = "contadores/contadores_" + fechaEjecucion
 
 class FiltrosQuery():
     language = "java"

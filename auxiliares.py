@@ -191,12 +191,12 @@ def obtenerRepoCommitID(repo):
     os.chdir(proyectPath)
     return commitID.decode()
 
-def generarEXCEL_CSV(df, nombreFichero, generarExcel, generarCsv):
+def generarEXCEL_CSV(df, pFichero, generarExcel, generarCsv):
     if generarExcel:
-        df.to_excel(nombreFichero + ".xlsx")
+        df.to_excel(pFichero + ".xlsx")
 
     if generarCsv:
-        df.to_csv(nombreFichero + ".csv")
+        df.to_csv(pFichero + ".csv")
 
 def generarPickle(nombreFichero, listaRepositorios):
     with open(nombreFichero, 'wb') as f:

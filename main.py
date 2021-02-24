@@ -76,6 +76,14 @@ def exe():
         # Imprimimos la lista de repositorios.
         auxiliares.imprimirListaRepositorios(filtered_repos)
 
+        # Creamos la carpeta donde van los logs (si no existe)
+        if not os.path.exists(conf.Configuracion.cLogs):
+            os.mkdir(conf.Configuracion.cLogs)
+
+        # Creamos la carpeta donde van los repositories (si no existe)
+        if not os.path.exists(conf.Configuracion.cRepositorios.split("/")[0]):
+            os.mkdir(conf.Configuracion.cRepositorios.split("/")[0])
+
         if conf.Configuracion.lapseExe:
             # EXCEL RESEARCH
             if os.path.exists("research.xlsx"):
@@ -160,9 +168,12 @@ def exe():
         else:
             print("No se han obtenido repositorios del fichero " + fRepos)
 
+        # Creamos la carpeta donde van los research (si no existe)
+        if not os.path.exists(conf.Configuracion.cResearch.split("/")[0]):
+            os.mkdir(conf.Configuracion.cResearch.split("/")[0])
+
         # Transformar DataFrame a Excel/CSV
-        fResearch = "research_" + conf.Configuracion.fechaEjecucion
-        auxiliares.generarEXCEL_CSV(df, fResearch, conf.Configuracion.doExcel, conf.Configuracion.doCsv)
+        auxiliares.generarEXCEL_CSV(df, conf.Configuracion.cResearch, conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 
         # Generar un DataFrame auxiliar con los contadores de los repositorios encontrados por cada criterio
         columna = "n_encontrados"
@@ -212,9 +223,12 @@ def exe():
         #df2.at[criterios.Criterios.criterio12.value, columna] += nC12
         df2.at["Totales", columna] += auxiliares.contarRepositoriosAlMenos1Criterio(df)
 
+        # Creamos la carpeta donde van los contadores (si no existe)
+        if not os.path.exists(conf.Configuracion.cContadores.split("/")[0]):
+            os.mkdir(conf.Configuracion.cContadores.split("/")[0])
+
         # Transformar DataFrame a Excel/CSV
-        fContadores = "contadores_" + conf.Configuracion.fechaEjecucion
-        auxiliares.generarEXCEL_CSV(df2, fContadores, conf.Configuracion.doExcel, conf.Configuracion.doCsv)
+        auxiliares.generarEXCEL_CSV(df2, conf.Configuracion.cContadores, conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 
         # Clonamos repositorios:
         if conf.Configuracion.clonarRepositorios:
