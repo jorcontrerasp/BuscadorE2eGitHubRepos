@@ -2,8 +2,8 @@ import datetime
 
 # CONFIGURACIÓN
 class Configuracion():
-    user = "jorcontrerasp"
-    token = "6dc204e26cd895a66d5ed1ccb478d60c0d15085e"
+    user = "userId"
+    token = "userToken"
     fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_")
     buscarEnLocal = True
     generarListaRepos = False
