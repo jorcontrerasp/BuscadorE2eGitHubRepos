@@ -15,13 +15,13 @@ g = Github(user, token)
 
 nombreRepo = "apache/karaf"
 repo = g.get_repo(nombreRepo)
-filtered_repos = [repo]
+filteredRepos = [repo]
 
-auxiliares.clonar1ListaRepo(filtered_repos)
+auxiliares.clonar1ListaRepo(filteredRepos)
 
 reposEnLocal = os.listdir(conf.Configuracion.carpetaRepositorios)
 
-df = auxiliares.generarDataFrame(filtered_repos)
+df = auxiliares.generarDataFrame(filteredRepos)
 #repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio8.value, df)
 
 df.at["apache/karaf", "GitHub_URL"] = df.at["apache/karaf", "GitHub_URL"] + "AAA\n"

@@ -51,6 +51,18 @@ def generarDataFrame(listaRepositorios):
                                #,criterios.Criterios.criterio12.name
                                ])
     df.at[repo1.full_name, "GitHub_URL"] = repo1.html_url
+    df.at[repo1.full_name, criterios.Criterios.criterio1.name] = " "
+    #df.at[repo1.full_name, criterios.Criterios.criterio2.name] = " "
+    df.at[repo1.full_name, criterios.Criterios.criterio3.name] = " "
+    #df.at[repo1.full_name, criterios.Criterios.criterio4.name] = " "
+    df.at[repo1.full_name, criterios.Criterios.criterio5.name] = " "
+    #df.at[repo1.full_name, criterios.Criterios.criterio6.name] = " "
+    #df.at[repo1.full_name, criterios.Criterios.criterio7.name] = " "
+    #df.at[repo1.full_name, criterios.Criterios.criterio8.name] = " "
+    #df.at[repo1.full_name, criterios.Criterios.criterio9.name] = " "
+    df.at[repo1.full_name, criterios.Criterios.criterio10.name] = " "
+    #df.at[repo1.full_name, criterios.Criterios.criterio11.name] = " "
+    #df.at[repo1.full_name, criterios.Criterios.criterio12.name] = " "
 
     for repo in listaRepositorios[1:len(listaRepositorios)]:
         df2 = pd.DataFrame([],
@@ -70,6 +82,18 @@ def generarDataFrame(listaRepositorios):
                                    #,criterios.Criterios.criterio12.name
                                    ])
         df2.at[repo.full_name, "GitHub_URL"] = repo.html_url
+        df2.at[repo.full_name, criterios.Criterios.criterio1.name] = " "
+        # df2.at[repo.full_name, criterios.Criterios.criterio2.name] = " "
+        df2.at[repo.full_name, criterios.Criterios.criterio3.name] = " "
+        # df2.at[repo.full_name, criterios.Criterios.criterio4.name] = " "
+        df2.at[repo.full_name, criterios.Criterios.criterio5.name] = " "
+        # df2.at[repo.full_name, criterios.Criterios.criterio6.name] = " "
+        # df2.at[repo.full_name, criterios.Criterios.criterio7.name] = " "
+        # df2.at[repo.full_name, criterios.Criterios.criterio8.name] = " "
+        # df2.at[repo.full_name, criterios.Criterios.criterio9.name] = " "
+        df2.at[repo.full_name, criterios.Criterios.criterio10.name] = " "
+        # df2.at[repo.full_name, criterios.Criterios.criterio11.name] = " "
+        # df2.at[repo.full_name, criterios.Criterios.criterio12.name] = " "
         df = df.append(df2)
 
     return df
@@ -133,29 +157,29 @@ def actualizarDataFrameCommitID(listaRepos, df):
 def contarRepositoriosAlMenos1Criterio(df):
     cont = 0
     for index, row in df.iterrows():
-        if ("nan" != str(row[criterios.Criterios.criterio1.name]) and len(str(row[criterios.Criterios.criterio1.name])) > 1):
+        if (len(str(row[criterios.Criterios.criterio1.name])) > 1):
             cont += 1
-        #elif ("nan" != str(row[criterios.Criterios.criterio2.name]) and len(str(row[criterios.Criterios.criterio2.name])) > 0):
+        #elif (len(str(row[criterios.Criterios.criterio2.name])) > 1):
             #cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio3.name]) and len(str(row[criterios.Criterios.criterio3.name])) > 0):
+        elif (len(str(row[criterios.Criterios.criterio3.name])) > 1):
             cont += 1
-        #elif ("nan" != str(row[criterios.Criterios.criterio4.name]) and len(str(row[criterios.Criterios.criterio4.name])) > 0):
+        #elif (len(str(row[criterios.Criterios.criterio4.name])) > 1):
             #cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio5.name]) and len(str(row[criterios.Criterios.criterio5.name])) > 0):
+        elif (len(str(row[criterios.Criterios.criterio5.name])) > 1):
             cont += 1
-        #elif ("nan" != str(row[criterios.Criterios.criterio6.name]) and len(str(row[criterios.Criterios.criterio6.name])) > 0):
+        #elif (len(str(row[criterios.Criterios.criterio6.name])) > 1):
             #cont += 1
-        #elif ("nan" != str(row[criterios.Criterios.criterio7.name]) and len(str(row[criterios.Criterios.criterio7.name])) > 0):
+        #elif (len(str(row[criterios.Criterios.criterio7.name])) > 1):
             #cont += 1
-        #elif ("nan" != str(row[criterios.Criterios.criterio8.name]) and len(str(row[criterios.Criterios.criterio8.name])) > 0):
+        #elif (len(str(row[criterios.Criterios.criterio8.name])) > 1):
             #cont += 1
-        #elif ("nan" != str(row[criterios.Criterios.criterio9.name]) and len(str(row[criterios.Criterios.criterio9.name])) > 0):
+        #elif (len(str(row[criterios.Criterios.criterio9.name])) > 1):
             #cont += 1
-        elif ("nan" != str(row[criterios.Criterios.criterio10.name]) and len(str(row[criterios.Criterios.criterio10.name])) > 0):
+        elif (len(str(row[criterios.Criterios.criterio10.name])) > 1):
             cont += 1
-        #elif ("nan" != str(row[criterios.Criterios.criterio11.name]) and len(row[criterios.Criterios.criterio11.name]) > 0):
+        #elif (len(row[criterios.Criterios.criterio11.name]) > 1):
             #cont += 1
-        #elif ("nan" != str(row[criterios.Criterios.criterio12.name]) and len(row[criterios.Criterios.criterio12.name]) > 0):
+        #elif (len(row[criterios.Criterios.criterio12.name]) > 1):
             #cont += 1
     return cont
 
