@@ -9,6 +9,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 <p>pip install pandas</p>
 <p>pip install openpyxl</p>
 <p>pip install pillow</p>
+<p>xcode-select —install (para corregir un posible xcrun error)</p>
 
 ### Variables de configuración 🔧
 
