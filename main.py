@@ -53,7 +53,10 @@ def exe():
             repositories = auxiliares.cargarRepositorios(fRepos)
         else:
             print("Utilizando el fichero " + fRepos + " para generar los repositorios")
-            repositories = auxiliares.cargarRepositorios(fRepos)
+            if os.path.exists(fRepos):
+                repositories = auxiliares.cargarRepositorios(fRepos)
+            else:
+                raise Exception("No se ha encontrado el fichero pickle en la raíz del proyecto.")
 
         # Filtramos por el número de COMMITS.
         filtrar_commits = False
@@ -71,7 +74,11 @@ def exe():
             for repo in repositories:
                 filteredRepos.append(repo)
 
-        print("Total projects: %d" % len(filteredRepos))
+        tProjects = len(filteredRepos)
+        print("Total projects: %d" % tProjects)
+
+        if tProjects == 0:
+            raise Exception("El total de proyectos a analizar no puede ser 0. Revise el fichero pickle o genere uno nuevo.")
 
         # Imprimimos la lista de repositorios.
         auxiliares.imprimirListaRepositorios(filteredRepos)
@@ -233,7 +240,7 @@ def exe():
             df2.at[criterios.Criterios.criterio10.value, columna] += nC10
             #df2.at[criterios.Criterios.criterio11.value, columna] += nC11
             #df2.at[criterios.Criterios.criterio12.value, columna] += nC12
-            df2.at["Totales", columna] += auxiliares.contarRepositoriosAlMenos1Criterio(df)
+            df2.at["Totales", columna] = auxiliares.contarRepositoriosAlMenos1Criterio(df)
 
             # Transformar DataFrame a Excel/CSV
             if conf.Configuracion.lapseExe:
@@ -254,4 +261,4 @@ def exe():
         #FIN
 
 # LLAMADA AL MÉTODO DE EJECUCIÓN
-exe()
+# exe()

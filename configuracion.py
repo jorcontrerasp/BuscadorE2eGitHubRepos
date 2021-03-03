@@ -3,7 +3,7 @@ import datetime
 # CONFIGURACIÓN
 class Configuracion():
     user = "userId"
-    token = "userToken"
+    token = "tokenId"
     fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_")
     buscarEnLocal = True
     generarListaRepos = False
