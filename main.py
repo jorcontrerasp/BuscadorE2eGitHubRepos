@@ -38,9 +38,12 @@ def exe():
                 is:public
             """
 
-            print("QUERY INICIAL:")
             queryConf = conf.FiltrosQuery.getQueryIni(self=conf.FiltrosQuery)
-            print(queryConf)
+            fQueryInicial = "query-inicial_" + conf.Configuracion.fechaEjecucion + ".txt"
+            f = open(fQueryInicial, "a")
+            f.write("QUERY INICIAL:")
+            f.write("\n")
+            f.write(queryConf)
             generator = g.search_repositories(query=queryConf)
 
             # Convertimos el generador en una lista de repositorios.
