@@ -7,13 +7,15 @@ from PIL import ImageTk
 
 app = tk.Tk()
 app.title("BuscadorGitHubRepos")
-width = '488'
-height = '480'
+width = '605'
+height = '560'
 app.geometry(width + 'x' + height)
 app.resizable(False, False)
 
 RANDOM_REPOS_INI = 30
-
+# STATE (Credenciales)
+user_state = tk.StringVar()
+token_state = tk.StringVar()
 # STATE (Filtros Query)
 lenguaje_state = tk.StringVar()
 stars_state = tk.StringVar()
@@ -87,6 +89,28 @@ titleAppLbl.grid(column=1, row=row)
 f = font.Font(titleAppLbl, titleAppLbl.cget("font"))
 f.configure(underline=True)
 titleAppLbl.configure(font=f)
+row+=1
+
+# CREDENCIALES
+credencialesLbl = tk.Label(app, text="CREDENCIALES")
+credencialesLbl.grid(column=0, row=row)
+f = font.Font(credencialesLbl, credencialesLbl.cget("font"))
+f.configure(underline=True)
+credencialesLbl.configure(font=f)
+row+=1
+
+userLbl = tk.Label(app, text="Usuario: ")
+userLbl.grid(column=0, row=row)
+user_state.set(conf.Configuracion.user)
+user = tk.Entry(app,width=15, textvariable=user_state)
+user.grid(column=1, row=row)
+row+=1
+
+tokenLbl = tk.Label(app, text="Token: ")
+tokenLbl.grid(column=0, row=row)
+token_state.set(conf.Configuracion.token)
+token = tk.Entry(app,width=35, textvariable=token_state)
+token.grid(column=1, row=row)
 row+=1
 
 # FILTROS QUERY
