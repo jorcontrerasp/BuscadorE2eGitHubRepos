@@ -285,10 +285,13 @@ def clonar1ListaRepo(repositorios):
             # get_ipython().system('git clone $project.clone_url $project_folder')
             comando = 'git clone ' + project.clone_url + ' ' + project_folder
             print(comando)
-            p = subprocess.Popen(comando, shell=True)
-            p.wait()
-            #os.system(comando)
-            print(" -> Project %s cloned!" % project_name)
+            try:
+                p = subprocess.Popen(comando, shell=True)
+                p.wait()
+                #os.system(comando)
+                print(" -> Project %s cloned!" % project_name)
+            except:
+                print("***WARN** - Por algún motivo no se ha podido clonar el repositorio: " + project.full_name)
 
 
 def clonarRepositorios(lRepositorios):
@@ -313,10 +316,13 @@ def clonarRepositorios(lRepositorios):
                 #get_ipython().system('git clone $project.clone_url $project_folder')
                 comando = 'git clone ' + project.clone_url + ' ' + project_folder
                 print(comando)
-                p = subprocess.Popen(comando, shell=True)
-                p.wait()
-                #os.system(comando)
-                print(" -> Project %s cloned!" % project_name)
+                try:
+                    p = subprocess.Popen(comando, shell=True)
+                    p.wait()
+                    #os.system(comando)
+                    print(" -> Project %s cloned!" % project_name)
+                except:
+                    print("***WARN** - Por algún motivo no se ha podido clonar el repositorio: " + project.full_name)
 
 def generarZipRepos():
     logging.basicConfig(level=logging.DEBUG,
