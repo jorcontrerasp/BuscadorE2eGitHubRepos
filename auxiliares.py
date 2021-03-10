@@ -210,10 +210,17 @@ def generarDataFrameContadores():
 
 def obtenerRepoCommitID(repo):
     proyectPath = os.getcwd()
-    os.chdir(proyectPath + "/" + conf.Configuracion.cRepositorios + "/" + repo)
-    commitID = subprocess.check_output("git log --pretty=format:'%h' -n 1", shell=True)
-    os.chdir(proyectPath)
-    return commitID.decode()
+    # Inicializamos el commitID a 'NE' (no encontrado).
+    commitID = "NE"
+    ruta = proyectPath + "/" + conf.Configuracion.cRepositorios + "/" + repo
+    if os.path.exists(ruta):
+        os.chdir(ruta)
+        commitIDAux = subprocess.check_output("git log --pretty=format:'%h' -n 1", shell=True)
+        commitID = commitIDAux.decode()
+        os.chdir(proyectPath)
+    else:
+        print("No se ha encontrado la ruta " + ruta)
+    return commitID
 
 def generarEXCEL_CSV(df, pFichero, generarExcel, generarCsv):
     if generarExcel:

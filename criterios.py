@@ -31,21 +31,25 @@ def recorrerRepositoriosLocal(listaRepositorios, criterio, df):
 
         content = obtenerRutaCompletaE("./" + conf.Configuracion.cRepositorios, [repo])
 
-        if criterio == Criterios.criterio10.value:
-            encontrado = buscarC10_Local(repo, content, df)
+        rutaIni = content[0]
+        if os.path.exists(rutaIni):
+            if criterio == Criterios.criterio10.value:
+                encontrado = buscarC10_Local(repo, content, df)
 
-        elif criterio == Criterios.criterio11.value:
-            encontrado = buscarC11_Local(repo, content, df)
+            elif criterio == Criterios.criterio11.value:
+                encontrado = buscarC11_Local(repo, content, df)
 
-        elif criterio == Criterios.criterio12.value:
-            encontrado = buscarFicherosCI_Local(repo, content, df)
+            elif criterio == Criterios.criterio12.value:
+                encontrado = buscarFicherosCI_Local(repo, content, df)
 
+            else:
+                encontrado = buscarTodaCarpetaEnRepoLocal2(repo, content, criterio, df)
+
+            # Si lo ha encontrado lo añadimos a la listaEncontrados.
+            if encontrado:
+                listaEncontrados.append(repo)
         else:
-            encontrado = buscarTodaCarpetaEnRepoLocal2(repo, content, criterio, df)
-
-        # Si lo ha encontrado lo añadimos a la listaEncontrados.
-        if encontrado:
-            listaEncontrados.append(repo)
+            print("No se ha encontrado la ruta " + rutaIni)
 
     return listaEncontrados
 
