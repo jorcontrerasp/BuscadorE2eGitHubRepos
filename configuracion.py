@@ -4,7 +4,7 @@ import datetime
 class Configuracion():
     user = "userId"
     token = "userToken"
-    fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_")
+    fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_").replace(":", "h", 1).replace(":", "m", 1) + "s"
     buscarEnLocal = True
     generarListaRepos = False
     randomizarListaRepos = True

@@ -80,7 +80,9 @@ def exe():
         tProjects = len(filteredRepos)
         print("Total projects: %d" % tProjects)
 
-        if tProjects == 0:
+        if tProjects == 0 \
+                and not os.path.exists("tmp-research.xlsx") \
+                and not os.path.exists("tmp-contadores.xlsx"):
             raise Exception("El total de proyectos a analizar no puede ser 0. Revise el fichero pickle o genere uno nuevo.")
 
         # Imprimimos la lista de repositorios.
