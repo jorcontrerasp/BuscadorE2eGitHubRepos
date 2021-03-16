@@ -14,6 +14,7 @@ class Configuracion():
     doCsv = False
     N_RANDOM = 30
     N_LAPSE_REPOS = 20
+    REPO_SIZE_LIMIT = 10000000
     cRepositorios = "repositories/repositories_" + fechaEjecucion
     cLogs = "logs"
     cResearch = "research/research_" + fechaEjecucion

@@ -14,8 +14,6 @@ import logging
 from github import GithubException
 import openpyxl
 
-carpetalogs = "logs"
-
 def imprimirListaRepositorios(repositorios):
     for project in repositorios:
         project_name = project.full_name.split("/")[1]
@@ -280,25 +278,28 @@ def clonar1ListaRepo(repositorios):
 
     # Clonamos los repositorios
     for project in repositorios:
-        #project_name = project.full_name.split("/")[1]
-        project_name = project.full_name.replace("/", "*_*")
-        project_folder = "%s/%s" % (conf.Configuracion.cRepositorios, project_name)
-
-        # CHECK IF PROJECT EXISTS
-        if os.path.exists(project_folder):
-            print(" -> Project %s already exist in local folder!" % project.full_name)
+        if project.size > conf.Configuracion.REPO_SIZE_LIMIT:
+            print("Repositorio NO clonado. Ocupa demasiado en disco.")
         else:
-            print("Clonando " + project.clone_url + " en " + project_folder)
-            # get_ipython().system('git clone $project.clone_url $project_folder')
-            comando = 'git clone ' + project.clone_url + ' ' + project_folder
-            print(comando)
-            try:
-                p = subprocess.Popen(comando, shell=True)
-                p.wait()
-                #os.system(comando)
-                print(" -> Project %s cloned!" % project_name)
-            except:
-                print("***WARN** - Por algún motivo no se ha podido clonar el repositorio: " + project.full_name)
+            #project_name = project.full_name.split("/")[1]
+            project_name = project.full_name.replace("/", "*_*")
+            project_folder = "%s/%s" % (conf.Configuracion.cRepositorios, project_name)
+
+            # CHECK IF PROJECT EXISTS
+            if os.path.exists(project_folder):
+                print(" -> Project %s already exist in local folder!" % project.full_name)
+            else:
+                print("Clonando " + project.clone_url + " en " + project_folder)
+                # get_ipython().system('git clone $project.clone_url $project_folder')
+                comando = 'git clone ' + project.clone_url + ' ' + project_folder
+                print(comando)
+                try:
+                    p = subprocess.Popen(comando, shell=True)
+                    p.wait()
+                    #os.system(comando)
+                    print(" -> Project %s cloned!" % project_name)
+                except:
+                    print("***WARN** - Por algún motivo no se ha podido clonar el repositorio: " + project.full_name)
 
 
 def clonarRepositorios(lRepositorios):
@@ -312,24 +313,27 @@ def clonarRepositorios(lRepositorios):
     # Clonamos los repositorios
     for repositorio in lRepositorios:
         for project in repositorio:
-            project_name = project.full_name.split("/")[1]
-            project_folder = "%s/%s" % (conf.Configuracion.cRepositorios, project_name)
-
-            # CHECK IF PROJECT EXISTS
-            if os.path.exists(project_folder):
-                print(" -> Project %s already exist in local folder!" % project.full_name)
+            if project.size > conf.Configuracion.REPO_SIZE_LIMIT:
+                print("Repositorio NO clonado. Ocupa demasiado en disco.")
             else:
-                print("Clonando " + project.clone_url + " en " + project_folder)
-                #get_ipython().system('git clone $project.clone_url $project_folder')
-                comando = 'git clone ' + project.clone_url + ' ' + project_folder
-                print(comando)
-                try:
-                    p = subprocess.Popen(comando, shell=True)
-                    p.wait()
-                    #os.system(comando)
-                    print(" -> Project %s cloned!" % project_name)
-                except:
-                    print("***WARN** - Por algún motivo no se ha podido clonar el repositorio: " + project.full_name)
+                project_name = project.full_name.split("/")[1]
+                project_folder = "%s/%s" % (conf.Configuracion.cRepositorios, project_name)
+
+                # CHECK IF PROJECT EXISTS
+                if os.path.exists(project_folder):
+                    print(" -> Project %s already exist in local folder!" % project.full_name)
+                else:
+                    print("Clonando " + project.clone_url + " en " + project_folder)
+                    #get_ipython().system('git clone $project.clone_url $project_folder')
+                    comando = 'git clone ' + project.clone_url + ' ' + project_folder
+                    print(comando)
+                    try:
+                        p = subprocess.Popen(comando, shell=True)
+                        p.wait()
+                        #os.system(comando)
+                        print(" -> Project %s cloned!" % project_name)
+                    except:
+                        print("***WARN** - Por algún motivo no se ha podido clonar el repositorio: " + project.full_name)
 
 def generarZipRepos():
     logging.basicConfig(level=logging.DEBUG,
