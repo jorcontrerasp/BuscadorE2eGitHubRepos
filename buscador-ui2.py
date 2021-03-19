@@ -1,16 +1,24 @@
 import main
 import configuracion as conf
 import tkinter as tk
+from tkinter import ttk
 from tkinter import font
 from PIL import Image
 from PIL import ImageTk
 
 app = tk.Tk()
 app.title("BuscadorGitHubRepos")
-width = '605'
-height = '595'
+width = '650'
+height = '650'
 app.geometry(width + 'x' + height)
 app.resizable(False, False)
+
+nb = ttk.Notebook(app)
+nb.pack(fill='both', expand='yes')
+
+p1 = ttk.Frame(nb)
+p2 = ttk.Frame(nb)
+p3 = ttk.Frame(nb)
 
 # STATE (Credenciales)
 user_state = tk.StringVar()
@@ -75,6 +83,8 @@ def randomizarReposCheck_clicked():
         nRandomRepos_state.set(0)
         nRandomRepos.config(state=tk.DISABLED)
 
+# PESTAÑA 1
+
 row = 0
 
 # LOGO URJC
@@ -83,9 +93,9 @@ logoUrjcHeight = 60
 img = Image.open("imgs/logo_urjc2.png")
 img = img.resize((logoUrjcWidth,logoUrjcHeight), Image.ANTIALIAS)
 photoImg = ImageTk.PhotoImage(img)
-widget = tk.Label(app, image=photoImg)
+widget = tk.Label(p1, image=photoImg)
 widget.grid(column=0, row=row)
-titleAppLbl = tk.Label(app, text="BuscadorGitHubRepos", font=('Helvetica', 18, 'bold'))
+titleAppLbl = tk.Label(p1, text="BuscadorGitHubRepos", font=('Helvetica', 18, 'bold'))
 titleAppLbl.grid(column=1, row=row)
 f = font.Font(titleAppLbl, titleAppLbl.cget("font"))
 f.configure(underline=True)
@@ -93,29 +103,29 @@ titleAppLbl.configure(font=f)
 row+=1
 
 # CREDENCIALES
-credencialesLbl = tk.Label(app, text="CREDENCIALES")
+credencialesLbl = tk.Label(p1, text="CREDENCIALES")
 credencialesLbl.grid(column=0, row=row)
 f = font.Font(credencialesLbl, credencialesLbl.cget("font"))
 f.configure(underline=True)
 credencialesLbl.configure(font=f)
 row+=1
 
-userLbl = tk.Label(app, text="Usuario: ")
+userLbl = tk.Label(p1, text="Usuario: ")
 userLbl.grid(column=0, row=row)
 user_state.set(conf.Configuracion.user)
-user = tk.Entry(app,width=15, textvariable=user_state)
+user = tk.Entry(p1,width=15, textvariable=user_state)
 user.grid(column=1, row=row)
 row+=1
 
-tokenLbl = tk.Label(app, text="Token: ")
+tokenLbl = tk.Label(p1, text="Token: ")
 tokenLbl.grid(column=0, row=row)
 token_state.set(conf.Configuracion.token)
-token = tk.Entry(app,width=34, textvariable=token_state)
+token = tk.Entry(p1,width=34, textvariable=token_state)
 token.grid(column=1, row=row)
 row+=1
 
 # FILTROS QUERY
-filtrosQueryLbl = tk.Label(app, text="FILTROS QUERY")
+filtrosQueryLbl = tk.Label(p1, text="FILTROS QUERY")
 filtrosQueryLbl.grid(column=0, row=row)
 f = font.Font(filtrosQueryLbl, filtrosQueryLbl.cget("font"))
 f.configure(underline=True)
@@ -123,74 +133,74 @@ filtrosQueryLbl.configure(font=f)
 row+=1
 
 # LENGUAJE
-lenguajeLbl = tk.Label(app, text="Lenguaje: ")
+lenguajeLbl = tk.Label(p1, text="Lenguaje: ")
 lenguajeLbl.grid(column=0, row=row)
 lenguaje_state.set(conf.FiltrosQuery.language)
-lenguaje = tk.Entry(app,width=15, textvariable=lenguaje_state)
+lenguaje = tk.Entry(p1, width=15, textvariable=lenguaje_state)
 lenguaje.grid(column=1, row=row)
 row+=1
 
 # STARS
-starsLbl = tk.Label(app, text="Stars: ")
+starsLbl = tk.Label(p1, text="Stars: ")
 starsLbl.grid(column=0, row=row)
 stars_state.set(conf.FiltrosQuery.stars)
-stars = tk.Entry(app,width=15, textvariable=stars_state)
+stars = tk.Entry(p1, width=15, textvariable=stars_state)
 stars.grid(column=1, row=row)
 row+=1
 
 # FORKS
-forksLbl = tk.Label(app, text="Forks: ")
+forksLbl = tk.Label(p1, text="Forks: ")
 forksLbl.grid(column=0, row=row)
 forks_state.set(conf.FiltrosQuery.forks)
-forks = tk.Entry(app,width=15, textvariable=forks_state)
+forks = tk.Entry(p1, width=15, textvariable=forks_state)
 forks.grid(column=1, row=row)
 row+=1
 
 # CREATED
-createdLbl = tk.Label(app, text="Created: ")
+createdLbl = tk.Label(p1, text="Created: ")
 createdLbl.grid(column=0, row=row)
 created_state.set(conf.FiltrosQuery.created)
-created = tk.Entry(app,width=15, textvariable=created_state)
+created = tk.Entry(p1, width=15, textvariable=created_state)
 created.grid(column=1, row=row)
 row+=1
 
 # PUSHED
-pushedLbl = tk.Label(app, text="Pushed: ")
+pushedLbl = tk.Label(p1, text="Pushed: ")
 pushedLbl.grid(column=0, row=row)
 pushed_state.set(conf.FiltrosQuery.pushed)
-pushed = tk.Entry(app,width=15, textvariable=pushed_state)
+pushed = tk.Entry(p1, width=15, textvariable=pushed_state)
 pushed.grid(column=1, row=row)
 row+=1
 
 # ARCHIVED
-archivedLbl = tk.Label(app, text="Archived ")
+archivedLbl = tk.Label(p1, text="Archived ")
 archivedLbl.grid(column=0, row=row)
 archivedCheck_state.set(False)
-archivedCheck = tk.Checkbutton(app, var=archivedCheck_state)
+archivedCheck = tk.Checkbutton(p1, var=archivedCheck_state)
 archivedCheck.grid(column=1, row=row)
 archivedCheck.config(state=tk.DISABLED)
 row+=1
 
 # PUBLIC
-publicLbl = tk.Label(app, text="Public")
+publicLbl = tk.Label(p1, text="Public")
 publicLbl.grid(column=0, row=row)
 publicCheck_state.set(True)
-publicCheck = tk.Checkbutton(app, var=publicCheck_state)
+publicCheck = tk.Checkbutton(p1, var=publicCheck_state)
 publicCheck.grid(column=1, row=row)
 publicCheck.config(state=tk.DISABLED)
 row+=1
 
 # SIZE LIMIT
-sizeLimitLbl = tk.Label(app, text="Size Limit (kilobytes): ")
+sizeLimitLbl = tk.Label(p1, text="Size Limit (kilobytes): ")
 sizeLimitLbl.grid(column=0, row=row)
 sizeLimit_state.set(conf.Configuracion.REPO_SIZE_LIMIT)
-sizeLimit = tk.Entry(app,width=7, textvariable=sizeLimit_state)
+sizeLimit = tk.Entry(p1, width=7, textvariable=sizeLimit_state)
 sizeLimit.grid(column=1, row=row)
 sizeLimit.config(state=tk.DISABLED)
 row+=1
 
 # VARIABLES DE CONFIGURACIÓN
-configuracionLbl = tk.Label(app, text="VARIABLES DE CONFIGURACIÓN")
+configuracionLbl = tk.Label(p1, text="VARIABLES DE CONFIGURACIÓN")
 configuracionLbl.grid(column=0, row=row)
 f = font.Font(configuracionLbl, configuracionLbl.cget("font"))
 f.configure(underline=True)
@@ -198,99 +208,121 @@ configuracionLbl.configure(font=f)
 row+=1
 
 # BUSCAR REPOS EN LOCAL
-buscarEnLocalReposLbl = tk.Label(app, text="Buscar repos en LOCAL")
+buscarEnLocalReposLbl = tk.Label(p1, text="Buscar repos en LOCAL")
 buscarEnLocalReposLbl.grid(column=0, row=row)
 #buscarEnLocalReposLbl.pack()
 buscarEnLocalCheck_state.set(conf.Configuracion.buscarEnLocal)
-buscarEnLocalCheck = tk.Checkbutton(app, var=buscarEnLocalCheck_state)
+buscarEnLocalCheck = tk.Checkbutton(p1, var=buscarEnLocalCheck_state)
 buscarEnLocalCheck.grid(column=1, row=row)
 #buscarEnLocalCheck.pack()
 row+=1
 
 # GENERAR LISTA REPOS
-generarListaReposLbl = tk.Label(app, text="Generar lista repos ('.pickle')")
+generarListaReposLbl = tk.Label(p1, text="Generar lista repos ('.pickle')")
 generarListaReposLbl.grid(column=0, row=row)
 #generarListaReposLbl.pack()
 generarListaReposCheck_state.set(conf.Configuracion.generarListaRepos)
-generarListaReposCheck = tk.Checkbutton(app, var=generarListaReposCheck_state)
+generarListaReposCheck = tk.Checkbutton(p1, var=generarListaReposCheck_state)
 generarListaReposCheck.grid(column=1, row=row)
 #generarListaReposCheck.pack()
 row+=1
 
 # ScriptLapseExe
-scriptLapseExeLbl = tk.Label(app, text="Ejecutar mediante 'ScriptLapseExe'")
+scriptLapseExeLbl = tk.Label(p1, text="Ejecutar mediante 'ScriptLapseExe'")
 #scriptLapseExeLbl.grid(column=0, row=row)
 #scriptLapseExeLbl.pack()
 scriptLapseExeCheck_state.set(conf.Configuracion.lapseExe)
-scriptLapseExeCheck = tk.Checkbutton(app, var=scriptLapseExeCheck_state)
+scriptLapseExeCheck = tk.Checkbutton(p1, var=scriptLapseExeCheck_state)
 #scriptLapseExeCheck.grid(column=1, row=row)
 #scriptLapseExeCheck.pack()
 #row+=1
 
 # Nº LAPSE REPOS
-#nLapseReposLbl = tk.Label(app, text="Nº lapse repos: ")
+#nLapseReposLbl = tk.Label(p1, text="Nº lapse repos: ")
 #nLapseReposLbl.grid(column=0, row=row)
 #nLapseReposLbl.pack()
 nLapseRepos_state.set(conf.Configuracion.N_LAPSE_REPOS)
-nLapseRepos = tk.Entry(app,width=5, textvariable=nLapseRepos_state)
+nLapseRepos = tk.Entry(p1, width=5, textvariable=nLapseRepos_state)
 #nLapseRepos.grid(column=2, row=row)
 #nLapseRepos.pack()
 row+=1
 
 # RANDOMIZAR REPOSITORIOS
-randomizarReposLbl = tk.Label(app, text="Randomizar repositorios")
+randomizarReposLbl = tk.Label(p1, text="Randomizar repositorios")
 randomizarReposLbl.grid(column=0, row=row)
 #randomizarReposLbl.pack()
 randomizarReposCheck_state.set(conf.Configuracion.randomizarListaRepos)
-randomizarReposCheck = tk.Checkbutton(app, var=randomizarReposCheck_state, command=randomizarReposCheck_clicked)
+randomizarReposCheck = tk.Checkbutton(p1, var=randomizarReposCheck_state, command=randomizarReposCheck_clicked)
 randomizarReposCheck.grid(column=1, row=row)
 #randomizarReposCheck.pack()
 
 # Nº REPOS RANDOM
-#nRandomReposLbl = tk.Label(app, text="Nº repos random: ")
+#nRandomReposLbl = tk.Label(p1, text="Nº repos random: ")
 #nRandomReposLbl.grid(column=0, row=row)
 #nRandomReposLbl.pack()
 nRandomRepos_state.set(conf.Configuracion.N_RANDOM)
-nRandomRepos = tk.Entry(app,width=5, textvariable=nRandomRepos_state)
+nRandomRepos = tk.Entry(p1, width=5, textvariable=nRandomRepos_state)
 nRandomRepos.grid(column=2, row=row)
 #nRandomRepos.pack()
 row+=1
 
 # CLONAR REPOSITORIOS
-clonarReposLbl = tk.Label(app, text="Clonar repositorios resultantes")
+clonarReposLbl = tk.Label(p1, text="Clonar repositorios resultantes")
 clonarReposLbl.grid(column=0, row=row)
 #clonarReposLbl.pack()
 clonarReposCheck_state.set(conf.Configuracion.clonarRepositorios)
-clonarReposCheck = tk.Checkbutton(app, var=clonarReposCheck_state)
+clonarReposCheck = tk.Checkbutton(p1, var=clonarReposCheck_state)
 clonarReposCheck.grid(column=1, row=row)
 #clonarReposCheck.pack()
 row+=1
 
 # DO EXCEL
-doExcelLbl = tk.Label(app, text="Generar Excel")
+doExcelLbl = tk.Label(p1, text="Generar Excel")
 doExcelLbl.grid(column=0, row=row)
 #doExcelLbl.pack()
 doExcelCheck_state.set(conf.Configuracion.doExcel)
-doExcelCheck = tk.Checkbutton(app, var=doExcelCheck_state)
+doExcelCheck = tk.Checkbutton(p1, var=doExcelCheck_state)
 doExcelCheck.grid(column=1, row=row)
 #doExcelCheck.pack()
 row+=1
 
 # DO CSV
-doCsvLbl = tk.Label(app, text="Generar Csv")
+doCsvLbl = tk.Label(p1, text="Generar Csv")
 doCsvLbl.grid(column=0, row=row)
 #doCsvLbl.pack()
 doCsvCheck_state.set(conf.Configuracion.doCsv)
-doCsvCheck = tk.Checkbutton(app, var=doCsvCheck_state)
+doCsvCheck = tk.Checkbutton(p1, var=doCsvCheck_state)
 doCsvCheck.grid(column=1, row=row)
 #doCsvCheck.pack()
 row+=1
 
 # BOTÓN EJECUTAR
-exeButton = tk.Button(app, text="EJECUTAR", fg="green",  command=exe)
+exeButton = tk.Button(p1, text="EJECUTAR", fg="green",  command=exe)
 #exeButton.pack()
 exeButton.grid(column=1, row=row)
 row+=1
+
+# PESTAÑA 2
+
+row = 0
+
+proximamenteLbl = tk.Label(p2, text="PRÓXIMAMENTE")
+proximamenteLbl.grid(column=0, row=row)
+row+=1
+
+
+# PESTAÑA 3
+
+row = 0
+
+proximamenteLbl = tk.Label(p3, text="PRÓXIMAMENTE")
+proximamenteLbl.grid(column=0, row=row)
+row+=1
+
+
+nb.add(p1, text='P1')
+nb.add(p2, text='P2')
+nb.add(p3, text='P3')
 
 #buscarEnLocalCheck_clicked()
 randomizarReposCheck_clicked()
