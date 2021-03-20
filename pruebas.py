@@ -6,31 +6,32 @@ import datetime
 import os
 from github import Github
 
-print(conf.Configuracion.fechaEjecucion + " - Iniciando prueba")
+class RepoPruebas():
+    organizacion = ""
+    nombre = ""
 
-# Generamos un token para consultar la API de GitHub a través de la librería.
-user = conf.Configuracion.user
-token = conf.Configuracion.token
-g = Github(user, token)
+def ejecutaPrueba():
+    print(conf.Configuracion.fechaEjecucion + " - Iniciando prueba")
 
-nombreRepo = "apache/karaf"
-repo = g.get_repo(nombreRepo)
-filteredRepos = [repo]
+    # Generamos un token para consultar la API de GitHub a través de la librería.
+    user = conf.Configuracion.user
+    token = conf.Configuracion.token
+    g = Github(user, token)
 
-auxiliares.clonar1ListaRepo(filteredRepos)
+    repo = g.get_repo(RepoPruebas.nombre)
+    filteredRepos = [repo]
 
-reposEnLocal = os.listdir(conf.Configuracion.carpetaRepositorios)
+    auxiliares.clonar1ListaRepo(filteredRepos)
 
-df = auxiliares.generarDataFrame(filteredRepos)
-#repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio8.value, df)
+    reposEnLocal = os.listdir(conf.Configuracion.carpetaRepositorios)
 
-df.at["apache/karaf", "GitHub_URL"] = df.at["apache/karaf", "GitHub_URL"] + "AAA\n"
-df.at["apache/karaf", "GitHub_URL"] = df.at["apache/karaf", "GitHub_URL"] + "BBB\n"
+    df = auxiliares.generarDataFrame(filteredRepos)
+    rAux = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio8.value, df)
 
-auxiliares.generarEXCEL_CSV(df, "research", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
+    auxiliares.generarEXCEL_CSV(df, "research", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 
+    date = str(datetime.datetime.now())[0:19]
+    print(date + " - Prueba finalizada")
 
-#print(repos1)
-
-date = str(datetime.datetime.now())[0:19]
-print(date + " - Prueba finalizada")
+# LLAMADA AL MÉTODO DE EJECUCIÓN
+# ejecutaPrueba()
