@@ -21,13 +21,13 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 - Generar excel: si se marca esta opción se guarda el resultado de la búsqueda en un fichero en formato excel.
 - Generar Csv: si se marca esta opción se guarda el resultado de la búsqueda en un fichero en formato csv.
 
-Pestaña 1:
+<p>Pestaña 1:</p>
 <img src="imgs/interfaz_p1.png" alt=“interfaz” width="450"/>
 
-Pestaña 2:
+<p>Pestaña 2:</p>
 <img src="imgs/interfaz_p2.png" alt=“interfaz” width="450"/>
 
-Pestaña 3:
+<p>Pestaña 3:</p>
 <img src="imgs/interfaz_p3.png" alt=“interfaz” width="450"/>
 
 ## Construido con 🛠️
