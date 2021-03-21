@@ -18,15 +18,23 @@ def ejecutaPrueba():
     token = conf.Configuracion.token
     g = Github(user, token)
 
-    repo = g.get_repo(RepoPruebas.nombre)
+    auxiliares.crearCarpetasLocal()
+
+    repo = g.get_repo(RepoPruebas.organizacion + "/" + RepoPruebas.nombre)
     filteredRepos = [repo]
 
     auxiliares.clonar1ListaRepo(filteredRepos)
 
-    reposEnLocal = os.listdir(conf.Configuracion.carpetaRepositorios)
+    reposEnLocal = os.listdir(conf.Configuracion.cRepositorios)
 
     df = auxiliares.generarDataFrame(filteredRepos)
-    rAux = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio8.value, df)
+
+    # Aplicamos criterios
+    print("Nº repos en local: " + str(len(reposEnLocal)))
+    repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio1.value, df)
+    repos3 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio3.value, df)
+    repos5 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio5.value, df)
+    repos10 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio10.value, df)
 
     auxiliares.generarEXCEL_CSV(df, "research", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
 

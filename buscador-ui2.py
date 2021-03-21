@@ -6,6 +6,8 @@ from tkinter import font
 from PIL import Image
 from PIL import ImageTk
 import pruebas
+import repoBD
+import executeQuery
 
 app = tk.Tk()
 app.title("BuscadorGitHubRepos")
@@ -97,6 +99,20 @@ def ejecutaPrueba():
 
 def consultarBD():
     print("Consultando base de datos...")
+    repo = repoBD.createRepoBD()
+    repo.setNombre(nombreRepoBD_state.get())
+    repo.setOrganizacion(organizacionBD_state.get())
+    repo.setSize(sizeBD_state.get())
+    repo.setCommitID(commitIdBD_state.get())
+
+    query = repo.getFiltro()
+
+    print(query)
+
+    filas = executeQuery.execute(query)
+
+    for fila in filas:
+        listadoBD.insert(0, fila)
 
 def randomizarReposCheck_clicked():
     if randomizarReposCheck_state.get():
@@ -340,7 +356,7 @@ row+=1
 # NOMBRE REPO BD
 nombreRepoBDLbl = tk.Label(p2, text="Nombre repositorio: ", bg=backgroudLblColor)
 nombreRepoBDLbl.grid(column=0, row=row)
-nombreRepoBD_state.set(" ")
+nombreRepoBD_state.set("")
 nombreRepoBD = tk.Entry(p2, width=15, textvariable=nombreRepoBD_state)
 nombreRepoBD.grid(column=1, row=row)
 row+=1
@@ -348,7 +364,7 @@ row+=1
 # ORGANIZACION BD
 organizacionBDLbl = tk.Label(p2, text="Organizacion: ", bg=backgroudLblColor)
 organizacionBDLbl.grid(column=0, row=row)
-organizacionBD_state.set(" ")
+organizacionBD_state.set("")
 organizacionBD = tk.Entry(p2, width=15, textvariable=organizacionBD_state)
 organizacionBD.grid(column=1, row=row)
 row+=1
@@ -356,7 +372,7 @@ row+=1
 # COMMIT ID BD
 commitIdBDLbl = tk.Label(p2, text="Commit ID: ", bg=backgroudLblColor)
 commitIdBDLbl.grid(column=0, row=row)
-commitIdBD_state.set(" ")
+commitIdBD_state.set("")
 commitIdBD = tk.Entry(p2, width=15, textvariable=commitIdBD_state)
 commitIdBD.grid(column=1, row=row)
 row+=1
@@ -364,7 +380,7 @@ row+=1
 # SIZE BD
 sizeBDLbl = tk.Label(p2, text="Tamaño (kilobytes): ", bg=backgroudLblColor)
 sizeBDLbl.grid(column=0, row=row)
-sizeBD_state.set(" ")
+sizeBD_state.set(0)
 sizeBD = tk.Entry(p2, width=15, textvariable=sizeBD_state)
 sizeBD.grid(column=1, row=row)
 row+=1

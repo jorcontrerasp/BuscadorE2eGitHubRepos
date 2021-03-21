@@ -88,23 +88,7 @@ def exe():
         # Imprimimos la lista de repositorios.
         auxiliares.imprimirListaRepositorios(filteredRepos)
 
-        # CREAR CARPETAS NECESARIAS EN LOCAL
-        # Creamos la carpeta donde van los logs (si no existe)
-        if not os.path.exists(conf.Configuracion.cLogs):
-            os.mkdir(conf.Configuracion.cLogs)
-
-        # Creamos la carpeta donde van los repositories (si no existe)
-        if not os.path.exists(conf.Configuracion.cRepositorios.split("/")[0]):
-            os.mkdir(conf.Configuracion.cRepositorios.split("/")[0])
-
-        # Creamos la carpeta donde van los contadores (si no existe)
-        if not os.path.exists(conf.Configuracion.cContadores.split("/")[0]):
-            os.mkdir(conf.Configuracion.cContadores.split("/")[0])
-
-        # Creamos la carpeta donde van los research (si no existe)
-        if not os.path.exists(conf.Configuracion.cResearch.split("/")[0]):
-            os.mkdir(conf.Configuracion.cResearch.split("/")[0])
-        # FIN CREAR CARPETAS NECESARIAS EN LOCAL
+        auxiliares.crearCarpetasLocal()
 
         if conf.Configuracion.lapseExe:
             # EXCEL RESEARCH

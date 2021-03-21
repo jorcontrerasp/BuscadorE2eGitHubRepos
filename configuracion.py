@@ -1,4 +1,6 @@
 import datetime
+import pymysql
+import pymysql.cursors
 
 # CONFIGURACIÓN
 class Configuracion():
@@ -19,6 +21,7 @@ class Configuracion():
     cLogs = "logs"
     cResearch = "research/research_" + fechaEjecucion
     cContadores = "contadores/contadores_" + fechaEjecucion
+    actualizarBD = False
 
 class FiltrosQuery():
     language = "java"
@@ -53,3 +56,11 @@ class FiltrosQuery():
             queryIni += "is:" + self.qIs + "\n"
 
         return queryIni
+
+class ConexionesBD():
+    host = "localhost"
+    port = ""
+    user = "root"
+    password = "password"
+    db = "buscadorGitHubRepos"
+    cursorClass = pymysql.cursors.DictCursor
