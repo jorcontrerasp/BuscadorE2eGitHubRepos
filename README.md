@@ -10,6 +10,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 <p>pip install openpyxl</p>
 <p>pip install pillow</p>
 <p>xcode-select —install (para corregir un posible xcrun error)</p>
+<p>pip install pymysql</p>
 
 ### Variables de configuración 🔧
 
@@ -20,7 +21,14 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 - Generar excel: si se marca esta opción se guarda el resultado de la búsqueda en un fichero en formato excel.
 - Generar Csv: si se marca esta opción se guarda el resultado de la búsqueda en un fichero en formato csv.
 
-<img src="imgs/interfaz.png" alt=“interfaz” width="450"/>
+Pestaña 1:
+<img src="imgs/interfaz_p1.png" alt=“interfaz” width="450"/>
+
+Pestaña 2:
+<img src="imgs/interfaz_p2.png" alt=“interfaz” width="450"/>
+
+Pestaña 3:
+<img src="imgs/interfaz_p3.png" alt=“interfaz” width="450"/>
 
 ## Construido con 🛠️
 
