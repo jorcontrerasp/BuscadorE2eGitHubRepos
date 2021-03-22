@@ -25,11 +25,11 @@ class RepoBD:
 
         if (len(self.nombre) > 0):
             campos += "NOMBRE,"
-            values += self.nombre + ","
+            values += "'" + self.nombre + "',"
 
         if (len(self.organizacion) > 0):
             campos += "ORGANIZACION,"
-            values += self.organizacion + ","
+            values += "'" + self.organizacion + "',"
 
         if (self.size > 0):
             campos += "SIZE,"
@@ -37,10 +37,10 @@ class RepoBD:
 
         if (len(self.commitID) > 0):
             campos += "COMMITID,"
-            values += self.commitID + ","
+            values += "'" + self.commitID + "',"
 
-        campos = campos[0:campos.size - 1]
-        values = values[0:values.size - 1]
+        campos = campos[0:len(campos) - 1]
+        values = values[0:len(values) - 1]
         insert = "INSERT INTO BD_D_REPO (" + campos + ") VALUES (" + values + ")"
 
         insert += ";"
@@ -54,18 +54,18 @@ class RepoBD:
 
         values = ""
         if (len(self.nombre) > 0):
-            values += "NOMBRE=" + self.nombre + ","
+            values += "NOMBRE='"  + self.nombre + "',"
 
         if (len(self.organizacion) > 0):
-            values += "ORGANIZACION=" + self.organizacion + ","
+            values += "ORGANIZACION='" + self.organizacion + "',"
 
         if (self.size > 0):
             values += "SIZE=" + str(self.size) + ","
 
         if (len(self.commitID) > 0):
-            values += "COMMITID=" + self.commitID + ","
+            values += "COMMITID='" + self.commitID + "',"
 
-        values = values[0:values.size - 1]
+        values = values[0:len(values) - 1]
         update = "UPDATE BD_D_REPO SET " + values + " WHERE ID = " + self.id
 
         update += ";"
@@ -79,16 +79,16 @@ class RepoBD:
             select += " AND ID=" + self.id
 
         if (len(self.nombre) > 0):
-            select += " AND NOMBRE=" + self.nombre
+            select += " AND NOMBRE='" + self.nombre + "'"
 
         if (len(self.organizacion) > 0):
-            select += " AND ORGANIZACION=" + self.organizacion
+            select += " AND ORGANIZACION='" + self.organizacion + "'"
 
         if (self.size > 0):
             select += " AND SIZE=" + str(self.size)
 
         if (len(self.commitID) > 0):
-            select += " AND COMITID=" + self.commitID
+            select += " AND COMITID='" + self.commitID + "'"
 
         select += ";"
 
@@ -101,16 +101,16 @@ class RepoBD:
             delete += " AND ID=" + self.id
 
         if (len(self.nombre) > 0):
-            delete += " AND NOMBRE=" + self.nombre
+            delete += " AND NOMBRE='" + self.nombre + "'"
 
         if (len(self.organizacion) > 0):
-            delete += " AND ORGANIZACION=" + self.organizacion
+            delete += " AND ORGANIZACION='" + self.organizacion + "'"
 
         if (self.size > 0):
             delete += " AND SIZE=" + str(self.size)
 
         if (len(self.commitID) > 0):
-            delete += " AND COMITID=" + self.commitID
+            delete += " AND COMITID='" + self.commitID + "'"
 
         delete += ";"
 

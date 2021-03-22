@@ -21,7 +21,7 @@ class Configuracion():
     cLogs = "logs"
     cResearch = "research/research_" + fechaEjecucion
     cContadores = "contadores/contadores_" + fechaEjecucion
-    actualizarBD = False
+    actualizarBD = True
 
 class FiltrosQuery():
     language = "java"

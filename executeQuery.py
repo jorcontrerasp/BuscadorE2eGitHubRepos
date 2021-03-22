@@ -3,20 +3,22 @@ import pymysql
 import pymysql.cursors
 
 def getConexion():
-    db = pymysql.connect(host=conf.ConexionesBD.host,
-                         user=conf.ConexionesBD.user,
-                         password=conf.ConexionesBD.password,
-                         database=conf.ConexionesBD.db,
-                         cursorclass=conf.ConexionesBD.cursorClass)
-    return db
+    try:
+        db = pymysql.connect(host=conf.ConexionesBD.host,
+                             user=conf.ConexionesBD.user,
+                             password=conf.ConexionesBD.password,
+                             database=conf.ConexionesBD.db,
+                             cursorclass=conf.ConexionesBD.cursorClass)
+        return db
+    except:
+        print("Error al obtener la conexión a la base de datos.")
 
 def finalizaConexion(db):
     db.close()
 
 def execute(query):
+    db = getConexion()
     try:
-        db = getConexion()
-
         # Preparamos el objeto cursor.
         cursor = db.cursor()
 

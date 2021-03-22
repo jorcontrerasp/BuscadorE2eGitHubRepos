@@ -2,6 +2,8 @@ from enum import Enum
 import configuracion as conf
 import auxiliares
 import os
+import repoBD
+import executeQuery
 
 class Criterios(Enum):
     criterio1 = "integration"
@@ -25,7 +27,7 @@ def obtenerRutaCompletaE(origen, lFicheros):
 
     return content
 
-def recorrerRepositoriosLocal(listaRepositorios, criterio, df):
+def recorrerRepositoriosLocal(listaRepositorios, df, df2):
     listaEncontrados = []
     for repo in listaRepositorios:
 
@@ -33,21 +35,57 @@ def recorrerRepositoriosLocal(listaRepositorios, criterio, df):
 
         rutaIni = content[0]
         if os.path.exists(rutaIni):
-            if criterio == Criterios.criterio10.value:
-                encontrado = buscarC10_Local(repo, content, df)
 
-            elif criterio == Criterios.criterio11.value:
-                encontrado = buscarC11_Local(repo, content, df)
+            boC1 = buscarTodaCarpetaEnRepoLocal2(repo, content, Criterios.criterio1.value, df)
+            boC3 = buscarTodaCarpetaEnRepoLocal2(repo, content, Criterios.criterio3.value, df)
+            boC5 = buscarTodaCarpetaEnRepoLocal2(repo, content, Criterios.criterio5.value, df)
+            boC10 = buscarC10_Local(repo, content, df)
 
-            elif criterio == Criterios.criterio12.value:
-                encontrado = buscarFicherosCI_Local(repo, content, df)
-
-            else:
-                encontrado = buscarTodaCarpetaEnRepoLocal2(repo, content, criterio, df)
-
-            # Si lo ha encontrado lo añadimos a la listaEncontrados.
-            if encontrado:
+            # Si lo ha encontrado:
+            # - lo añadimos a la listaEncontrados.
+            if boC1 or boC3 or boC5 or boC10:
                 listaEncontrados.append(repo)
+
+            # Actualizamos BD
+            if conf.Configuracion.actualizarBD:
+                print("Actualizando base de datos...")
+                repoBBDD = repoBD.createRepoBD()
+                print(repo)
+                repoBBDD.setNombre(repo.split("*_*")[1])
+                repoBBDD.setOrganizacion(repo.split("*_*")[0])
+
+                query = repoBBDD.getFiltro()
+
+                print(query)
+
+                filas = executeQuery.execute(query)
+                if len(filas)>0:
+                    fila1 = filas[0]
+                    repoBBDD.setId(fila1["id"])
+                    repoBBDD.setSize(0)
+                    repoBBDD.setCommitID(df.at[repo.replace("*_*", "/"), "CommitID"])
+                    update = repoBBDD.getUpdate()
+                    print(update)
+                    rUpdate = executeQuery.execute(update)
+                else:
+                    repoBBDD.setSize(0)
+                    repoBBDD.setCommitID(df.at[repo.replace("*_*", "/"), "CommitID"])
+                    insert = repoBBDD.getInsert()
+                    print(insert)
+                    rInsert = executeQuery.execute(insert)
+
+                # Actualizamos contadores
+                columna = "n_encontrados"
+                if boC1:
+                    df2.at[Criterios.criterio1.value, columna] += 1
+                if boC3:
+                    df2.at[Criterios.criterio3.value, columna] += 1
+                if boC5:
+                    df2.at[Criterios.criterio5.value, columna] += 1
+                if boC10:
+                    df2.at[Criterios.criterio10.value, columna] += 1
+
+                df2.at["Totales", columna] = auxiliares.contarRepositoriosAlMenos1Criterio(df)
         else:
             print("No se ha encontrado la ruta " + rutaIni)
 
@@ -259,291 +297,290 @@ def buscarFicherosCI_Local(repo, lFicheros, df):
     return encontrado
 
 # FUNCIONES DE BÚSQUEDA (API de GitHub)
-def buscarEnRepo(listaRepositorios, criterio, df):
-    print("Buscando repositorios recursivamente: '" + criterio +"'")
-    repos = []
+def busquedaGitHubApiRepos(listaRepositorios, df, df2):
+    listaEncontrados = []
+    for repo in listaRepositorios:
+        boC1 = buscarEnRepo(repo, Criterios.criterio1.value, df)
+        #boC3 = buscarEnRepo(repo, Criterios.criterio3.value, df)
+        #boC5 = buscarEnRepo(repo, Criterios.criterio5.value, df)
+        boC3 = False
+        boC5 = False
+
+        # Si lo ha encontrado:
+        # - lo añadimos a la listaEncontrados.
+        # - insertamos en BD
+        if boC1 or boC3 or boC5:
+            listaEncontrados.append(repo)
+            if conf.Configuracion.actualizarBD:
+                print("Actualizando base de datos...")
+                repoBBDD = repoBD.createRepoBD()
+                repoBBDD.setNombre(repo.full_name.split("/")[1])
+                repoBBDD.setOrganizacion(repo.full_name.split("/")[0])
+
+                query = repoBBDD.getFiltro()
+
+                filas = executeQuery.execute(query)
+                if len(filas) > 0:
+                    fila1 = filas[0]
+                    repoBBDD.setId(fila1["id"])
+                    repoBBDD.setSize(repo.size)
+                    repoBBDD.setCommitID(df.at[repo.full_name, "CommitID"])
+                    update = repoBBDD.getUpdate()
+                    rUpdate = executeQuery.execute(update)
+                else:
+                    repoBBDD.setSize(repo.size)
+                    repoBBDD.setCommitID(df.at[repo.full_name, "CommitID"])
+                    insert = repoBBDD.getInsert()
+                    rInsert = executeQuery.execute(insert)
+
+            # Actualizamos contadores
+            columna = "n_encontrados"
+            if boC1:
+                df2.at[Criterios.criterio1.value, columna] += 1
+            if boC3:
+                df2.at[Criterios.criterio3.value, columna] += 1
+            if boC5:
+                df2.at[Criterios.criterio5.value, columna] += 1
+
+            df2.at["Totales", columna] = auxiliares.contarRepositoriosAlMenos1Criterio(df)
+
+    return listaEncontrados
+
+def buscarEnRepo(repo, criterio, df):
+    print("Buscando repositorios recursivamente: '" + criterio + "' en el repo: " + repo.full_name)
+    encontrado = False
     log = conf.Configuracion.cLogs + "/log_buscarEnRepo_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
-
-    for repo in listaRepositorios:
-        f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("\n")
+    contents = repo.get_contents("")
+    while contents:
+        content_file = contents.pop(0)
+        f.write(str(content_file))
         f.write("\n")
-        contents = repo.get_contents("")
-        while contents:
-            content_file = contents.pop(0)
-            f.write(str(content_file))
+        if criterio in content_file.path.lower():
+            f.write("Adding " + content_file.path)
             f.write("\n")
-            if criterio in content_file.path.lower():
-                f.write("Adding " + content_file.path)
-                f.write("\n")
-                repos.append(repo)
-                auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
-                break
-            else:
-                if content_file.type == "dir":
-                    contents.extend(repo.get_contents(content_file.path))
-
-    print("Total de repositorios filtrados según el criterio: %d" % len(repos))
+            encontrado = True
+            auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
+            break
+        else:
+            if content_file.type == "dir":
+                contents.extend(repo.get_contents(content_file.path))
     f.close()
-    auxiliares.imprimirListaRepositorios(repos)
-    return repos
+    return encontrado
 
-def buscarEnRaiz(listaRepositorios, criterio, df):
-    print("Buscando repositorios: '" + criterio +"' en la raiz")
-    repos = []
+def buscarEnRaiz(repo, criterio, df):
+    print("Buscando '" + criterio +"' en la raiz del repo: " + repo.full_name)
+    encontrado = False
     log = conf.Configuracion.cLogs + "/log_buscarEnRaiz_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
-    for repo in listaRepositorios:
-        f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("\n")
+    contents = repo.get_contents("")
+    for content_file in contents:
+        f.write(str(content_file))
         f.write("\n")
-        contents = repo.get_contents("")
-        for content_file in contents:
-            f.write(str(content_file))
+        if criterio in content_file.path.lower():
+            f.write("Adding " + content_file.path)
             f.write("\n")
-            if criterio in content_file.path.lower():
-                f.write("Adding " + content_file.path)
-                f.write("\n")
-                repos.append(repo)
-                auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
-                break
+            encontrado = True
+            auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
+            break
 
-    print("Total de repositorios filtrados según el criterio: %d" % len(repos))
     f.close()
-    auxiliares.imprimirListaRepositorios(repos)
-    return repos
+    return encontrado
 
-def buscarEnTests(listaRepositorios, criterio, df):
-    print("Buscando repositorios: '" + criterio + "' en carpeta test/tests")
-    repos = []
+def buscarEnTests(repo, criterio, df):
+    print("Buscando '" + criterio + "' en carpeta test/tests del repo: " + repo.full_name)
+    encontrado = False
     log = conf.Configuracion.cLogs + "/log_buscarEnTests_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
-    for repo in listaRepositorios:
-        f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("\n")
+    contents = repo.get_contents("")
+    while contents:
+        content_file = contents.pop(0)
+        #print(content_file)
+        f.write(str(content_file))
         f.write("\n")
-        contents = repo.get_contents("")
-        while contents:
-            content_file = contents.pop(0)
-            #print(content_file)
-            f.write(str(content_file))
-            f.write("\n")
-            if "test" in content_file.path.lower():
-                if content_file.type == "dir":
-                    #contents.extend(repo.get_contents(content_file.path))
-                    contents = repo.get_contents(content_file.path)
-                    while contents:
-                        content_file = contents.pop(0)
-                        #print(content_file)
-                        f.write(str(content_file))
+        if "test" in content_file.path.lower():
+            if content_file.type == "dir":
+                #contents.extend(repo.get_contents(content_file.path))
+                contents = repo.get_contents(content_file.path)
+                while contents:
+                    content_file = contents.pop(0)
+                    #print(content_file)
+                    f.write(str(content_file))
+                    f.write("\n")
+                    if "test/" + criterio in content_file.path.lower() or "tests/" + criterio in content_file.path.lower():
+                        #print("Adding " + content_file.path)
+                        f.write("Adding " + content_file.path)
                         f.write("\n")
-                        if "test/" + criterio in content_file.path.lower() or "tests/" + criterio in content_file.path.lower():
-                            #print("Adding " + content_file.path)
-                            f.write("Adding " + content_file.path)
-                            f.write("\n")
-                            repos.append(repo)
-                            auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
-                            break
-                break
-        f.write("\n")
+                        encontrado = True
+                        auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
+                        break
+            break
+    f.write("\n")
 
-    print("Total de repositorios filtrados según el criterio: %d" % len(repos))
     f.close()
-    auxiliares.imprimirListaRepositorios(repos)
-    return repos
+    return encontrado
 
-def buscarEnSrcTests(listaRepositorios, criterio, df):
-    print("Buscando repositorios: '" + criterio +"' en carpeta src/test")
-    repos = []
+def buscarEnSrcTests(repo, criterio, df):
+    print("Buscando '" + criterio +"' en carpeta src/test del repo: " + repo.full_name)
+    encontrado = False
     log = conf.Configuracion.cLogs + "/log_buscarEnSrcTests_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
-    for repo in listaRepositorios:
-        f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("\n")
+    contents = repo.get_contents("")
+    while contents:
+        content_file = contents.pop(0)
+        f.write(str(content_file))
         f.write("\n")
-        contents = repo.get_contents("")
-        while contents:
-            content_file = contents.pop(0)
-            f.write(str(content_file))
-            f.write("\n")
-            if content_file.path.lower() == "src":
-                if content_file.type == "dir":
-                    #contents.extend(repo.get_contents(content_file.path))
-                    contents = repo.get_contents(content_file.path)
-                    while contents:
-                        content_file = contents.pop(0)
-                        f.write(str(content_file))
+        if content_file.path.lower() == "src":
+            if content_file.type == "dir":
+                #contents.extend(repo.get_contents(content_file.path))
+                contents = repo.get_contents(content_file.path)
+                while contents:
+                    content_file = contents.pop(0)
+                    f.write(str(content_file))
+                    f.write("\n")
+                    if content_file.path.lower() in ["src/test"]:
+                        f.write("Accediendo a carpeta " + content_file.path)
                         f.write("\n")
-                        if content_file.path.lower() in ["src/test"]:
-                            f.write("Accediendo a carpeta " + content_file.path)
-                            f.write("\n")
-                            if content_file.type == "dir":
-                                #contents.extend(repo.get_contents(content_file.path))
-                                contents = repo.get_contents(content_file.path)
-                                while contents:
-                                    content_file = contents.pop(0)
-                                    f.write(str(content_file))
-                                    f.write("\n")
-                                    if content_file.type == "dir":
-                                        if criterio in content_file.path.lower():
-                                            f.write("Adding " + content_file.path)
-                                            f.write("\n")
-                                            repos.append(repo)
-                                            auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
-                                            break
-                                        else:
-                                            contents.extend(repo.get_contents(content_file.path))
-                            break
-        f.write("\n")
+                        if content_file.type == "dir":
+                            #contents.extend(repo.get_contents(content_file.path))
+                            contents = repo.get_contents(content_file.path)
+                            while contents:
+                                content_file = contents.pop(0)
+                                f.write(str(content_file))
+                                f.write("\n")
+                                if content_file.type == "dir":
+                                    if criterio in content_file.path.lower():
+                                        f.write("Adding " + content_file.path)
+                                        f.write("\n")
+                                        encontrado = True
+                                        auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
+                                        break
+                                    else:
+                                        contents.extend(repo.get_contents(content_file.path))
+                        break
+    f.write("\n")
 
-    print("Total de repositorios filtrados según el criterio: %d" % len(repos))
     f.close()
-    auxiliares.imprimirListaRepositorios(repos)
-    return repos
-
-# Criterio 9:
-def buscarC9(listaRepositorios, df):
-    print("Iniciando criterio de búsqueda nº 9...")
-    repos = []
-    log = conf.Configuracion.cLogs + "/log_buscarC9_" + conf.Configuracion.fechaEjecucion + ".log"
-    f = open(log, "a")
-
-    for repo in listaRepositorios:
-        f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
-        f.write("\n")
-        contents = repo.get_contents("")
-        while contents:
-            content_file = contents.pop(0)
-            f.write(str(content_file))
-            f.write("\n")
-            if "swagger" in content_file.path.lower():
-                f.write("Adding " + content_file.path)
-                f.write("\n")
-                repos.append(repo)
-                auxiliares.actualizarDataFrame(Criterios.criterio9.value, repo.full_name, content_file.path, df)
-                break
-            else:
-                if content_file.type == "dir":
-                    contents.extend(repo.get_contents(content_file.path))
-
-    print("Total repositories (criterio 9): %d" % len(repos))
-    f.close()
-    auxiliares.imprimirListaRepositorios(repos)
-    return repos
+    return encontrado
 
 # Criterio 10:
-def buscarC10(listaRepositorios, df):
-    print("Iniciando criterio de búsqueda nº 10...")
-    repos = []
+def buscarC10(repo, df):
+    print("Iniciando criterio de búsqueda nº 10 en el repo: " + repo.full_name)
+    encontrado = False
     log = conf.Configuracion.cLogs + "/log_buscarC10_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
-    for repo in listaRepositorios:
-        f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("\n")
+    contents = repo.get_contents("")
+    while contents:
+        content_file = contents.pop(0)
+        f.write(str(content_file))
         f.write("\n")
-        contents = repo.get_contents("")
-        while contents:
-            content_file = contents.pop(0)
-            f.write(str(content_file))
-            f.write("\n")
-            if "test" in content_file.path.lower() or "tests" in content_file.path.lower():
-                if content_file.type == "dir":
-                    f.write("Accediendo a carpeta " + content_file.path)
+        if "test" in content_file.path.lower() or "tests" in content_file.path.lower():
+            if content_file.type == "dir":
+                f.write("Accediendo a carpeta " + content_file.path)
+                f.write("\n")
+                contents2 = repo.get_contents(content_file.path)
+                while contents2:
+                    content_file = contents2.pop(0)
+                    f.write(str(content_file))
                     f.write("\n")
-                    contents2 = repo.get_contents(content_file.path)
-                    while contents2:
-                        content_file = contents2.pop(0)
-                        f.write(str(content_file))
+
+                    # Obtenemos el fichero en el que nos encontramos, no la ruta completa.
+                    fActual = auxiliares.obtenerFicheroIt(content_file.path.lower())
+
+                    if fActual.endswith("it") \
+                            or fActual.startswith("it") \
+                            or "e2e" in fActual \
+                            or "system" in fActual \
+                            or "itest" in fActual:
+                        f.write("Adding " + content_file.path)
                         f.write("\n")
+                        encontrado = True
+                        auxiliares.actualizarDataFrame(Criterios.criterio10.value, repo.full_name, content_file.path, df)
+                        break
+            break
 
-                        # Obtenemos el fichero en el que nos encontramos, no la ruta completa.
-                        fActual = auxiliares.obtenerFicheroIt(content_file.path.lower())
-
-                        if fActual.endswith("it") \
-                                or fActual.startswith("it") \
-                                or "e2e" in fActual \
-                                or "system" in fActual \
-                                or "itest" in fActual:
-                            f.write("Adding " + content_file.path)
-                            f.write("\n")
-                            repos.append(repo)
-                            auxiliares.actualizarDataFrame(Criterios.criterio10.value, repo.full_name, content_file.path, df)
-                            break
-                break
-
-    print("Total repositories (criterio 10): %d" % len(repos))
     f.close()
-    auxiliares.imprimirListaRepositorios(repos)
-    return repos
+    return encontrado
 
 # Criterio 11:
-def buscarC11(listaRepositorios, df):
-    print("Iniciando criterio de búsqueda nº 11...")
-    repos = []
+def buscarC11(repo, df):
+    print("Iniciando criterio de búsqueda nº 11 en el repo: " + repo.full_name)
+    encontrado = False
     log = conf.Configuracion.cLogs + "/log_buscarC11_" + conf.Configuracion.fechaEjecucion + ".log"
     f = open(log, "a")
 
-    for repo in listaRepositorios:
-        f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
+    f.write("\n")
+    contents = repo.get_contents("")
+    while contents:
+        content_file = contents.pop(0)
+        f.write(str(content_file))
         f.write("\n")
-        contents = repo.get_contents("")
-        while contents:
-            content_file = contents.pop(0)
-            f.write(str(content_file))
-            f.write("\n")
 
-            # Con esto se consigue que busque el fichero "pom.xml" y "build.xml" y no que contenga dichos literales.
-            # Por ejemplo: HolaQueTal_pom.xml no lo tendría en cuenta. ¿Debería tenerlos en cuenta?
-            # Obtenemos el fichero en el que nos encontramos, no la ruta completa.
-            fActual = auxiliares.obtenerFicheroIt(content_file.path.lower())
+        # Con esto se consigue que busque el fichero "pom.xml" y "build.xml" y no que contenga dichos literales.
+        # Por ejemplo: HolaQueTal_pom.xml no lo tendría en cuenta. ¿Debería tenerlos en cuenta?
+        # Obtenemos el fichero en el que nos encontramos, no la ruta completa.
+        fActual = auxiliares.obtenerFicheroIt(content_file.path.lower())
 
-            if "pom.xml" in fActual:
-                try:
-                    decoded = auxiliares.getFileContent(repo, content_file.path)
-                    isSelenium = 'selenium' in str(decoded)
-                    isRestassured = 'rest-assured' in str(decoded)
-                    if isSelenium or isRestassured:
-                        f.write("Adding " + content_file.path)
-                        f.write("\n")
-                        repos.append(repo)
-                        auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
-                        break
-                    else:
-                        f.write("Literales 'selenium' y 'rest-assured' no encontrados")
-                        f.write("\n")
-                        #Con el siguiente break el programa solamente comprobaría el primer 'pom.xml' que encuentre.
-                        #Quitándolo, si el primer 'pom.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'pom.xml' que cumpla la condición.
-                        break
-                except:
-                    f.write("Error obteniendo el contenido del pom.xml")
+        if "pom.xml" in fActual:
+            try:
+                decoded = auxiliares.getFileContent(repo, content_file.path)
+                isSelenium = 'selenium' in str(decoded)
+                isRestassured = 'rest-assured' in str(decoded)
+                if isSelenium or isRestassured:
+                    f.write("Adding " + content_file.path)
                     f.write("\n")
-                    raise
-            elif "build.xml" in fActual:
-                try:
-                    decoded = auxiliares.getFileContent(repo, content_file.path)
-                    isSelenium = 'selenium' in str(decoded)
-                    isRestassured = 'restassured' in str(decoded)
-                    if isSelenium or isRestassured:
-                        f.write("Adding " + content_file.path)
-                        f.write("\n")
-                        repos.append(repo)
-                        auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
-                        break
-                    else:
-                        f.write("Literales 'selenium' y 'rest-assured' no encontrados")
-                        f.write("\n")
-                        # Con el siguiente break el programa solamente comprobaría el primer 'build.xml' que encuentre.
-                        # Quitándolo, si el primer 'build.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'build.xml' que cumpla la condición.
-                        break
-                except:
-                    f.write("Error obteniendo el contenido del build.xml")
+                    encontrado = True
+                    auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
+                    break
+                else:
+                    f.write("Literales 'selenium' y 'rest-assured' no encontrados")
                     f.write("\n")
-                    raise
-            else:
-                if content_file.type == "dir":
-                    contents.extend(repo.get_contents(content_file.path))
+                    #Con el siguiente break el programa solamente comprobaría el primer 'pom.xml' que encuentre.
+                    #Quitándolo, si el primer 'pom.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'pom.xml' que cumpla la condición.
+                    break
+            except:
+                f.write("Error obteniendo el contenido del pom.xml")
+                f.write("\n")
+                raise
+        elif "build.xml" in fActual:
+            try:
+                decoded = auxiliares.getFileContent(repo, content_file.path)
+                isSelenium = 'selenium' in str(decoded)
+                isRestassured = 'restassured' in str(decoded)
+                if isSelenium or isRestassured:
+                    f.write("Adding " + content_file.path)
+                    f.write("\n")
+                    encontrado = True
+                    auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
+                    break
+                else:
+                    f.write("Literales 'selenium' y 'rest-assured' no encontrados")
+                    f.write("\n")
+                    # Con el siguiente break el programa solamente comprobaría el primer 'build.xml' que encuentre.
+                    # Quitándolo, si el primer 'build.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'build.xml' que cumpla la condición.
+                    break
+            except:
+                f.write("Error obteniendo el contenido del build.xml")
+                f.write("\n")
+                raise
+        else:
+            if content_file.type == "dir":
+                contents.extend(repo.get_contents(content_file.path))
 
-    print("Total repositories (criterio 11): %d" % len(repos))
     f.close()
-    auxiliares.imprimirListaRepositorios(repos)
-    return repos
+    return encontrado
