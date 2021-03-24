@@ -12,6 +12,8 @@ import shutil
 from shutil import rmtree
 import logging
 from github import GithubException
+import repoBD
+import executeQuery
 import openpyxl
 
 def imprimirListaRepositorios(repositorios):
@@ -62,6 +64,15 @@ def generarDataFrame(listaRepositorios):
     #df.at[repo1.full_name, criterios.Criterios.criterio11.name] = " "
     #df.at[repo1.full_name, criterios.Criterios.criterio12.name] = " "
 
+    # Actualizamos la BD
+    repo1BBDD = repoBD.createRepoBD()
+    repo1BBDD.setNombre(repo1.full_name.split("/")[1])
+    repo1BBDD.setOrganizacion(repo1.full_name.split("/")[0])
+    repo1BBDD.setUrl(repo1.html_url)
+    repo1BBDD.setSize(repo1.size)
+    repo1BBDD.setBoE2e(0)
+    guardarRepoEnBD(repo1BBDD)
+
     for repo in listaRepositorios[1:len(listaRepositorios)]:
         df2 = pd.DataFrame([],
                           index=[repo.full_name],
@@ -93,6 +104,15 @@ def generarDataFrame(listaRepositorios):
         # df2.at[repo.full_name, criterios.Criterios.criterio11.name] = " "
         # df2.at[repo.full_name, criterios.Criterios.criterio12.name] = " "
         df = df.append(df2)
+
+        # Actualizamos la BD
+        repoBBDD = repoBD.createRepoBD()
+        repoBBDD.setNombre(repo.full_name.split("/")[1])
+        repoBBDD.setOrganizacion(repo.full_name.split("/")[0])
+        repoBBDD.setUrl(repo.html_url)
+        repoBBDD.setSize(repo.size)
+        repoBBDD.setBoE2e(0)
+        guardarRepoEnBD(repoBBDD)
 
     return df
 
@@ -150,7 +170,18 @@ def actualizarDataFrame(criterio, nombreRepo, path, df):
 
 def actualizarDataFrameCommitID(listaRepos, df):
     for repo in listaRepos:
-        df.at[repo.full_name, "CommitID"] = obtenerRepoCommitID(repo.full_name.replace("/", "*_*"))
+        commitID = obtenerRepoCommitID(repo.full_name.replace("/", "*_*"))
+        df.at[repo.full_name, "CommitID"] = commitID
+
+        # Actualizamos la BD
+        repoBBDD = repoBD.createRepoBD()
+        repoBBDD.setNombre(repo.full_name.split("/")[1])
+        repoBBDD.setOrganizacion(repo.full_name.split("/")[0])
+        repoBBDD.setUrl(repo.html_url)
+        repoBBDD.setSize(repo.size)
+        repoBBDD.setCommitID(commitID)
+        repoBBDD.setBoE2e(0)
+        guardarRepoEnBD(repoBBDD)
 
 def contarRepositoriosAlMenos1Criterio(df):
     cont = 0
@@ -366,3 +397,23 @@ def generarZipRepos():
                                       logger=logging)
 
     rmtree("./" + conf.Configuracion.cRepositorios)
+
+def guardarRepoEnBD(repoBBDD):
+    print("Actualizando base de datos...")
+    repoFiltro = repoBD.createRepoBD()
+    repoFiltro.setNombre(repoBBDD.getNombre())
+    repoFiltro.setOrganizacion(repoBBDD.getOrganizacion())
+
+    query = repoFiltro.getFiltro()
+
+    filas = executeQuery.execute(query)
+    if len(filas) > 0:
+        fila1 = filas[0]
+        repoBBDD.setId(fila1["id"])
+        update = repoBBDD.getUpdate()
+        print(update)
+        rUpdate = executeQuery.execute(update)
+    else:
+        insert = repoBBDD.getInsert()
+        print(insert)
+        rInsert = executeQuery.execute(insert)

@@ -12,7 +12,7 @@ import executeQuery
 app = tk.Tk()
 app.title("BuscadorGitHubRepos")
 width = '650'
-height = '650'
+height = '675'
 app.geometry(width + 'x' + height)
 app.resizable(False, False)
 
@@ -42,6 +42,7 @@ sizeLimit_state = tk.IntVar()
 # STATE (Variables de configuración)
 nRandomRepos_state = tk.IntVar()
 nLapseRepos_state = tk.IntVar()
+actualizarBDCheck_state = tk.BooleanVar()
 buscarEnLocalCheck_state = tk.BooleanVar()
 generarListaReposCheck_state = tk.BooleanVar()
 randomizarReposCheck_state = tk.BooleanVar()
@@ -80,6 +81,7 @@ def exe():
         conf.FiltrosQuery.qIs = "private"
 
     # Configuración
+    conf.Configuracion.actualizarBD = actualizarBDCheck_state.get()
     conf.Configuracion.buscarEnLocal = buscarEnLocalCheck_state.get()
     conf.Configuracion.generarListaRepos = generarListaReposCheck_state.get()
     conf.Configuracion.randomizarListaRepos = randomizarReposCheck_state.get()
@@ -244,6 +246,16 @@ configuracionLbl.grid(column=0, row=row)
 f = font.Font(configuracionLbl, configuracionLbl.cget("font"))
 f.configure(underline=True)
 configuracionLbl.configure(font=f)
+row+=1
+
+# ACTUALIZAR BD
+actualizarBDLbl = tk.Label(p1, text="Actualizar BD", bg=backgroudLblColor)
+actualizarBDLbl.grid(column=0, row=row)
+#actualizarBDLbl.pack()
+actualizarBDCheck_state.set(conf.Configuracion.actualizarBD)
+actualizarBDCheck = tk.Checkbutton(p1, var=actualizarBDCheck_state, bg=backgroudLblColor)
+actualizarBDCheck.grid(column=1, row=row)
+#actualizarBDCheck.pack()
 row+=1
 
 # BUSCAR REPOS EN LOCAL

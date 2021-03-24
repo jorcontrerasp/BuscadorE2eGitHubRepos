@@ -43,49 +43,32 @@ def recorrerRepositoriosLocal(listaRepositorios, df, df2):
 
             # Si lo ha encontrado:
             # - lo añadimos a la listaEncontrados.
+            encontrado = False
             if boC1 or boC3 or boC5 or boC10:
                 listaEncontrados.append(repo)
+                encontrado = True
 
             # Actualizamos BD
             if conf.Configuracion.actualizarBD:
                 print("Actualizando base de datos...")
                 repoBBDD = repoBD.createRepoBD()
-                print(repo)
                 repoBBDD.setNombre(repo.split("*_*")[1])
                 repoBBDD.setOrganizacion(repo.split("*_*")[0])
+                repoBBDD.setBoE2e(encontrado)
+                auxiliares.guardarRepoEnBD(repoBBDD)
 
-                query = repoBBDD.getFiltro()
+            # Actualizamos contadores
+            columna = "n_encontrados"
+            if boC1:
+                df2.at[Criterios.criterio1.value, columna] += 1
+            if boC3:
+                df2.at[Criterios.criterio3.value, columna] += 1
+            if boC5:
+                df2.at[Criterios.criterio5.value, columna] += 1
+            if boC10:
+                df2.at[Criterios.criterio10.value, columna] += 1
 
-                print(query)
-
-                filas = executeQuery.execute(query)
-                if len(filas)>0:
-                    fila1 = filas[0]
-                    repoBBDD.setId(fila1["id"])
-                    repoBBDD.setSize(0)
-                    repoBBDD.setCommitID(df.at[repo.replace("*_*", "/"), "CommitID"])
-                    update = repoBBDD.getUpdate()
-                    print(update)
-                    rUpdate = executeQuery.execute(update)
-                else:
-                    repoBBDD.setSize(0)
-                    repoBBDD.setCommitID(df.at[repo.replace("*_*", "/"), "CommitID"])
-                    insert = repoBBDD.getInsert()
-                    print(insert)
-                    rInsert = executeQuery.execute(insert)
-
-                # Actualizamos contadores
-                columna = "n_encontrados"
-                if boC1:
-                    df2.at[Criterios.criterio1.value, columna] += 1
-                if boC3:
-                    df2.at[Criterios.criterio3.value, columna] += 1
-                if boC5:
-                    df2.at[Criterios.criterio5.value, columna] += 1
-                if boC10:
-                    df2.at[Criterios.criterio10.value, columna] += 1
-
-                df2.at["Totales", columna] = auxiliares.contarRepositoriosAlMenos1Criterio(df)
+            df2.at["Totales", columna] = auxiliares.contarRepositoriosAlMenos1Criterio(df)
         else:
             print("No se ha encontrado la ruta " + rutaIni)
 
@@ -308,41 +291,29 @@ def busquedaGitHubApiRepos(listaRepositorios, df, df2):
 
         # Si lo ha encontrado:
         # - lo añadimos a la listaEncontrados.
-        # - insertamos en BD
+        encontrado = False
         if boC1 or boC3 or boC5:
             listaEncontrados.append(repo)
-            if conf.Configuracion.actualizarBD:
-                print("Actualizando base de datos...")
-                repoBBDD = repoBD.createRepoBD()
-                repoBBDD.setNombre(repo.full_name.split("/")[1])
-                repoBBDD.setOrganizacion(repo.full_name.split("/")[0])
+            encontrado = True
 
-                query = repoBBDD.getFiltro()
+        if conf.Configuracion.actualizarBD:
+            print("Actualizando base de datos...")
+            repoBBDD = repoBD.createRepoBD()
+            repoBBDD.setNombre(repo.full_name.split("/")[1])
+            repoBBDD.setOrganizacion(repo.full_name.split("/")[0])
+            repoBBDD.setBoE2e(encontrado)
+            auxiliares.guardarRepoEnBD(repoBBDD)
 
-                filas = executeQuery.execute(query)
-                if len(filas) > 0:
-                    fila1 = filas[0]
-                    repoBBDD.setId(fila1["id"])
-                    repoBBDD.setSize(repo.size)
-                    repoBBDD.setCommitID(df.at[repo.full_name, "CommitID"])
-                    update = repoBBDD.getUpdate()
-                    rUpdate = executeQuery.execute(update)
-                else:
-                    repoBBDD.setSize(repo.size)
-                    repoBBDD.setCommitID(df.at[repo.full_name, "CommitID"])
-                    insert = repoBBDD.getInsert()
-                    rInsert = executeQuery.execute(insert)
+        # Actualizamos contadores
+        columna = "n_encontrados"
+        if boC1:
+            df2.at[Criterios.criterio1.value, columna] += 1
+        if boC3:
+            df2.at[Criterios.criterio3.value, columna] += 1
+        if boC5:
+            df2.at[Criterios.criterio5.value, columna] += 1
 
-            # Actualizamos contadores
-            columna = "n_encontrados"
-            if boC1:
-                df2.at[Criterios.criterio1.value, columna] += 1
-            if boC3:
-                df2.at[Criterios.criterio3.value, columna] += 1
-            if boC5:
-                df2.at[Criterios.criterio5.value, columna] += 1
-
-            df2.at["Totales", columna] = auxiliares.contarRepositoriosAlMenos1Criterio(df)
+        df2.at["Totales", columna] = auxiliares.contarRepositoriosAlMenos1Criterio(df)
 
     return listaEncontrados
 
