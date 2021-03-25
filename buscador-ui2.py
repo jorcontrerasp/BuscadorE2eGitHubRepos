@@ -56,6 +56,7 @@ nombreRepoBD_state = tk.StringVar()
 organizacionBD_state = tk.StringVar()
 commitIdBD_state = tk.StringVar()
 sizeBD_state = tk.IntVar()
+boE2eCheck_state = tk.BooleanVar()
 
 # STATE (Pruebas)
 organizacion_state = tk.StringVar()
@@ -106,6 +107,7 @@ def consultarBD():
     repo.setOrganizacion(organizacionBD_state.get())
     repo.setSize(sizeBD_state.get())
     repo.setCommitID(commitIdBD_state.get())
+    repo.setBoE2e(boE2eCheck_state.get())
 
     query = repo.getFiltro()
 
@@ -395,6 +397,16 @@ sizeBDLbl.grid(column=0, row=row)
 sizeBD_state.set(0)
 sizeBD = tk.Entry(p2, width=15, textvariable=sizeBD_state)
 sizeBD.grid(column=1, row=row)
+row+=1
+
+# CON E2E
+boE2eLbl = tk.Label(p2, text="Con e2e", bg=backgroudLblColor)
+boE2eLbl.grid(column=0, row=row)
+#boE2eLbl.pack()
+boE2eCheck_state.set(True)
+boE2eCheck = tk.Checkbutton(p2, var=boE2eCheck_state, bg=backgroudLblColor)
+boE2eCheck.grid(column=1, row=row)
+#boE2eCheck.pack()
 row+=1
 
 # BOTÓN CONSULTA BBDD

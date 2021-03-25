@@ -26,8 +26,6 @@ def execute(query):
         cursor.execute(query)
 
         filas = cursor.fetchall()
-        for fila in filas:
-            print(fila)
 
         # Cerramos la conexión con la BBDD.
         db.commit()

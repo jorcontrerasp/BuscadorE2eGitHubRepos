@@ -10,7 +10,7 @@ class RepoBD:
     boE2e = False
 
     def __init__(self):
-        self.id = ""
+        self.id = -1
         self.nombre = ""
         self.organizacion = ""
         self.size = 0
@@ -23,9 +23,9 @@ class RepoBD:
         campos = ""
         values = ""
 
-        if(len(self.id) >0):
+        if(self.id >0):
             campos += "ID,"
-            values += self.id + ","
+            values += str(self.id) + ","
 
         if (len(self.nombre) > 0):
             campos += "NOMBRE,"
@@ -63,7 +63,7 @@ class RepoBD:
         return insert
 
     def getUpdate(self):
-        if(len(self.id) == 0):
+        if(self.id == -1 or self.id == 0):
             print("El objeto repoBD no tiene ID. No se puede actualizar.")
             return ""
 
@@ -89,7 +89,7 @@ class RepoBD:
             values += "BOE2E=0,"
 
         values = values[0:len(values) - 1]
-        update = "UPDATE BD_D_REPO SET " + values + " WHERE ID = " + self.id
+        update = "UPDATE BD_D_REPO SET " + values + " WHERE ID = " + str(self.id)
 
         update += ";"
 
@@ -98,8 +98,8 @@ class RepoBD:
     def getFiltro(self):
         select = "SELECT * FROM BD_D_REPO WHERE 1=1"
 
-        if (len(self.id) > 0):
-            select += " AND ID=" + self.id
+        if (self.id > 0):
+            select += " AND ID=" + str(self.id)
 
         if (len(self.nombre) > 0):
             select += " AND NOMBRE='" + self.nombre + "'"
@@ -128,8 +128,8 @@ class RepoBD:
     def getDelete(self):
         delete = "DELETE BD_D_REPO WHERE 1=1"
 
-        if (len(self.id) > 0):
-            delete += " AND ID=" + self.id
+        if (self.id > 0):
+            delete += " AND ID=" + str(self.id)
 
         if (len(self.nombre) > 0):
             delete += " AND NOMBRE='" + self.nombre + "'"

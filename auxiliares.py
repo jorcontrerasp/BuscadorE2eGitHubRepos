@@ -409,11 +409,10 @@ def guardarRepoEnBD(repoBBDD):
     filas = executeQuery.execute(query)
     if len(filas) > 0:
         fila1 = filas[0]
-        repoBBDD.setId(fila1["id"])
+        id = fila1["id"]
+        repoBBDD.setId(id)
         update = repoBBDD.getUpdate()
-        print(update)
         rUpdate = executeQuery.execute(update)
     else:
         insert = repoBBDD.getInsert()
-        print(insert)
         rInsert = executeQuery.execute(insert)
