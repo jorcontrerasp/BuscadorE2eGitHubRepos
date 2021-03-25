@@ -16,16 +16,16 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 
 - Actualizar BD: si se marca esta opción se almacenarán los datos obtenidos en base de datos. Para ello se ha utilizado una BB MySql.
 
-CONFIGURACIÓN DE LA BBDD:
-Mysql -u root -p
+  <p>CONFIGURACIÓN DE LA BBDD:</p>
+  Mysql -u root -p
 
-CREATE DATABASE buscadorGitHubRepos;
+  CREATE DATABASE buscadorGitHubRepos;
 
-USE buscadorGitHubRepos;
+  USE buscadorGitHubRepos;
 
-CREATE TABLE IF NOT EXISTS BD_D_REPO(id int(11) NOT NULL AUTO_INCREMENT, nombre varchar(50), organizacion varchar(200), url varchar(1000), commitid varchar(20), size int(20), boe2e int(1), PRIMARY KEY (id));
+  CREATE TABLE IF NOT EXISTS BD_D_REPO(id int(11) NOT NULL AUTO_INCREMENT, nombre varchar(50), organizacion varchar(200), url varchar(1000), commitid varchar(20), size int(20), boe2e int(1), PRIMARY KEY (id));
 
-INSERT INTO BD_D_REPO (nombre, organizacion, url, commitID, size, boE2E) VALUES("AAA", "BBB", "CCC", "123456789A", 1000, 0);
+  INSERT INTO BD_D_REPO (nombre, organizacion, url, commitID, size, boE2E) VALUES("AAA", "BBB", "CCC", "123456789A", 1000, 0);
 
 - Buscar repos en LOCAL: si se marca esta opción se clonan los proyectos que se van a utilizar en la carpeta “repositories”, y una vez clonados, la búsqueda se realiza sobre dichos ficheros en local. Al finalizar el proceso se borra la carpeta “repositories” y se genera un fichero zip a modo de snapshot con todos esos repositorios clonados inicialmente.
 - Generar lista repos ('.pickle’): si se marca esta opción se genera un nuevo fichero “.pickle” con todos los repositorios que se van a utilizar en el proceso de búsqueda. Si no se marca se reutiliza el fichero “.pickle” existente en la carpeta del proyecto.
