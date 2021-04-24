@@ -5,20 +5,20 @@ import executeQuery
 
 # CONFIGURACIÓN
 class Configuracion():
-    user = "userId"
-    token = "userToken"
+    user = None
+    token = None
     fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_").replace(":", "h", 1).replace(":", "m", 1) + "s"
-    buscarEnLocal = True
-    generarListaRepos = True
-    randomizarListaRepos = True
-    lapseExe = False
-    clonarRepositorios = False
-    doExcel = True
-    doCsv = False
-    actualizarBD = True
-    N_RANDOM = 30
-    N_LAPSE_REPOS = 20
-    REPO_SIZE_LIMIT = 10000000
+    buscarEnLocal = None
+    generarListaRepos = None
+    randomizarListaRepos = None
+    lapseExe = None
+    clonarRepositorios = None
+    doExcel = None
+    doCsv = None
+    actualizarBD = None
+    N_RANDOM = -1
+    N_LAPSE_REPOS = -1
+    REPO_SIZE_LIMIT = -1
     cRepositorios = "repositories/repositories_" + fechaEjecucion
     cLogs = "logs"
     cResearch = "research/research_" + fechaEjecucion
