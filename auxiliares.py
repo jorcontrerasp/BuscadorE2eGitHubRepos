@@ -36,7 +36,7 @@ def generarDataFrame(listaRepositorios):
     repo1 = listaRepositorios[0]
     df = pd.DataFrame([],
                       index=[repo1.full_name],
-                      columns=["GitHub_URL", "CommitID"
+                      columns=["GitHub_URL", "Lenguaje", "CommitID"
                                ,criterios.Criterios.criterio1.name
                                #,criterios.Criterios.criterio2.name
                                ,criterios.Criterios.criterio3.name
@@ -51,6 +51,7 @@ def generarDataFrame(listaRepositorios):
                                #,criterios.Criterios.criterio12.name
                                ])
     df.at[repo1.full_name, "GitHub_URL"] = repo1.html_url
+    df.at[repo1.full_name, "Lenguaje"] = repo1.language
     df.at[repo1.full_name, criterios.Criterios.criterio1.name] = " "
     #df.at[repo1.full_name, criterios.Criterios.criterio2.name] = " "
     df.at[repo1.full_name, criterios.Criterios.criterio3.name] = " "
@@ -68,15 +69,17 @@ def generarDataFrame(listaRepositorios):
     repo1BBDD = repoBD.createRepoBD()
     repo1BBDD.setNombre(repo1.full_name.split("/")[1])
     repo1BBDD.setOrganizacion(repo1.full_name.split("/")[0])
+    repo1BBDD.setLenguaje(repo1.language)
     repo1BBDD.setUrl(repo1.html_url)
     repo1BBDD.setSize(repo1.size)
     repo1BBDD.setBoE2e(0)
+    repo1BBDD.setIdBusqueda(conf.Configuracion.idBusqueda)
     guardarRepoEnBD(repo1BBDD)
 
     for repo in listaRepositorios[1:len(listaRepositorios)]:
         df2 = pd.DataFrame([],
                           index=[repo.full_name],
-                          columns=["GitHub_URL", "CommitID"
+                          columns=["GitHub_URL", "Lenguaje", "CommitID"
                                    ,criterios.Criterios.criterio1.name
                                    #,criterios.Criterios.criterio2.name
                                    ,criterios.Criterios.criterio3.name
@@ -91,6 +94,8 @@ def generarDataFrame(listaRepositorios):
                                    #,criterios.Criterios.criterio12.name
                                    ])
         df2.at[repo.full_name, "GitHub_URL"] = repo.html_url
+        lenguaje = repo.language
+        df2.at[repo.full_name, "Lenguaje"] = repo.language
         df2.at[repo.full_name, criterios.Criterios.criterio1.name] = " "
         # df2.at[repo.full_name, criterios.Criterios.criterio2.name] = " "
         df2.at[repo.full_name, criterios.Criterios.criterio3.name] = " "
@@ -109,9 +114,11 @@ def generarDataFrame(listaRepositorios):
         repoBBDD = repoBD.createRepoBD()
         repoBBDD.setNombre(repo.full_name.split("/")[1])
         repoBBDD.setOrganizacion(repo.full_name.split("/")[0])
+        repoBBDD.setLenguaje(repo.language)
         repoBBDD.setUrl(repo.html_url)
         repoBBDD.setSize(repo.size)
         repoBBDD.setBoE2e(0)
+        repoBBDD.setIdBusqueda(conf.Configuracion.idBusqueda)
         guardarRepoEnBD(repoBBDD)
 
     return df
@@ -177,10 +184,12 @@ def actualizarDataFrameCommitID(listaRepos, df):
         repoBBDD = repoBD.createRepoBD()
         repoBBDD.setNombre(repo.full_name.split("/")[1])
         repoBBDD.setOrganizacion(repo.full_name.split("/")[0])
+        repoBBDD.setOrganizacion(repo.language)
         repoBBDD.setUrl(repo.html_url)
         repoBBDD.setSize(repo.size)
         repoBBDD.setCommitID(commitID)
         repoBBDD.setBoE2e(0)
+        repoBBDD.setIdBusqueda(conf.Configuracion.idBusqueda)
         guardarRepoEnBD(repoBBDD)
 
 def contarRepositoriosAlMenos1Criterio(df):
@@ -398,6 +407,12 @@ def generarZipRepos():
 
     rmtree("./" + conf.Configuracion.cRepositorios)
 
+def convertToBinaryData(filename):
+    # Convert digital data to binary format
+    with open(filename, 'rb') as file:
+        binaryData = file.read()
+    return binaryData
+
 def guardarRepoEnBD(repoBBDD):
     print("Actualizando base de datos...")
     repoFiltro = repoBD.createRepoBD()
@@ -409,10 +424,20 @@ def guardarRepoEnBD(repoBBDD):
     filas = executeQuery.execute(query)
     if len(filas) > 0:
         fila1 = filas[0]
-        id = fila1["id"]
+        id = fila1["idrepo"]
         repoBBDD.setId(id)
         update = repoBBDD.getUpdate()
         rUpdate = executeQuery.execute(update)
     else:
         insert = repoBBDD.getInsert()
         rInsert = executeQuery.execute(insert)
+
+def guardarBusquedaBD(busquedaBD):
+    if busquedaBD.getIdBusqueda() > 0:
+        update = busquedaBD.getUpdateParam()
+        rUpdate = executeQuery.executeWithParams(update)
+        return rUpdate
+    else:
+        insert = busquedaBD.getInsertParam()
+        idBusqueda = executeQuery.executeWithParams(insert)
+        return idBusqueda

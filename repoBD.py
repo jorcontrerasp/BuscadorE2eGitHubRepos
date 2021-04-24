@@ -1,22 +1,29 @@
 import executeQuery
+import configuracion as conf
 
 class RepoBD:
-    id = ""
+    id = -1
     nombre = ""
     organizacion = ""
+    lenguaje = ""
     size = 0
     commitID = ""
     url = ""
     boE2e = False
+    idbusqueda = -1
+    tstbd = ""
 
     def __init__(self):
         self.id = -1
         self.nombre = ""
         self.organizacion = ""
+        self.lenguaje = ""
         self.size = 0
         self.commitID = ""
         self.url = ""
         self.boE2e = False
+        self.idbusqueda = -1
+        self.tstbd = conf.Configuracion.fechaEjecucion
 
     def getInsert(self):
 
@@ -24,28 +31,32 @@ class RepoBD:
         values = ""
 
         if(self.id >0):
-            campos += "ID,"
+            campos += "IDREPO,"
             values += str(self.id) + ","
 
-        if (len(self.nombre) > 0):
+        if (len(str(self.nombre)) > 0):
             campos += "NOMBRE,"
-            values += "'" + self.nombre + "',"
+            values += "'" + str(self.nombre) + "',"
 
-        if (len(self.organizacion) > 0):
+        if (len(str(self.organizacion)) > 0):
             campos += "ORGANIZACION,"
-            values += "'" + self.organizacion + "',"
+            values += "'" + str(self.organizacion) + "',"
+
+        if (len(str(self.lenguaje)) > 0):
+            campos += "LENGUAJE,"
+            values += "'" + str(self.lenguaje) + "',"
 
         if (self.size > 0):
             campos += "SIZE,"
             values += str(self.size) + ","
 
-        if (len(self.commitID) > 0):
+        if (len(str(self.commitID)) > 0):
             campos += "COMMITID,"
-            values += "'" + self.commitID + "',"
+            values += "'" + str(self.commitID) + "',"
 
-        if (len(self.url) > 0):
+        if (len(str(self.url)) > 0):
             campos += "URL,"
-            values += "'" + self.url + "',"
+            values += "'" + str(self.url) + "',"
 
         if (self.boE2e):
             campos += "BOE2E,"
@@ -53,6 +64,14 @@ class RepoBD:
         else:
             campos += "BOE2E,"
             values += "0" + ","
+
+        if (self.idbusqueda > 0):
+            campos += "IDBUSQUEDA,"
+            values += str(self.idbusqueda) + ","
+
+        if (len(str(self.tstbd)) > 0):
+            campos += "TSTBD,"
+            values += "'" + str(self.tstbd) + "',"
 
         campos = campos[0:len(campos) - 1]
         values = values[0:len(values) - 1]
@@ -64,32 +83,41 @@ class RepoBD:
 
     def getUpdate(self):
         if(self.id == -1 or self.id == 0):
-            print("El objeto repoBD no tiene ID. No se puede actualizar.")
+            print("El objeto repoBD no tiene IDREPO. No se puede actualizar.")
             return ""
 
         values = ""
-        if (len(self.nombre) > 0):
-            values += "NOMBRE='"  + self.nombre + "',"
+        if (len(str(self.nombre)) > 0):
+            values += "NOMBRE='"  + str(self.nombre) + "',"
 
-        if (len(self.organizacion) > 0):
-            values += "ORGANIZACION='" + self.organizacion + "',"
+        if (len(str(self.organizacion)) > 0):
+            values += "ORGANIZACION='" + str(self.organizacion) + "',"
+
+        if (len(str(self.lenguaje)) > 0):
+            values += "LENGUAJE='" + str(self.lenguaje) + "',"
 
         if (self.size > 0):
             values += "SIZE=" + str(self.size) + ","
 
-        if (len(self.commitID) > 0):
-            values += "COMMITID='" + self.commitID + "',"
+        if (len(str(self.commitID)) > 0):
+            values += "COMMITID='" + str(self.commitID) + "',"
 
-        if (len(self.url) > 0):
-            values += "URL='"  + self.url + "',"
+        if (len(str(self.url)) > 0):
+            values += "URL='" + str(self.url) + "',"
 
         if (self.boE2e):
             values += "BOE2E=1,"
         else:
             values += "BOE2E=0,"
 
+        if (self.idbusqueda > 0):
+            values += "IDBUSQUEDA=" + str(self.idbusqueda) + ","
+
+        if (len(str(self.tstbd)) > 0):
+            values += "TSTBD='" + str(self.tstbd) + "',"
+
         values = values[0:len(values) - 1]
-        update = "UPDATE BD_D_REPO SET " + values + " WHERE ID = " + str(self.id)
+        update = "UPDATE BD_D_REPO SET " + values + " WHERE IDREPO = " + str(self.id)
 
         update += ";"
 
@@ -99,27 +127,36 @@ class RepoBD:
         select = "SELECT * FROM BD_D_REPO WHERE 1=1"
 
         if (self.id > 0):
-            select += " AND ID=" + str(self.id)
+            select += " AND IDREPO=" + str(self.id)
 
-        if (len(self.nombre) > 0):
-            select += " AND NOMBRE='" + self.nombre + "'"
+        if (len(str(self.nombre)) > 0):
+            select += " AND NOMBRE='" + str(self.nombre) + "'"
 
-        if (len(self.organizacion) > 0):
-            select += " AND ORGANIZACION='" + self.organizacion + "'"
+        if (len(str(self.organizacion)) > 0):
+            select += " AND ORGANIZACION='" + str(self.organizacion) + "'"
+
+        if (len(str(self.lenguaje)) > 0):
+            select += " AND LENGUAJE='" + str(self.lenguaje) + "'"
 
         if (self.size > 0):
             select += " AND SIZE=" + str(self.size)
 
-        if (len(self.commitID) > 0):
-            select += " AND COMITID='" + self.commitID + "'"
+        if (len(str(self.commitID)) > 0):
+            select += " AND COMITID='" + str(self.commitID) + "'"
 
-        if (len(self.url) > 0):
-            select += " AND URL='" + self.url + "'"
+        if (len(str(self.url)) > 0):
+            select += " AND URL='" + str(self.url) + "'"
 
         if (self.boE2e):
             select += " AND BOE2E=1"
         else:
             select += " AND BOE2E=0"
+
+        if (self.idbusqueda > 0):
+            select += " AND IDBUSQUEDA=" + str(self.idbusqueda)
+
+        if (len(str(self.tstbd)) > 0):
+            select += " AND TSTBD='" + str(self.tstbd) + "'"
 
         select += ";"
 
@@ -129,27 +166,36 @@ class RepoBD:
         delete = "DELETE BD_D_REPO WHERE 1=1"
 
         if (self.id > 0):
-            delete += " AND ID=" + str(self.id)
+            delete += " AND IDREPO=" + str(self.id)
 
-        if (len(self.nombre) > 0):
-            delete += " AND NOMBRE='" + self.nombre + "'"
+        if (len(str(self.nombre)) > 0):
+            delete += " AND NOMBRE='" + str(self.nombre) + "'"
 
-        if (len(self.organizacion) > 0):
-            delete += " AND ORGANIZACION='" + self.organizacion + "'"
+        if (len(str(self.organizacion)) > 0):
+            delete += " AND ORGANIZACION='" + str(self.organizacion) + "'"
+
+        if (len(str(self.lenguaje)) > 0):
+            delete += " AND LENGUAJE='" + str(self.lenguaje) + "'"
 
         if (self.size > 0):
             delete += " AND SIZE=" + str(self.size)
 
-        if (len(self.commitID) > 0):
-            delete += " AND COMITID='" + self.commitID + "'"
+        if (len(str(self.commitID)) > 0):
+            delete += " AND COMITID='" + str(self.commitID) + "'"
 
-        if (len(self.url) > 0):
-            delete += " AND URL='" + self.url + "'"
+        if (len(str(self.url)) > 0):
+            delete += " AND URL='" + str(self.url) + "'"
 
         if (self.boE2e):
             delete += " AND BOE2E=1"
         else:
             delete += " AND BOE2E=0"
+
+        if (self.idbusqueda > 0):
+            delete += " AND IDBUSQUEDA=" + str(self.idbusqueda)
+
+        if (len(str(self.tstbd)) > 0):
+            delete += " AND TSTBD='" + str(self.tstbd) + "'"
 
         delete += ";"
 
@@ -174,6 +220,12 @@ class RepoBD:
     def setOrganizacion(self, organizacion):
         self.organizacion = organizacion
 
+    def getLenguaje(self):
+        return self.lenguaje
+
+    def setLenguaje(self, lenguaje):
+        self.lenguaje = lenguaje
+
     def getSize(self):
         return self.size
 
@@ -197,6 +249,18 @@ class RepoBD:
 
     def setBoE2e(self, boE2e):
         self.boE2e = boE2e
+
+    def getIdBusqueda(self):
+        return self.idbusqueda
+
+    def setIdBusqueda(self, idbusqueda):
+        self.idbusqueda = idbusqueda
+
+    def getTstbd(self):
+        return self.tstbd
+
+    def setTstbd(self, tstbd):
+        self.tstbd = tstbd
 
 def createRepoBD():
     repoBD = RepoBD()

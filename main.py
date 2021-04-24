@@ -1,6 +1,7 @@
 #TFG (estudio CI/CD GitHub) - Programa de validación
 
 #Importamos las librerías necesarias.
+import github
 from github import Github
 import configuracion as conf
 import criterios
@@ -9,6 +10,7 @@ import pandas as pd
 import datetime
 import random
 import os
+import busquedaBD
 
 def exe():
     fRepos = 'repos.pickle'
@@ -54,6 +56,18 @@ def exe():
             fRepos = 'repos_%s.pickle' % conf.Configuracion.fechaEjecucion
             auxiliares.generarPickle(fRepos, repositories)
             repositories = auxiliares.cargarRepositorios(fRepos)
+
+            busqueda = busquedaBD.createBusquedaBD()
+            busqueda.setLenguaje(conf.FiltrosQuery.language)
+            busqueda.setStars(conf.FiltrosQuery.stars)
+            busqueda.setForks(conf.FiltrosQuery.forks)
+            busqueda.setCreated(conf.FiltrosQuery.created)
+            busqueda.setPushed(conf.FiltrosQuery.pushed)
+            busqueda.setArchived(conf.FiltrosQuery.archived)
+            busqueda.setPublic(conf.FiltrosQuery.qIs)
+            idBusqueda = auxiliares.guardarBusquedaBD(busqueda)
+            conf.Configuracion.idBusqueda = idBusqueda
+
         else:
             print("Utilizando el fichero " + fRepos + " para generar los repositorios")
             if os.path.exists(fRepos):
@@ -172,6 +186,19 @@ def exe():
             print("Fichero tmp-research.xlsx eliminado")
             os.remove("tmp-contadores.xlsx")
             print("Fichero tmp-contadores.xlsx eliminado")
+
+            # Guardamos los ficheros excel en BD.
+            if conf.Configuracion.actualizarBD:
+                busqueda = busquedaBD.createBusquedaBD()
+                busqueda.setIdBusqueda(conf.Configuracion.idBusqueda)
+                busqueda.setResearch(conf.Configuracion.cResearch + ".xlsx")
+                busqueda.setContadores(conf.Configuracion.cContadores + ".xlsx")
+                if conf.Configuracion.randomizarListaRepos:
+                    busqueda.setFRepos('random_repos_%s.pickle' % conf.Configuracion.fechaEjecucion)
+                else:
+                    busqueda.setFRepos('repos_%s.pickle' % conf.Configuracion.fechaEjecucion)
+                auxiliares.guardarBusquedaBD(busqueda)
+
             continuar = False
 
         if continuar:
@@ -183,6 +210,18 @@ def exe():
                 auxiliares.generarEXCEL_CSV(df, conf.Configuracion.cResearch, conf.Configuracion.doExcel, conf.Configuracion.doCsv)
                 auxiliares.generarEXCEL_CSV(df2, conf.Configuracion.cContadores, conf.Configuracion.doExcel,
                                             conf.Configuracion.doCsv)
+
+                # Guardamos los ficheros excel en BD.
+                if conf.Configuracion.actualizarBD:
+                    busqueda = busquedaBD.createBusquedaBD()
+                    busqueda.setIdBusqueda(conf.Configuracion.idBusqueda)
+                    busqueda.setResearch(conf.Configuracion.cResearch + ".xlsx")
+                    busqueda.setContadores(conf.Configuracion.cContadores + ".xlsx")
+                    if conf.Configuracion.randomizarListaRepos:
+                        busqueda.setFRepos('random_repos_%s.pickle' % conf.Configuracion.fechaEjecucion)
+                    else:
+                        busqueda.setFRepos('repos_%s.pickle' % conf.Configuracion.fechaEjecucion)
+                    auxiliares.guardarBusquedaBD(busqueda)
 
             # Clonamos repositorios:
             if conf.Configuracion.clonarRepositorios:

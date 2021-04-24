@@ -54,6 +54,7 @@ scriptLapseExeCheck_state = tk.BooleanVar()
 # STATE (Base de datos)
 nombreRepoBD_state = tk.StringVar()
 organizacionBD_state = tk.StringVar()
+lenguajeBD_state = tk.StringVar()
 commitIdBD_state = tk.StringVar()
 sizeBD_state = tk.IntVar()
 boE2eCheck_state = tk.BooleanVar()
@@ -105,6 +106,7 @@ def consultarBD():
     repo = repoBD.createRepoBD()
     repo.setNombre(nombreRepoBD_state.get())
     repo.setOrganizacion(organizacionBD_state.get())
+    repo.setLenguaje(lenguajeBD_state.get())
     repo.setSize(sizeBD_state.get())
     repo.setCommitID(commitIdBD_state.get())
     repo.setBoE2e(boE2eCheck_state.get())
@@ -381,6 +383,14 @@ organizacionBDLbl.grid(column=0, row=row)
 organizacionBD_state.set("")
 organizacionBD = tk.Entry(p2, width=15, textvariable=organizacionBD_state)
 organizacionBD.grid(column=1, row=row)
+row+=1
+
+# LENGUAJE BD
+lenguajeBDLbl = tk.Label(p2, text="Lenguaje: ", bg=backgroudLblColor)
+lenguajeBDLbl.grid(column=0, row=row)
+lenguajeBD_state.set("")
+lenguajeBD = tk.Entry(p2, width=15, textvariable=lenguajeBD_state)
+lenguajeBD.grid(column=1, row=row)
 row+=1
 
 # COMMIT ID BD
