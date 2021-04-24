@@ -1,5 +1,6 @@
 from enum import Enum
 import configuracion as conf
+import filtrosQuery as fq
 import auxiliares
 import os
 import repoBD
@@ -31,7 +32,7 @@ def recorrerRepositoriosLocal(listaRepositorios, df, df2):
     listaEncontrados = []
     for repo in listaRepositorios:
 
-        content = obtenerRutaCompletaE("./" + conf.Configuracion.cRepositorios, [repo])
+        content = obtenerRutaCompletaE("./" + conf.config.cRepositorios, [repo])
 
         rutaIni = content[0]
         if os.path.exists(rutaIni):
@@ -49,7 +50,7 @@ def recorrerRepositoriosLocal(listaRepositorios, df, df2):
                 encontrado = True
 
             # Actualizamos BD
-            if conf.Configuracion.actualizarBD:
+            if conf.config.actualizarBD:
                 print("Actualizando base de datos...")
                 repoBBDD = repoBD.createRepoBD()
                 repoBBDD.setNombre(repo.split("*_*")[1])
@@ -76,7 +77,7 @@ def recorrerRepositoriosLocal(listaRepositorios, df, df2):
 
 # El primer fichero o carpeta que cumpla el criterio será el que devuelva
 def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
-    log = conf.Configuracion.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -112,7 +113,7 @@ def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
 
 # Busca todas los ficheros/carpetas que coinciden (no que contengan) con el criterio.
 def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
-    log = conf.Configuracion.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -148,7 +149,7 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
 
 # Busca todas los ficheros/carpetas que contengan en su nombre el value del criterio.
 def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
-    log = conf.Configuracion.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -183,7 +184,7 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
     return encontrado
 
 def buscarC10_Local(repo, lFicheros, df):
-    log = conf.Configuracion.cLogs + "/log_buscarC10Local_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarC10Local_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -214,7 +215,7 @@ def buscarC10_Local(repo, lFicheros, df):
     return encontrado
 
 def buscarC11_Local(repo, lFicheros, df):
-    log = conf.Configuracion.cLogs + "/log_buscarC11Local_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarC11Local_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -246,7 +247,7 @@ def buscarC11_Local(repo, lFicheros, df):
     return encontrado
 
 def buscarFicherosCI_Local(repo, lFicheros, df):
-    log = conf.Configuracion.cLogs + "/log_buscarC12Local_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarC12Local_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
@@ -296,7 +297,7 @@ def busquedaGitHubApiRepos(listaRepositorios, df, df2):
             listaEncontrados.append(repo)
             encontrado = True
 
-        if conf.Configuracion.actualizarBD:
+        if conf.config.actualizarBD:
             print("Actualizando base de datos...")
             repoBBDD = repoBD.createRepoBD()
             repoBBDD.setNombre(repo.full_name.split("/")[1])
@@ -320,7 +321,7 @@ def busquedaGitHubApiRepos(listaRepositorios, df, df2):
 def buscarEnRepo(repo, criterio, df):
     print("Buscando repositorios recursivamente: '" + criterio + "' en el repo: " + repo.full_name)
     encontrado = False
-    log = conf.Configuracion.cLogs + "/log_buscarEnRepo_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarEnRepo_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
     f.write("\n")
@@ -344,7 +345,7 @@ def buscarEnRepo(repo, criterio, df):
 def buscarEnRaiz(repo, criterio, df):
     print("Buscando '" + criterio +"' en la raiz del repo: " + repo.full_name)
     encontrado = False
-    log = conf.Configuracion.cLogs + "/log_buscarEnRaiz_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarEnRaiz_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
 
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -366,7 +367,7 @@ def buscarEnRaiz(repo, criterio, df):
 def buscarEnTests(repo, criterio, df):
     print("Buscando '" + criterio + "' en carpeta test/tests del repo: " + repo.full_name)
     encontrado = False
-    log = conf.Configuracion.cLogs + "/log_buscarEnTests_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarEnTests_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
 
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -402,7 +403,7 @@ def buscarEnTests(repo, criterio, df):
 def buscarEnSrcTests(repo, criterio, df):
     print("Buscando '" + criterio +"' en carpeta src/test del repo: " + repo.full_name)
     encontrado = False
-    log = conf.Configuracion.cLogs + "/log_buscarEnSrcTests_" + criterio + "_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarEnSrcTests_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
 
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -449,7 +450,7 @@ def buscarEnSrcTests(repo, criterio, df):
 def buscarC10(repo, df):
     print("Iniciando criterio de búsqueda nº 10 en el repo: " + repo.full_name)
     encontrado = False
-    log = conf.Configuracion.cLogs + "/log_buscarC10_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarC10_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
 
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
@@ -491,7 +492,7 @@ def buscarC10(repo, df):
 def buscarC11(repo, df):
     print("Iniciando criterio de búsqueda nº 11 en el repo: " + repo.full_name)
     encontrado = False
-    log = conf.Configuracion.cLogs + "/log_buscarC11_" + conf.Configuracion.fechaEjecucion + ".log"
+    log = conf.config.cLogs + "/log_buscarC11_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
 
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])

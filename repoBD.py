@@ -23,7 +23,7 @@ class RepoBD:
         self.url = ""
         self.boE2e = False
         self.idbusqueda = -1
-        self.tstbd = conf.Configuracion.fechaEjecucion
+        self.tstbd = conf.config.fechaEjecucion
 
     def getInsert(self):
 

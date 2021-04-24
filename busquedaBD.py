@@ -1,5 +1,6 @@
 import executeQuery
 import configuracion as conf
+import filtrosQuery as fq
 import auxiliares
 
 class BusquedaBD:
@@ -26,7 +27,7 @@ class BusquedaBD:
         self.public = True
         self.research = None
         self.contadores = None
-        self.tstbd = conf.Configuracion.fechaEjecucion
+        self.tstbd = conf.config.fechaEjecucion
 
     def getInsert(self):
 

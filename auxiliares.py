@@ -2,6 +2,7 @@
 
 #Importamos las librerías necesarias.
 import configuracion as conf
+import filtrosQuery as fq
 import criterios
 import pickle
 import pandas as pd
@@ -73,7 +74,7 @@ def generarDataFrame(listaRepositorios):
     repo1BBDD.setUrl(repo1.html_url)
     repo1BBDD.setSize(repo1.size)
     repo1BBDD.setBoE2e(0)
-    repo1BBDD.setIdBusqueda(conf.Configuracion.idBusqueda)
+    repo1BBDD.setIdBusqueda(conf.config.idBusqueda)
     guardarRepoEnBD(repo1BBDD)
 
     for repo in listaRepositorios[1:len(listaRepositorios)]:
@@ -118,7 +119,7 @@ def generarDataFrame(listaRepositorios):
         repoBBDD.setUrl(repo.html_url)
         repoBBDD.setSize(repo.size)
         repoBBDD.setBoE2e(0)
-        repoBBDD.setIdBusqueda(conf.Configuracion.idBusqueda)
+        repoBBDD.setIdBusqueda(conf.config.idBusqueda)
         guardarRepoEnBD(repoBBDD)
 
     return df
@@ -184,12 +185,12 @@ def actualizarDataFrameCommitID(listaRepos, df):
         repoBBDD = repoBD.createRepoBD()
         repoBBDD.setNombre(repo.full_name.split("/")[1])
         repoBBDD.setOrganizacion(repo.full_name.split("/")[0])
-        repoBBDD.setOrganizacion(repo.language)
+        repoBBDD.setLenguaje(repo.language)
         repoBBDD.setUrl(repo.html_url)
         repoBBDD.setSize(repo.size)
         repoBBDD.setCommitID(commitID)
         repoBBDD.setBoE2e(0)
-        repoBBDD.setIdBusqueda(conf.Configuracion.idBusqueda)
+        repoBBDD.setIdBusqueda(conf.config.idBusqueda)
         guardarRepoEnBD(repoBBDD)
 
 def contarRepositoriosAlMenos1Criterio(df):
@@ -250,7 +251,7 @@ def obtenerRepoCommitID(repo):
     proyectPath = os.getcwd()
     # Inicializamos el commitID a 'NE' (no encontrado).
     commitID = "NE"
-    ruta = proyectPath + "/" + conf.Configuracion.cRepositorios + "/" + repo
+    ruta = proyectPath + "/" + conf.config.cRepositorios + "/" + repo
     if os.path.exists(ruta):
         os.chdir(ruta)
         commitIDAux = subprocess.check_output("git log --pretty=format:'%h' -n 1", shell=True)
@@ -311,38 +312,38 @@ def obtenerFicheroIt(path):
 def crearCarpetasLocal():
     # CREAR CARPETAS NECESARIAS EN LOCAL
     # Creamos la carpeta donde van los logs (si no existe)
-    if not os.path.exists(conf.Configuracion.cLogs):
-        os.mkdir(conf.Configuracion.cLogs)
+    if not os.path.exists(conf.config.cLogs):
+        os.mkdir(conf.config.cLogs)
 
     # Creamos la carpeta donde van los repositories (si no existe)
-    if not os.path.exists(conf.Configuracion.cRepositorios.split("/")[0]):
-        os.mkdir(conf.Configuracion.cRepositorios.split("/")[0])
+    if not os.path.exists(conf.config.cRepositorios.split("/")[0]):
+        os.mkdir(conf.config.cRepositorios.split("/")[0])
 
     # Creamos la carpeta donde van los contadores (si no existe)
-    if not os.path.exists(conf.Configuracion.cContadores.split("/")[0]):
-        os.mkdir(conf.Configuracion.cContadores.split("/")[0])
+    if not os.path.exists(conf.config.cContadores.split("/")[0]):
+        os.mkdir(conf.config.cContadores.split("/")[0])
 
     # Creamos la carpeta donde van los research (si no existe)
-    if not os.path.exists(conf.Configuracion.cResearch.split("/")[0]):
-        os.mkdir(conf.Configuracion.cResearch.split("/")[0])
+    if not os.path.exists(conf.config.cResearch.split("/")[0]):
+        os.mkdir(conf.config.cResearch.split("/")[0])
     # FIN CREAR CARPETAS NECESARIAS EN LOCAL
 
 def clonar1ListaRepo(repositorios):
     # Generamos el directorio 'repositories'
-    if not os.path.exists(conf.Configuracion.cRepositorios):
-        print("Folder %s created!" % conf.Configuracion.cRepositorios)
-        os.mkdir(conf.Configuracion.cRepositorios)
+    if not os.path.exists(conf.config.cRepositorios):
+        print("Folder %s created!" % conf.config.cRepositorios)
+        os.mkdir(conf.config.cRepositorios)
     else:
-        print("Folder %s already exist" % conf.Configuracion.cRepositorios)
+        print("Folder %s already exist" % conf.config.cRepositorios)
 
     # Clonamos los repositorios
     for project in repositorios:
-        if project.size > conf.Configuracion.REPO_SIZE_LIMIT:
+        if project.size > conf.config.REPO_SIZE_LIMIT:
             print("Repositorio NO clonado. Ocupa demasiado en disco.")
         else:
             #project_name = project.full_name.split("/")[1]
             project_name = project.full_name.replace("/", "*_*")
-            project_folder = "%s/%s" % (conf.Configuracion.cRepositorios, project_name)
+            project_folder = "%s/%s" % (conf.config.cRepositorios, project_name)
 
             # CHECK IF PROJECT EXISTS
             if os.path.exists(project_folder):
@@ -363,20 +364,20 @@ def clonar1ListaRepo(repositorios):
 
 def clonarRepositorios(lRepositorios):
     # Generamos el directorio 'repositories'
-    if not os.path.exists(conf.Configuracion.cRepositorios):
-        print("Folder %s created!" % conf.Configuracion.cRepositorios)
-        os.mkdir(conf.Configuracion.cRepositorios)
+    if not os.path.exists(conf.config.cRepositorios):
+        print("Folder %s created!" % conf.config.cRepositorios)
+        os.mkdir(conf.config.cRepositorios)
     else:
-        print("Folder %s already exist" % conf.Configuracion.cRepositorios)
+        print("Folder %s already exist" % conf.config.cRepositorios)
 
     # Clonamos los repositorios
     for repositorio in lRepositorios:
         for project in repositorio:
-            if project.size > conf.Configuracion.REPO_SIZE_LIMIT:
+            if project.size > conf.config.REPO_SIZE_LIMIT:
                 print("Repositorio NO clonado. Ocupa demasiado en disco.")
             else:
                 project_name = project.full_name.split("/")[1]
-                project_folder = "%s/%s" % (conf.Configuracion.cRepositorios, project_name)
+                project_folder = "%s/%s" % (conf.config.cRepositorios, project_name)
 
                 # CHECK IF PROJECT EXISTS
                 if os.path.exists(project_folder):
@@ -397,15 +398,15 @@ def clonarRepositorios(lRepositorios):
 def generarZipRepos():
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s : %(levelname)s : %(message)s',
-                        filename='logs/repositories_' + conf.Configuracion.fechaEjecucion + '.log',
+                        filename='logs/repositories_' + conf.config.fechaEjecucion + '.log',
                         filemode='w', )
 
-    archivo_zip = shutil.make_archive("repos_snapshots/repositories_" + conf.Configuracion.fechaEjecucion,
+    archivo_zip = shutil.make_archive("repos_snapshots/repositories_" + conf.config.fechaEjecucion,
                                       "zip",
-                                      base_dir=conf.Configuracion.cRepositorios,
+                                      base_dir=conf.config.cRepositorios,
                                       logger=logging)
 
-    rmtree("./" + conf.Configuracion.cRepositorios)
+    rmtree("./" + conf.config.cRepositorios)
 
 def convertToBinaryData(filename):
     # Convert digital data to binary format

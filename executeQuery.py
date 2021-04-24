@@ -1,14 +1,16 @@
 import configuracion as conf
+import filtrosQuery as fq
+import conexionesBD as cBD
 import pymysql
 import pymysql.cursors
 
 def getConexion():
     try:
-        db = pymysql.connect(host=conf.ConexionesBD.host,
-                             user=conf.ConexionesBD.user,
-                             password=conf.ConexionesBD.password,
-                             database=conf.ConexionesBD.db,
-                             cursorclass=conf.ConexionesBD.cursorClass)
+        db = pymysql.connect(host=cBD.ConexionesBD.host,
+                             user=cBD.ConexionesBD.user,
+                             password=cBD.ConexionesBD.password,
+                             database=cBD.ConexionesBD.db,
+                             cursorclass=cBD.ConexionesBD.cursorClass)
         return db
     except:
         print("Error al obtener la conexión a la base de datos.")
@@ -23,6 +25,7 @@ def execute(query):
         cursor = db.cursor()
 
         # Ejecutamos la query.
+        #print(query)
         cursor.execute(query)
 
         filas = cursor.fetchall()
@@ -45,6 +48,7 @@ def executeWithParams(query_params):
         cursor = db.cursor()
 
         # Ejecutamos la query.
+        #print(query_params)
         sql = query_params[0]
         params = query_params[1]
 

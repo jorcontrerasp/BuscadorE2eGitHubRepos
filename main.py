@@ -4,6 +4,7 @@
 import github
 from github import Github
 import configuracion as conf
+import filtrosQuery as fq
 import criterios
 import auxiliares
 import pandas as pd
@@ -18,15 +19,15 @@ def exe():
     df = pd.DataFrame
     df2 = pd.DataFrame
 
-    print(conf.Configuracion.fechaEjecucion + " - Iniciando proceso")
+    print(conf.config.fechaEjecucion + " - Iniciando proceso")
 
     try:
         # Generamos un token para consultar la API de GitHub a través de la librería.
-        user = conf.Configuracion.user
-        token = conf.Configuracion.token
+        user = conf.config.user
+        token = conf.config.token
         g = Github(user, token)
 
-        if conf.Configuracion.generarListaRepos:
+        if conf.config.generarListaRepos:
             print("Generando nueva lista de repositorios")
             # Obtenemos un objeto generador, encargado de realizar las búsquedas al iterar sobre él.
 
@@ -40,8 +41,8 @@ def exe():
                 is:public
             """
 
-            queryConf = conf.FiltrosQuery.getQueryIni(self=conf.FiltrosQuery)
-            fQueryInicial = "query-inicial_" + conf.Configuracion.fechaEjecucion + ".txt"
+            queryConf = fq.FiltrosQuery.getQueryIni(self=fq.FiltrosQuery)
+            fQueryInicial = "query-inicial_" + conf.config.fechaEjecucion + ".txt"
             f = open(fQueryInicial, "w")
             f.write("QUERY INICIAL:")
             f.write("\n")
@@ -53,20 +54,20 @@ def exe():
             print("Total repos: %d" % len(repositories))
 
             # Guardamos la información de los repositorios recuperados en un archivo binario de Python.
-            fRepos = 'repos_%s.pickle' % conf.Configuracion.fechaEjecucion
+            fRepos = 'repos_%s.pickle' % conf.config.fechaEjecucion
             auxiliares.generarPickle(fRepos, repositories)
             repositories = auxiliares.cargarRepositorios(fRepos)
 
             busqueda = busquedaBD.createBusquedaBD()
-            busqueda.setLenguaje(conf.FiltrosQuery.language)
-            busqueda.setStars(conf.FiltrosQuery.stars)
-            busqueda.setForks(conf.FiltrosQuery.forks)
-            busqueda.setCreated(conf.FiltrosQuery.created)
-            busqueda.setPushed(conf.FiltrosQuery.pushed)
-            busqueda.setArchived(conf.FiltrosQuery.archived)
-            busqueda.setPublic(conf.FiltrosQuery.qIs)
+            busqueda.setLenguaje(fq.FiltrosQuery.language)
+            busqueda.setStars(fq.FiltrosQuery.stars)
+            busqueda.setForks(fq.FiltrosQuery.forks)
+            busqueda.setCreated(fq.FiltrosQuery.created)
+            busqueda.setPushed(fq.FiltrosQuery.pushed)
+            busqueda.setArchived(fq.FiltrosQuery.archived)
+            busqueda.setPublic(fq.FiltrosQuery.qIs)
             idBusqueda = auxiliares.guardarBusquedaBD(busqueda)
-            conf.Configuracion.idBusqueda = idBusqueda
+            conf.config.idBusqueda = idBusqueda
 
         else:
             print("Utilizando el fichero " + fRepos + " para generar los repositorios")
@@ -104,7 +105,7 @@ def exe():
 
         auxiliares.crearCarpetasLocal()
 
-        if conf.Configuracion.lapseExe:
+        if conf.config.lapseExe:
             # EXCEL RESEARCH
             if os.path.exists("tmp-research.xlsx"):
                 df = pd.read_excel("tmp-research.xlsx", index_col=0)
@@ -118,8 +119,8 @@ def exe():
                 # Generamos un nuevo DataFrame mediante la librería "pandas".
                 df2 = auxiliares.generarDataFrameContadores()
 
-            listaAux = filteredRepos[0:conf.Configuracion.N_LAPSE_REPOS]
-            del filteredRepos[0:conf.Configuracion.N_LAPSE_REPOS]
+            listaAux = filteredRepos[0:conf.config.N_LAPSE_REPOS]
+            del filteredRepos[0:conf.config.N_LAPSE_REPOS]
             auxiliares.generarPickle(fRepos, filteredRepos)
         else:
             listaAux = []
@@ -127,10 +128,10 @@ def exe():
                 if r not in listaAux:
                     listaAux.append(r)
 
-            if conf.Configuracion.randomizarListaRepos:
+            if conf.config.randomizarListaRepos:
                 # Seleccionamos N repositorios de manera aleatoria:
                 lRandom = []
-                while len(lRandom) < conf.Configuracion.N_RANDOM:
+                while len(lRandom) < conf.config.N_RANDOM:
                     item = random.choice(listaAux)
                     if item not in lRandom:
                         lRandom.append(item)
@@ -138,7 +139,7 @@ def exe():
                 print("Random projects: %d" % len(listaAux))
 
                 # Guardamos la información de los repositorios randomizados en un archivo binario de Python.
-                fRepos = 'random_repos_%s.pickle' % conf.Configuracion.fechaEjecucion
+                fRepos = 'random_repos_%s.pickle' % conf.config.fechaEjecucion
                 auxiliares.generarPickle(fRepos, listaAux)
                 listaAux = auxiliares.cargarRepositorios(fRepos)
 
@@ -152,7 +153,7 @@ def exe():
         continuar = True
         lReposEncontrados = []
         if len(listaAux) > 0:
-            if conf.Configuracion.buscarEnLocal:
+            if conf.config.buscarEnLocal:
 
                 print("Nº repos que se van a clonar: " + str(len(listaAux)))
                 # Clonamos en local los repositorios obtenidos:
@@ -162,7 +163,7 @@ def exe():
                 auxiliares.actualizarDataFrameCommitID(listaAux, df)
 
                 # Listamos los repositorios clonados
-                reposEnLocal = os.listdir(conf.Configuracion.cRepositorios)
+                reposEnLocal = os.listdir(conf.config.cRepositorios)
 
                 # Aplicamos criterios
                 print("Nº repos en local: " + str(len(reposEnLocal)))
@@ -178,53 +179,45 @@ def exe():
             print("Nº de repos encontrados: " + str(len(lReposEncontrados)))
         else:
             print("No se han obtenido repositorios del fichero " + fRepos)
-            auxiliares.generarEXCEL_CSV(df, conf.Configuracion.cResearch,
-                                        conf.Configuracion.doExcel,conf.Configuracion.doCsv)
-            auxiliares.generarEXCEL_CSV(df2, conf.Configuracion.cContadores,
-                                        conf.Configuracion.doExcel, conf.Configuracion.doCsv)
+            auxiliares.generarEXCEL_CSV(df, conf.config.cResearch,
+                                        conf.config.doExcel,conf.config.doCsv)
+            auxiliares.generarEXCEL_CSV(df2, conf.config.cContadores,
+                                        conf.config.doExcel, conf.config.doCsv)
             os.remove("tmp-research.xlsx")
             print("Fichero tmp-research.xlsx eliminado")
             os.remove("tmp-contadores.xlsx")
             print("Fichero tmp-contadores.xlsx eliminado")
 
             # Guardamos los ficheros excel en BD.
-            if conf.Configuracion.actualizarBD:
+            if conf.config.actualizarBD:
                 busqueda = busquedaBD.createBusquedaBD()
-                busqueda.setIdBusqueda(conf.Configuracion.idBusqueda)
-                busqueda.setResearch(conf.Configuracion.cResearch + ".xlsx")
-                busqueda.setContadores(conf.Configuracion.cContadores + ".xlsx")
-                if conf.Configuracion.randomizarListaRepos:
-                    busqueda.setFRepos('random_repos_%s.pickle' % conf.Configuracion.fechaEjecucion)
-                else:
-                    busqueda.setFRepos('repos_%s.pickle' % conf.Configuracion.fechaEjecucion)
+                busqueda.setIdBusqueda(conf.config.idBusqueda)
+                busqueda.setResearch(conf.config.cResearch + ".xlsx")
+                busqueda.setContadores(conf.config.cContadores + ".xlsx")
                 auxiliares.guardarBusquedaBD(busqueda)
 
             continuar = False
 
         if continuar:
             # Transformar DataFrame a Excel/CSV
-            if conf.Configuracion.lapseExe:
-                auxiliares.generarEXCEL_CSV(df, "tmp-research", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
-                auxiliares.generarEXCEL_CSV(df2, "tmp-contadores", conf.Configuracion.doExcel, conf.Configuracion.doCsv)
+            if conf.config.lapseExe:
+                auxiliares.generarEXCEL_CSV(df, "tmp-research", conf.config.doExcel, conf.config.doCsv)
+                auxiliares.generarEXCEL_CSV(df2, "tmp-contadores", conf.config.doExcel, conf.config.doCsv)
             else:
-                auxiliares.generarEXCEL_CSV(df, conf.Configuracion.cResearch, conf.Configuracion.doExcel, conf.Configuracion.doCsv)
-                auxiliares.generarEXCEL_CSV(df2, conf.Configuracion.cContadores, conf.Configuracion.doExcel,
-                                            conf.Configuracion.doCsv)
+                auxiliares.generarEXCEL_CSV(df, conf.config.cResearch, conf.config.doExcel, conf.config.doCsv)
+                auxiliares.generarEXCEL_CSV(df2, conf.config.cContadores, conf.config.doExcel,
+                                            conf.config.doCsv)
 
                 # Guardamos los ficheros excel en BD.
-                if conf.Configuracion.actualizarBD:
+                if conf.config.actualizarBD:
                     busqueda = busquedaBD.createBusquedaBD()
-                    busqueda.setIdBusqueda(conf.Configuracion.idBusqueda)
-                    busqueda.setResearch(conf.Configuracion.cResearch + ".xlsx")
-                    busqueda.setContadores(conf.Configuracion.cContadores + ".xlsx")
-                    if conf.Configuracion.randomizarListaRepos:
-                        busqueda.setFRepos('random_repos_%s.pickle' % conf.Configuracion.fechaEjecucion)
-                    else:
-                        busqueda.setFRepos('repos_%s.pickle' % conf.Configuracion.fechaEjecucion)
+                    busqueda.setIdBusqueda(conf.config.idBusqueda)
+                    busqueda.setResearch(conf.config.cResearch + ".xlsx")
+                    busqueda.setContadores(conf.config.cContadores + ".xlsx")
                     auxiliares.guardarBusquedaBD(busqueda)
 
             # Clonamos repositorios:
-            if conf.Configuracion.clonarRepositorios:
+            if conf.config.clonarRepositorios:
                 lAux = []
                 lAux.append(lReposEncontrados)
                 auxiliares.clonarRepositorios(lAux)
