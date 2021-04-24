@@ -24,6 +24,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   USE buscadorGitHubRepos;
   
   -- Script generador del esquema:
+  
   DROP TABLE BD_D_REPO;
   DROP TABLE BD_D_BUSQUEDA;
   DROP TABLE BD_D_CONFIGURACION;
