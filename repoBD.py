@@ -1,4 +1,3 @@
-import executeQuery
 import configuracion as conf
 
 class RepoBD:

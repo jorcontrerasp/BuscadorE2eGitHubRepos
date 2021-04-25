@@ -1,7 +1,6 @@
 #TFG (estudio CI/CD GitHub) - Programa de validación
 
 #Importamos las librerías necesarias.
-import github
 from github import Github
 import configuracion as conf
 import filtrosQuery as fq

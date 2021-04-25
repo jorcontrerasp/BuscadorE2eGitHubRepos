@@ -1,10 +1,8 @@
 from enum import Enum
 import configuracion as conf
-import filtrosQuery as fq
 import auxiliares
 import os
 import repoBD
-import executeQuery
 
 class Criterios(Enum):
     criterio1 = "integration"

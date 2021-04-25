@@ -2,7 +2,6 @@
 
 #Importamos las librerías necesarias.
 import configuracion as conf
-import filtrosQuery as fq
 import criterios
 import pickle
 import pandas as pd
@@ -15,7 +14,25 @@ import logging
 from github import GithubException
 import repoBD
 import executeQuery
-import openpyxl
+
+def crearCarpetasLocal():
+    # CREAR CARPETAS NECESARIAS EN LOCAL
+    # Creamos la carpeta donde van los logs (si no existe)
+    if not os.path.exists(conf.config.cLogs):
+        os.mkdir(conf.config.cLogs)
+
+    # Creamos la carpeta donde van los repositories (si no existe)
+    if not os.path.exists(conf.config.cRepositorios.split("/")[0]):
+        os.mkdir(conf.config.cRepositorios.split("/")[0])
+
+    # Creamos la carpeta donde van los contadores (si no existe)
+    if not os.path.exists(conf.config.cContadores.split("/")[0]):
+        os.mkdir(conf.config.cContadores.split("/")[0])
+
+    # Creamos la carpeta donde van los research (si no existe)
+    if not os.path.exists(conf.config.cResearch.split("/")[0]):
+        os.mkdir(conf.config.cResearch.split("/")[0])
+    # FIN CREAR CARPETAS NECESARIAS EN LOCAL
 
 def imprimirListaRepositorios(repositorios):
     for project in repositorios:
@@ -176,6 +193,13 @@ def actualizarDataFrame(criterio, nombreRepo, path, df):
     else:
         print("Criterio no definido")
 
+def actualizarDataFrameAux(criterio, nombreRepo, path, df):
+    valor = str(df.at[nombreRepo, criterio])
+    if valor == "nan":
+        df.at[nombreRepo, criterio] = "[" + path + "]\n"
+    else:
+        df.at[nombreRepo, criterio] += "[" + path + "]\n"
+
 def actualizarDataFrameCommitID(listaRepos, df):
     for repo in listaRepos:
         commitID = obtenerRepoCommitID(repo.full_name.replace("/", "*_*"))
@@ -192,6 +216,24 @@ def actualizarDataFrameCommitID(listaRepos, df):
         repoBBDD.setBoE2e(0)
         repoBBDD.setIdBusqueda(conf.config.idBusqueda)
         guardarRepoEnBD(repoBBDD)
+
+def generarDataFrameContadores():
+    df = pd.DataFrame([0, 0, 0, 0, 0],
+                      index=[criterios.Criterios.criterio1.value
+                             #,criterios.Criterios.criterio2.value
+                             ,criterios.Criterios.criterio3.value
+                             #,criterios.Criterios.criterio4.value
+                             ,criterios.Criterios.criterio5.value
+                             #,criterios.Criterios.criterio6.value
+                             #,criterios.Criterios.criterio7.value
+                             #,criterios.Criterios.criterio8.value
+                             #,criterios.Criterios.criterio9.value
+                             ,criterios.Criterios.criterio10.value
+                             #,criterios.Criterios.criterio11.value
+                             #,criterios.Criterios.criterio12.value
+                             ,"Totales"],
+                      columns=['n_encontrados'])
+    return df
 
 def contarRepositoriosAlMenos1Criterio(df):
     cont = 0
@@ -222,31 +264,6 @@ def contarRepositoriosAlMenos1Criterio(df):
             #cont += 1
     return cont
 
-def actualizarDataFrameAux(criterio, nombreRepo, path, df):
-    valor = str(df.at[nombreRepo, criterio])
-    if valor == "nan":
-        df.at[nombreRepo, criterio] = "[" + path + "]\n"
-    else:
-        df.at[nombreRepo, criterio] += "[" + path + "]\n"
-
-def generarDataFrameContadores():
-    df = pd.DataFrame([0, 0, 0, 0, 0],
-                      index=[criterios.Criterios.criterio1.value
-                             #,criterios.Criterios.criterio2.value
-                             ,criterios.Criterios.criterio3.value
-                             #,criterios.Criterios.criterio4.value
-                             ,criterios.Criterios.criterio5.value
-                             #,criterios.Criterios.criterio6.value
-                             #,criterios.Criterios.criterio7.value
-                             #,criterios.Criterios.criterio8.value
-                             #,criterios.Criterios.criterio9.value
-                             ,criterios.Criterios.criterio10.value
-                             #,criterios.Criterios.criterio11.value
-                             #,criterios.Criterios.criterio12.value
-                             ,"Totales"],
-                      columns=['n_encontrados'])
-    return df
-
 def obtenerRepoCommitID(repo):
     proyectPath = os.getcwd()
     # Inicializamos el commitID a 'NE' (no encontrado).
@@ -261,6 +278,16 @@ def obtenerRepoCommitID(repo):
         print("No se ha encontrado la ruta " + ruta)
     return commitID
 
+def cargarRepositorios(fichero):
+    with open(fichero, 'rb') as f:
+        repositories = pickle.load(f)
+    return repositories
+
+def generarPickle(nombreFichero, listaRepositorios):
+    with open(nombreFichero, 'wb') as f:
+        pickle.dump(listaRepositorios, f)
+    print("Fichero " + nombreFichero + " generado")
+
 def generarEXCEL_CSV(df, pFichero, generarExcel, generarCsv):
     if generarExcel:
         df.to_excel(pFichero + ".xlsx")
@@ -268,15 +295,13 @@ def generarEXCEL_CSV(df, pFichero, generarExcel, generarCsv):
     if generarCsv:
         df.to_csv(pFichero + ".csv")
 
-def generarPickle(nombreFichero, listaRepositorios):
-    with open(nombreFichero, 'wb') as f:
-        pickle.dump(listaRepositorios, f)
-    print("Fichero " + nombreFichero + " generado")
-
-def cargarRepositorios(fichero):
-    with open(fichero, 'rb') as f:
-        repositories = pickle.load(f)
-    return repositories
+def obtenerFicheroIt(path):
+    if "/" in path:
+        pathArray = path.split("/")
+        fActual = pathArray[len(pathArray) - 1]
+    else:
+        fActual = path
+    return fActual
 
 def getBlobContent(repo, branch, path_name):
     # Obtener referencia del "branch"
@@ -301,32 +326,11 @@ def getFileContent(repo, filePath):
         content = b64.decode("utf8")
         return str(content)
 
-def obtenerFicheroIt(path):
-    if "/" in path:
-        pathArray = path.split("/")
-        fActual = pathArray[len(pathArray) - 1]
-    else:
-        fActual = path
-    return fActual
-
-def crearCarpetasLocal():
-    # CREAR CARPETAS NECESARIAS EN LOCAL
-    # Creamos la carpeta donde van los logs (si no existe)
-    if not os.path.exists(conf.config.cLogs):
-        os.mkdir(conf.config.cLogs)
-
-    # Creamos la carpeta donde van los repositories (si no existe)
-    if not os.path.exists(conf.config.cRepositorios.split("/")[0]):
-        os.mkdir(conf.config.cRepositorios.split("/")[0])
-
-    # Creamos la carpeta donde van los contadores (si no existe)
-    if not os.path.exists(conf.config.cContadores.split("/")[0]):
-        os.mkdir(conf.config.cContadores.split("/")[0])
-
-    # Creamos la carpeta donde van los research (si no existe)
-    if not os.path.exists(conf.config.cResearch.split("/")[0]):
-        os.mkdir(conf.config.cResearch.split("/")[0])
-    # FIN CREAR CARPETAS NECESARIAS EN LOCAL
+def convertToBinaryData(filename):
+    # Convert digital data to binary format
+    with open(filename, 'rb') as file:
+        binaryData = file.read()
+    return binaryData
 
 def clonar1ListaRepo(repositorios):
     # Generamos el directorio 'repositories'
@@ -407,12 +411,6 @@ def generarZipRepos():
                                       logger=logging)
 
     rmtree("./" + conf.config.cRepositorios)
-
-def convertToBinaryData(filename):
-    # Convert digital data to binary format
-    with open(filename, 'rb') as file:
-        binaryData = file.read()
-    return binaryData
 
 def guardarRepoEnBD(repoBBDD):
     print("Actualizando base de datos...")

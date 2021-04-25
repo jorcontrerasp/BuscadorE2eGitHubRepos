@@ -1,7 +1,4 @@
-import datetime
-import pymysql
 import pymysql.cursors
-import executeQuery
 
 class ConexionesBD():
     host = "localhost"

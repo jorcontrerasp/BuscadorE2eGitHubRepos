@@ -1,6 +1,4 @@
-import executeQuery
 import configuracion as conf
-import filtrosQuery as fq
 import auxiliares
 
 class BusquedaBD:

@@ -453,7 +453,6 @@ limpiarResultadosButton = tk.Button(p2, text="Limpiar", fg="black",  command=lim
 limpiarResultadosButton.grid(column=1, row=row)
 row+=1
 
-
 # PESTAÑA 3
 
 row = 0

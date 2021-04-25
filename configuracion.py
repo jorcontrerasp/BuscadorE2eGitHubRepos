@@ -1,6 +1,4 @@
 import datetime
-import pymysql
-import pymysql.cursors
 import executeQuery
 
 # CONFIGURACIÓN

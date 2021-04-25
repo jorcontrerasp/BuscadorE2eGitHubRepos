@@ -1,5 +1,3 @@
-import configuracion as conf
-import filtrosQuery as fq
 import conexionesBD as cBD
 import pymysql
 import pymysql.cursors
