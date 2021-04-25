@@ -64,7 +64,94 @@ class Configuracion():
         return r
 
     # GETTER & SETTER
-    def getUserBD(self):
+    def getUser(self):
+        return self.user
+
+    def getUserSql(self):
         return self.getConfiguracion("CREDENCIALES", "user")
+
+    def setUser(self, user):
+        self.user = user
+
+    def getToken(self):
+        return self.token
+
+    def getTokenSql(self):
+        return self.getConfiguracion("CREDENCIALES", "token")
+
+    def setToken(self, token):
+        self.token = token
+
+    def getBuscarEnLocal(self):
+        return self.buscarEnLocal
+
+    def getBuscarEnLocalSql(self):
+        return self.getConfiguracion("SEARCH_PARAM", "buscarEnLocal")
+
+    def setBuscarEnLocal(self, buscarEnLocal):
+        self.buscarEnLocal = buscarEnLocal
+
+    def getGenerarListaRepos(self):
+        return self.generarListaRepos
+
+    def getGenerarListaReposSql(self):
+        return self.getConfiguracion("SEARCH_PARAM", "generarListaRepos")
+
+    def setGenerarListaRepos(self, generarListaRepos):
+        self.generarListaRepos = generarListaRepos
+
+    def getRandomizarListaRepos(self):
+        return self.randomizarListaRepos
+
+    def getRandomizarListaReposSql(self):
+        return self.getConfiguracion("SEARCH_PARAM", "randomizarListaRepos")
+
+    def setRandomizarListaRepos(self, randomizarListaRepos):
+        self.randomizarListaRepos = randomizarListaRepos
+
+    def getLapseExe(self):
+        return self.lapseExe
+
+    def getLapseExeSql(self):
+        return self.getConfiguracion("SEARCH_PARAM", "lapseExe")
+
+    def setLapseExe(self, lapseExe):
+        self.lapseExe = lapseExe
+
+    def getClonarRepositorios(self):
+        return self.clonarRepositorios
+
+    def getClonarRepositoriosSql(self):
+        return self.getConfiguracion("SEARCH_PARAM", "clonarRepositorios")
+
+    def setClonarRepositorios(self, clonarRepositorios):
+        self.clonarRepositorios = clonarRepositorios
+
+    def getDoExcel(self):
+        return self.doExcel
+
+    def getDoExcelSql(self):
+        return self.getConfiguracion("SEARCH_PARAM", "doExcel")
+
+    def setDoExcel(self, doExcel):
+        self.doExcel = doExcel
+
+    def getDoCsv(self):
+        return self.doCsv
+
+    def getDoCsvSql(self):
+        return self.getConfiguracion("SEARCH_PARAM", "doCsv")
+
+    def setDoCsv(self, doCsv):
+        self.doCsv = doCsv
+
+    def getActualizarBD(self):
+        return self.actualizarBD
+
+    def getActualizarBDSql(self):
+        return self.getConfiguracion("SEARCH_PARAM", "actualizarBD")
+
+    def setActualizarBD(self, actualizarBD):
+        self.actualizarBD = actualizarBD
 
 config = Configuracion()
