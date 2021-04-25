@@ -111,6 +111,7 @@ def consultarBD():
     repo.setSize(sizeBD_state.get())
     repo.setCommitID(commitIdBD_state.get())
     repo.setBoE2e(boE2eCheck_state.get())
+    repo.setTstbd("")
 
     query = repo.getFiltro()
 
@@ -119,7 +120,11 @@ def consultarBD():
     filas = executeQuery.execute(query)
 
     for fila in filas:
-        listadoBD.insert(0, fila)
+        id = fila["idrepo"]
+        nombre = fila["nombre"]
+        organizacion = fila["organizacion"]
+        url = fila["url"]
+        listadoBD.insert(0, "[" + str(id) + "]" +organizacion + "/" + nombre + ": " + "'" + url + "'")
 
 def randomizarReposCheck_clicked():
     if randomizarReposCheck_state.get():
@@ -128,6 +133,10 @@ def randomizarReposCheck_clicked():
     else:
         nRandomRepos_state.set(0)
         nRandomRepos.config(state=tk.DISABLED)
+
+def limpiarResultados():
+    print("Limpiando base de datos...")
+    listadoBD.delete(0, tk.END)
 
 # PESTAÑA 1
 
@@ -428,15 +437,22 @@ row+=1
 
 # Resultado de la búsqueda
 resultadoLbl = tk.Label(p2, text="Resultado de la consulta:", bg=backgroudLblColor)
-resultadoLbl.grid(column=0, row=row)
+resultadoLbl.grid(column=1, row=row)
 f = font.Font(resultadoLbl, resultadoLbl.cget("font"))
 f.configure(underline=True)
 resultadoLbl.configure(font=f)
 row+=1
 scrollbar = ttk.Scrollbar(p2, orient=tk.VERTICAL)
-listadoBD = tk.Listbox(p2, borderwidth=1, yscrollcommand=scrollbar.set)
-listadoBD.grid(row=row)
+listadoBD = tk.Listbox(p2, borderwidth=1, yscrollcommand=scrollbar.set, width = 40)
+listadoBD.grid(column=1, row=row)
 row+=1
+
+# BOTÓN LIMPIAR RESULTADOS
+limpiarResultadosButton = tk.Button(p2, text="Limpiar", fg="black",  command=limpiarResultados, bg=backgroudLblColor)
+#limpiarResultadosButton.pack()
+limpiarResultadosButton.grid(column=1, row=row)
+row+=1
+
 
 # PESTAÑA 3
 
