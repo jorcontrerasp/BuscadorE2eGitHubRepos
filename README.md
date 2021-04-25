@@ -26,8 +26,11 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   -- Script generador del esquema:
   
   DROP TABLE BD_D_REPO;
+  
   DROP TABLE BD_D_BUSQUEDA;
+  
   DROP TABLE BD_D_CONFIGURACION;
+  
   DROP TABLE BD_D_CONFIGURACIONTIPO;
 
   CREATE TABLE IF NOT EXISTS BD_D_BUSQUEDA(idbusqueda int(11) NOT NULL AUTO_INCREMENT, 
@@ -174,6 +177,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   
   <img src="imgs/buscador-er.png" alt=“buscador-er” width="450"/>
 
+- Actualiza BD: si se marca esta opción se actualizarán los datos relacionados con la búsqueda y con cada repositorio en base de datos. 
 - Buscar repos en LOCAL: si se marca esta opción se clonan los proyectos que se van a utilizar en la carpeta “repositories”, y una vez clonados, la búsqueda se realiza sobre dichos ficheros en local. Al finalizar el proceso se borra la carpeta “repositories” y se genera un fichero zip a modo de snapshot con todos esos repositorios clonados inicialmente.
 - Generar lista repos ('.pickle’): si se marca esta opción se genera un nuevo fichero “.pickle” con todos los repositorios que se van a utilizar en el proceso de búsqueda. Si no se marca se reutiliza el fichero “.pickle” existente en la carpeta del proyecto.
 - Randomizar repositorios: si se marca esta opción, de todos los repositorios obtenidos inicialmente para realizar la búsqueda, se utilizan un número x de forma aleatoria.
