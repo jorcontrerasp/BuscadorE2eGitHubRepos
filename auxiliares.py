@@ -440,3 +440,23 @@ def guardarBusquedaBD(busquedaBD):
         insert = busquedaBD.getInsertParam()
         idBusqueda = executeQuery.executeWithParams(insert)
         return idBusqueda
+
+def getConfiguracion(codigo, campo):
+    query = "Select valor from BD_D_CONFIGURACION WHERE IDCONFIGURACIONTIPO IN(Select IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = :codigo) AND campo = :campo;"
+    query = query.replace(":codigo", "'" + codigo + "'")
+    query = query.replace(":campo", "'" + campo + "'")
+
+    resultado = executeQuery.execute(query)
+
+    r = None
+    valor = resultado[0]["valor"]
+    if valor == 'True':
+        r = True
+    elif valor == 'False':
+        r = False
+    elif valor.isdigit():
+        r = int(valor)
+    else:
+        r = valor
+
+    return r

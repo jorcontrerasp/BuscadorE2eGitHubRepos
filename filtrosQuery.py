@@ -1,3 +1,5 @@
+import auxiliares
+
 class FiltrosQuery():
     language = "java"
     stars = ">=500"
@@ -6,6 +8,18 @@ class FiltrosQuery():
     pushed = ">2020-01-01"
     archived = "false"
     qIs = "public"
+
+    def __init__(self):
+        self.inicializaFiltrosQuery()
+
+    def inicializaFiltrosQuery(self):
+        self.language = auxiliares.getConfiguracion("FILTROS_PARAM", "language")
+        self.stars = auxiliares.getConfiguracion("FILTROS_PARAM", "stars")
+        self.forks = auxiliares.getConfiguracion("FILTROS_PARAM", "forks")
+        self.created = auxiliares.getConfiguracion("FILTROS_PARAM", "created")
+        self.pushed = auxiliares.getConfiguracion("FILTROS_PARAM", "pushed")
+        self.archived = auxiliares.getConfiguracion("FILTROS_PARAM", "archived")
+        self.qIs = auxiliares.getConfiguracion("FILTROS_PARAM", "qIs")
 
     def getQueryIni(self):
         queryIni = ""
@@ -31,3 +45,5 @@ class FiltrosQuery():
             queryIni += "is:" + self.qIs + "\n"
 
         return queryIni
+
+filtrosQuery = FiltrosQuery()

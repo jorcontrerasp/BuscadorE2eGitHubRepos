@@ -40,7 +40,7 @@ def exe():
                 is:public
             """
 
-            queryConf = fq.FiltrosQuery.getQueryIni(self=fq.FiltrosQuery)
+            queryConf = fq.filtrosQuery.getQueryIni()
             fQueryInicial = "query-inicial_" + conf.config.fechaEjecucion + ".txt"
             f = open(fQueryInicial, "w")
             f.write("QUERY INICIAL:")
