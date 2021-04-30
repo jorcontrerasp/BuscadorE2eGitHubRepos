@@ -175,7 +175,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 
   COMMIT;
   
-  <img src="imgs/buscador-er.png" alt=“buscador-er” width="450"/>
+  <img src="imgs/buscador-er_blanco.png" alt=“buscador-er” width="450"/>
 
 - Actualizar BD: si se marca esta opción se actualizarán los datos relacionados con la búsqueda y con cada repositorio en base de datos. 
 - Buscar repos en LOCAL: si se marca esta opción se clonan los proyectos que se van a utilizar en la carpeta “repositories”, y una vez clonados, la búsqueda se realiza sobre dichos ficheros en local. Al finalizar el proceso se borra la carpeta “repositories” y se genera un fichero zip a modo de snapshot con todos esos repositorios clonados inicialmente.
