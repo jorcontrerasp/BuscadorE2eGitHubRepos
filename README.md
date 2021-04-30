@@ -75,9 +75,6 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   VALUES ("CREDENCIALES", "Configuración relativa a las credenciales de GitHub");
 
   INSERT INTO BD_D_CONFIGURACIONTIPO(codigo, descripcion)
-  VALUES ("BD_CONF", "Configuración relativa a las conexiones a la BBDD");
-
-  INSERT INTO BD_D_CONFIGURACIONTIPO(codigo, descripcion)
   VALUES ("SEARCH_PARAM", "Configuración relativa al funcionamiento del buscador");
 
   INSERT INTO BD_D_CONFIGURACIONTIPO(codigo, descripcion)
@@ -86,94 +83,181 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   CREATE TABLE IF NOT EXISTS BD_D_CONFIGURACION(idconfiguracion int(11) NOT NULL AUTO_INCREMENT,
   campo varchar(100),
   valor varchar(500),
+  descripcion varchar(500),
   idconfiguraciontipo int(11),
   PRIMARY KEY (idconfiguracion),
   INDEX (idconfiguraciontipo),
   FOREIGN KEY (idconfiguraciontipo) REFERENCES BD_D_CONFIGURACIONTIPO(idconfiguraciontipo) );
 
   -- Configuración de las credenciales de GitHub
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("user", "jorcontrerasp", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'CREDENCIALES'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "user", 
+    "jorcontrerasp", 
+    "Nombre de usuario de GitHub", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'CREDENCIALES')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("token", "fd761289fc2b65485d7ffe989e4c04b15fe8c69d", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'CREDENCIALES'));
-
-  -- Configuración que se utiliza para la BBDD (por tenerla almacenada en BD también)
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("host", "localhost", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'BD_CONF'));
-
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("port", "3306", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'BD_CONF'));
-
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("user", "root", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'BD_CONF'));
-
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("password", "password", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'BD_CONF'));
-
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("db", "buscadorGitHubRepos", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'BD_CONF'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "token", 
+    "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", 
+    "Token de autenticación GitHub", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'CREDENCIALES')
+  );
 
   -- Configuración del filtro de búsqueda
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("language", "Java", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "language", 
+    "Java", 
+    "Indica el 'lenguaje' que se carga en el filtro de búsqueda inicial", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("stars", ">=500", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "stars", 
+    ">=500", 
+    "Indica las 'estrellas' que se cargan en el filtro de búsqueda inicial", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("forks", ">=300", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "forks", 
+    ">=300", 
+    "Indica los 'forks' que se cargan en el filtro de búsqueda inicial", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("created", "<2015-01-01", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "created", 
+    "<2015-01-01", 
+    "Indica la 'fecha de creación' que se carga en el filtro de búsqueda inicial", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("pushed", ">2020-01-01", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "pushed", 
+    ">2020-01-01", 
+    "Indica la 'fecha de lanzamiento a la plataforma' que se carga en el filtro de búsqueda inicial", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("pushed", ">2020-01-01", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "archived", 
+    "false", 
+    "Indica el campo 'archived' que se carga en el filtro de búsqueda inicial", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("archived", "False", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM'));
-
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("public", "True", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "qIs", 
+    "public", 
+    "Indica el campo 'public' que se carga en el filtro de búsqueda inicial", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'FILTROS_PARAM')
+  );
 
   -- Configuración de los parámetros de búsqueda
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("buscarEnLocal", "True", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "buscarEnLocal", 
+    "True", 
+    "Indica si el proceso se realiza en local o no", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("generarListaRepos", "True", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "generarListaRepos", 
+    "True", 
+    "Indica si se reutiliza los repositorios obtenidos de un fichero pickle existente o si genera uno nuevo", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("randomizarListaRepos", "True", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "randomizarListaRepos", 
+    "True", 
+    "Indica si se randomizan los repositorios obtenidos o no", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("lapseExe", "False", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "lapseExe", 
+    "False", 
+    "Indica si se va a ejecutar mediante lapsos de tiempo (ScriptLapseExe)", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("clonarRepositorios", "False", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "clonarRepositorios", 
+    "False", 
+    "Indica si se van a clonar los repositorios resultantes", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("doExcel", "True", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "doExcel", 
+    "True", 
+    "Indica si se transforma el DataFrame a Excel", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("doCsv", "False", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "doCsv", 
+    "False", 
+    "Indica si se transforma el DataFrame a Csv", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("N_RANDOM", "30", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "N_RANDOM", 
+    "30", 
+    "Número de repositorios random que se van a seleccionar", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("N_LAPSE_REPOS", "20", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "N_LAPSE_REPOS", 
+    "20", 
+    "Número de repositorios que se utilizan en cada lapso de tiempo (ScriptLapseExe)", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("REPO_SIZE_LIMIT", "10000000", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "REPO_SIZE_LIMIT", 
+    "10000000", 
+    "Límite de tamaño de un repositorio que se va a clonar", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
-  INSERT INTO BD_D_CONFIGURACION(campo, valor, idconfiguraciontipo)
-  VALUES("actualizarBD", "True", (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM'));
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "actualizarBD", 
+    "True", 
+    "Indica si se actualiza la BD en la ejecución del proceso", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
 
   COMMIT;
+
+  /*
+  UPDATE BD_D_CONFIGURACION SET valor = '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' 
+  WHERE IDCONFIGURACIONTIPO IN(Select IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'CREDENCIALES') AND campo = 'token';
+  */
   
   <img src="imgs/buscador-er_blanco.png" alt=“buscador-er” width="450"/>
 
