@@ -67,21 +67,21 @@ nombreRepo_state = tk.StringVar()
 def exe():
     print("Ejecutando proceso desde buscador-UI")
     # Filtros Query:
-    fq.FiltrosQuery.language = lenguaje_state.get().lower()
-    fq.FiltrosQuery.stars = stars_state.get()
-    fq.FiltrosQuery.forks = forks_state.get()
-    fq.FiltrosQuery.created = created_state.get()
-    fq.FiltrosQuery.pushed = pushed_state.get()
+    fq.filtrosQuery.language = lenguaje_state.get().lower()
+    fq.filtrosQuery.stars = stars_state.get()
+    fq.filtrosQuery.forks = forks_state.get()
+    fq.filtrosQuery.created = created_state.get()
+    fq.filtrosQuery.pushed = pushed_state.get()
 
     if archivedCheck_state.get():
-        fq.FiltrosQuery.qIs = "true"
+        fq.filtrosQuery.qIs = "true"
     else:
-        fq.FiltrosQuery.qIs = "false"
+        fq.filtrosQuery.qIs = "false"
 
     if publicCheck_state.get():
-        fq.FiltrosQuery.qIs = "public"
+        fq.filtrosQuery.qIs = "public"
     else:
-        fq.FiltrosQuery.qIs = "private"
+        fq.filtrosQuery.qIs = "private"
 
     # Configuración
     conf.config.actualizarBD = actualizarBDCheck_state.get()
@@ -190,7 +190,7 @@ row+=1
 # LENGUAJE
 lenguajeLbl = tk.Label(p1, text="Lenguaje: ", bg=backgroudLblColor)
 lenguajeLbl.grid(column=0, row=row)
-lenguaje_state.set(fq.FiltrosQuery.language)
+lenguaje_state.set(fq.filtrosQuery.language)
 lenguaje = tk.Entry(p1, width=15, textvariable=lenguaje_state)
 lenguaje.grid(column=1, row=row)
 row+=1
@@ -198,7 +198,7 @@ row+=1
 # STARS
 starsLbl = tk.Label(p1, text="Stars: ", bg=backgroudLblColor)
 starsLbl.grid(column=0, row=row)
-stars_state.set(fq.FiltrosQuery.stars)
+stars_state.set(fq.filtrosQuery.stars)
 stars = tk.Entry(p1, width=15, textvariable=stars_state)
 stars.grid(column=1, row=row)
 row+=1
@@ -206,7 +206,7 @@ row+=1
 # FORKS
 forksLbl = tk.Label(p1, text="Forks: ", bg=backgroudLblColor)
 forksLbl.grid(column=0, row=row)
-forks_state.set(fq.FiltrosQuery.forks)
+forks_state.set(fq.filtrosQuery.forks)
 forks = tk.Entry(p1, width=15, textvariable=forks_state)
 forks.grid(column=1, row=row)
 row+=1
@@ -214,7 +214,7 @@ row+=1
 # CREATED
 createdLbl = tk.Label(p1, text="Created: ", bg=backgroudLblColor)
 createdLbl.grid(column=0, row=row)
-created_state.set(fq.FiltrosQuery.created)
+created_state.set(fq.filtrosQuery.created)
 created = tk.Entry(p1, width=15, textvariable=created_state)
 created.grid(column=1, row=row)
 row+=1
@@ -222,7 +222,7 @@ row+=1
 # PUSHED
 pushedLbl = tk.Label(p1, text="Pushed: ", bg=backgroudLblColor)
 pushedLbl.grid(column=0, row=row)
-pushed_state.set(fq.FiltrosQuery.pushed)
+pushed_state.set(fq.filtrosQuery.pushed)
 pushed = tk.Entry(p1, width=15, textvariable=pushed_state)
 pushed.grid(column=1, row=row)
 row+=1
