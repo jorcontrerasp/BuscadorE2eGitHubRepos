@@ -9,6 +9,7 @@ from PIL import ImageTk
 import pruebas
 import repoBD
 import executeQuery
+import datetime
 
 app = tk.Tk()
 app.title("BuscadorGitHubRepos")
@@ -84,6 +85,7 @@ def exe():
         fq.filtrosQuery.qIs = "private"
 
     # Configuración
+    conf.config.fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_").replace(":", "h", 1).replace(":", "m", 1) + "s"
     conf.config.actualizarBD = actualizarBDCheck_state.get()
     conf.config.buscarEnLocal = buscarEnLocalCheck_state.get()
     conf.config.generarListaRepos = generarListaReposCheck_state.get()
