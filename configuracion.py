@@ -46,7 +46,7 @@ class Configuracion():
         return self.user
 
     def getUserSql(self):
-        return self.getConfiguracion("CREDENCIALES", "user")
+        return auxiliares.getConfiguracion("CREDENCIALES", "user")
 
     def setUser(self, user):
         self.user = user
@@ -55,7 +55,7 @@ class Configuracion():
         return self.token
 
     def getTokenSql(self):
-        return self.getConfiguracion("CREDENCIALES", "token")
+        return auxiliares.getConfiguracion("CREDENCIALES", "token")
 
     def setToken(self, token):
         self.token = token
@@ -64,7 +64,7 @@ class Configuracion():
         return self.buscarEnLocal
 
     def getBuscarEnLocalSql(self):
-        return self.getConfiguracion("SEARCH_PARAM", "buscarEnLocal")
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "buscarEnLocal")
 
     def setBuscarEnLocal(self, buscarEnLocal):
         self.buscarEnLocal = buscarEnLocal
@@ -73,7 +73,7 @@ class Configuracion():
         return self.generarListaRepos
 
     def getGenerarListaReposSql(self):
-        return self.getConfiguracion("SEARCH_PARAM", "generarListaRepos")
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "generarListaRepos")
 
     def setGenerarListaRepos(self, generarListaRepos):
         self.generarListaRepos = generarListaRepos
@@ -82,7 +82,7 @@ class Configuracion():
         return self.randomizarListaRepos
 
     def getRandomizarListaReposSql(self):
-        return self.getConfiguracion("SEARCH_PARAM", "randomizarListaRepos")
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "randomizarListaRepos")
 
     def setRandomizarListaRepos(self, randomizarListaRepos):
         self.randomizarListaRepos = randomizarListaRepos
@@ -91,7 +91,7 @@ class Configuracion():
         return self.lapseExe
 
     def getLapseExeSql(self):
-        return self.getConfiguracion("SEARCH_PARAM", "lapseExe")
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "lapseExe")
 
     def setLapseExe(self, lapseExe):
         self.lapseExe = lapseExe
@@ -100,7 +100,7 @@ class Configuracion():
         return self.clonarRepositorios
 
     def getClonarRepositoriosSql(self):
-        return self.getConfiguracion("SEARCH_PARAM", "clonarRepositorios")
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "clonarRepositorios")
 
     def setClonarRepositorios(self, clonarRepositorios):
         self.clonarRepositorios = clonarRepositorios
@@ -109,7 +109,7 @@ class Configuracion():
         return self.doExcel
 
     def getDoExcelSql(self):
-        return self.getConfiguracion("SEARCH_PARAM", "doExcel")
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "doExcel")
 
     def setDoExcel(self, doExcel):
         self.doExcel = doExcel
@@ -118,7 +118,7 @@ class Configuracion():
         return self.doCsv
 
     def getDoCsvSql(self):
-        return self.getConfiguracion("SEARCH_PARAM", "doCsv")
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "doCsv")
 
     def setDoCsv(self, doCsv):
         self.doCsv = doCsv
@@ -127,7 +127,7 @@ class Configuracion():
         return self.actualizarBD
 
     def getActualizarBDSql(self):
-        return self.getConfiguracion("SEARCH_PARAM", "actualizarBD")
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "actualizarBD")
 
     def setActualizarBD(self, actualizarBD):
         self.actualizarBD = actualizarBD

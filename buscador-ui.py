@@ -88,12 +88,12 @@ def exe():
     conf.config.buscarEnLocal = buscarEnLocalCheck_state.get()
     conf.config.generarListaRepos = generarListaReposCheck_state.get()
     conf.config.randomizarListaRepos = randomizarReposCheck_state.get()
-    conf.config.lapseExe = False
+    conf.config.lapseExe = conf.config.lapseExe
     conf.config.clonarRepositorios = clonarReposCheck_state.get()
     conf.config.doExcel = doExcelCheck_state.get()
     conf.config.doCsv = doCsvCheck_state.get()
     conf.config.N_RANDOM = nRandomRepos_state.get()
-    conf.config.N_LAPSE_REPOS = 0
+    conf.config.N_LAPSE_REPOS = conf.config.N_LAPSE_REPOS
     conf.config.REPO_SIZE_LIMIT = sizeLimit_state.get()
     main.exe()
 

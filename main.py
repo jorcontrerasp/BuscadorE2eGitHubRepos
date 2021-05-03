@@ -57,16 +57,18 @@ def exe():
             auxiliares.generarPickle(fRepos, repositories)
             repositories = auxiliares.cargarRepositorios(fRepos)
 
-            busqueda = busquedaBD.createBusquedaBD()
-            busqueda.setLenguaje(fq.FiltrosQuery.language)
-            busqueda.setStars(fq.FiltrosQuery.stars)
-            busqueda.setForks(fq.FiltrosQuery.forks)
-            busqueda.setCreated(fq.FiltrosQuery.created)
-            busqueda.setPushed(fq.FiltrosQuery.pushed)
-            busqueda.setArchived(fq.FiltrosQuery.archived)
-            busqueda.setPublic(fq.FiltrosQuery.qIs)
-            idBusqueda = auxiliares.guardarBusquedaBD(busqueda)
-            conf.config.idBusqueda = idBusqueda
+            # Almacenamos un registro de búsqueda en base de datos.
+            if conf.config.actualizarBD:
+                busqueda = busquedaBD.createBusquedaBD()
+                busqueda.setLenguaje(fq.FiltrosQuery.language)
+                busqueda.setStars(fq.FiltrosQuery.stars)
+                busqueda.setForks(fq.FiltrosQuery.forks)
+                busqueda.setCreated(fq.FiltrosQuery.created)
+                busqueda.setPushed(fq.FiltrosQuery.pushed)
+                busqueda.setArchived(fq.FiltrosQuery.archived)
+                busqueda.setPublic(fq.FiltrosQuery.qIs)
+                idBusqueda = auxiliares.guardarBusquedaBD(busqueda)
+                conf.config.idBusqueda = idBusqueda
 
         else:
             print("Utilizando el fichero " + fRepos + " para generar los repositorios")
@@ -182,18 +184,28 @@ def exe():
                                         conf.config.doExcel,conf.config.doCsv)
             auxiliares.generarEXCEL_CSV(df2, conf.config.cContadores,
                                         conf.config.doExcel, conf.config.doCsv)
-            os.remove("tmp-research.xlsx")
-            print("Fichero tmp-research.xlsx eliminado")
-            os.remove("tmp-contadores.xlsx")
-            print("Fichero tmp-contadores.xlsx eliminado")
 
-            # Guardamos los ficheros excel en BD.
+            if os.path.exists("tmp-research.xlsx"):
+                os.remove("tmp-research.xlsx")
+                print("Fichero tmp-research.xlsx eliminado")
+            if os.path.exists("tmp-contadores.xlsx"):
+                os.remove("tmp-contadores.xlsx")
+                print("Fichero tmp-contadores.xlsx eliminado")
+
+            # Guardamos la búsqueda junto con los ficheros excel en BD.
             if conf.config.actualizarBD:
                 busqueda = busquedaBD.createBusquedaBD()
-                busqueda.setIdBusqueda(conf.config.idBusqueda)
+                busqueda.setLenguaje(fq.FiltrosQuery.language)
+                busqueda.setStars(fq.FiltrosQuery.stars)
+                busqueda.setForks(fq.FiltrosQuery.forks)
+                busqueda.setCreated(fq.FiltrosQuery.created)
+                busqueda.setPushed(fq.FiltrosQuery.pushed)
+                busqueda.setArchived(fq.FiltrosQuery.archived)
+                busqueda.setPublic(fq.FiltrosQuery.qIs)
                 busqueda.setResearch(conf.config.cResearch + ".xlsx")
                 busqueda.setContadores(conf.config.cContadores + ".xlsx")
-                auxiliares.guardarBusquedaBD(busqueda)
+                idBusqueda = auxiliares.guardarBusquedaBD(busqueda)
+                conf.config.idBusqueda = idBusqueda
 
             continuar = False
 
