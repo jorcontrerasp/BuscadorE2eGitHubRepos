@@ -56,14 +56,14 @@ class BusquedaBD:
             campos += "PUSHED,"
             values += "'" + str(self.pushed) + "',"
 
-        if (self.archived):
+        if (self.archived == "true"):
             campos += "ARCHIVED,"
             values += "1" + ","
         else:
             campos += "ARCHIVED,"
             values += "0" + ","
 
-        if (self.public):
+        if (self.public == "public"):
             campos += "PUBLIC,"
             values += "1" + ","
         else:
@@ -96,12 +96,12 @@ class BusquedaBD:
         except:
             contadoresBD = None
 
-        if (self.archived):
+        if (self.archived == "true"):
             archivedBD = 1
         else:
             archivedBD = 0
 
-        if (self.public):
+        if (self.public == "public"):
             publicBD = 1
         else:
             publicBD = 0
@@ -133,12 +133,12 @@ class BusquedaBD:
         if (len(str(self.pushed)) > 0):
             values += "PUSHED='" + str(self.pushed) + "',"
 
-        if (self.archived):
+        if (self.archived == "true"):
             values += "ARCHIVED=1,"
         else:
             values += "ARCHIVED=0,"
 
-        if (self.public):
+        if (self.public == "public"):
             values += "PUBLIC=1,"
         else:
             values += "PUBLIC=0,"
@@ -180,12 +180,12 @@ class BusquedaBD:
             values += "PUSHED=%s,"
             updateBlobTupleAux.append(self.pushed)
 
-        if (self.archived):
+        if (self.archived == "true"):
             values += "ARCHIVED=1,"
         else:
             values += "ARCHIVED=0,"
 
-        if (self.public):
+        if (self.public == "public"):
             values += "PUBLIC=1,"
         else:
             values += "PUBLIC=0,"
@@ -238,12 +238,12 @@ class BusquedaBD:
         if (len(str(self.pushed)) > 0):
             select += " AND PUSHED='" + str(self.pushed) + "'"
 
-        if (self.archived):
+        if (self.archived == "true"):
             select += " AND ARCHIVED=1"
         else:
             select += " AND ARCHIVED=0"
 
-        if (self.public):
+        if (self.public == "public"):
             select += " AND PUBLIC=1"
         else:
             select += " AND PUBLIC=0"
@@ -276,12 +276,12 @@ class BusquedaBD:
         if (len(str(self.pushed)) > 0):
             delete += " AND PUSHED='" + str(self.pushed) + "'"
 
-        if (self.archived):
+        if (self.archived == "true"):
             delete += " AND ARCHIVED=1"
         else:
             delete += " AND ARCHIVED=0"
 
-        if (self.public):
+        if (self.public == "public"):
             delete += " AND PUBLIC=1"
         else:
             delete += " AND PUBLIC=0"

@@ -18,7 +18,7 @@ def exe():
     df = pd.DataFrame
     df2 = pd.DataFrame
 
-    print(conf.config.fechaEjecucion + " - Iniciando proceso")
+    print(conf.config.fechaEjecucion + " - Iniciando proceso.")
 
     try:
         # Generamos un token para consultar la API de GitHub a través de la librería.
@@ -27,7 +27,7 @@ def exe():
         g = Github(user, token)
 
         if conf.config.generarListaRepos:
-            print("Generando nueva lista de repositorios")
+            print("Generando nueva lista de repositorios.")
             # Obtenemos un objeto generador, encargado de realizar las búsquedas al iterar sobre él.
 
             query = """
@@ -60,13 +60,13 @@ def exe():
             # Almacenamos un registro de búsqueda en base de datos.
             if conf.config.actualizarBD:
                 busqueda = busquedaBD.createBusquedaBD()
-                busqueda.setLenguaje(fq.FiltrosQuery.language)
-                busqueda.setStars(fq.FiltrosQuery.stars)
-                busqueda.setForks(fq.FiltrosQuery.forks)
-                busqueda.setCreated(fq.FiltrosQuery.created)
-                busqueda.setPushed(fq.FiltrosQuery.pushed)
-                busqueda.setArchived(fq.FiltrosQuery.archived)
-                busqueda.setPublic(fq.FiltrosQuery.qIs)
+                busqueda.setLenguaje(fq.filtrosQuery.language)
+                busqueda.setStars(fq.filtrosQuery.stars)
+                busqueda.setForks(fq.filtrosQuery.forks)
+                busqueda.setCreated(fq.filtrosQuery.created)
+                busqueda.setPushed(fq.filtrosQuery.pushed)
+                busqueda.setArchived(fq.filtrosQuery.archived)
+                busqueda.setPublic(fq.filtrosQuery.qIs)
                 idBusqueda = auxiliares.guardarBusquedaBD(busqueda)
                 conf.config.idBusqueda = idBusqueda
 
@@ -101,8 +101,9 @@ def exe():
                 and not os.path.exists("tmp-contadores.xlsx"):
             raise Exception("El total de proyectos a analizar no puede ser 0. Revise el fichero pickle o genere uno nuevo.")
 
-        # Imprimimos la lista de repositorios.
-        auxiliares.imprimirListaRepositorios(filteredRepos)
+        # Si hemos generado un nuevo pickle imprimimos la lista de repositorios.
+        if conf.config.generarListaRepos:
+            auxiliares.imprimirListaRepositorios(filteredRepos)
 
         auxiliares.crearCarpetasLocal()
 
@@ -168,6 +169,7 @@ def exe():
 
                 # Aplicamos criterios
                 print("Nº repos en local: " + str(len(reposEnLocal)))
+                print("Aplicando criterios...")
                 lReposEncontrados = criterios.recorrerRepositoriosLocal(reposEnLocal, df, df2)
 
                 # Generar Zip de los repositorios
@@ -175,6 +177,7 @@ def exe():
 
             else:
                 # Aplicamos criterios:
+                print("Aplicando criterios...")
                 lReposEncontrados = criterios.busquedaGitHubApiRepos(listaAux, df, df2)
 
             print("Nº de repos encontrados: " + str(len(lReposEncontrados)))
@@ -195,13 +198,13 @@ def exe():
             # Guardamos la búsqueda junto con los ficheros excel en BD.
             if conf.config.actualizarBD:
                 busqueda = busquedaBD.createBusquedaBD()
-                busqueda.setLenguaje(fq.FiltrosQuery.language)
-                busqueda.setStars(fq.FiltrosQuery.stars)
-                busqueda.setForks(fq.FiltrosQuery.forks)
-                busqueda.setCreated(fq.FiltrosQuery.created)
-                busqueda.setPushed(fq.FiltrosQuery.pushed)
-                busqueda.setArchived(fq.FiltrosQuery.archived)
-                busqueda.setPublic(fq.FiltrosQuery.qIs)
+                busqueda.setLenguaje(fq.filtrosQuery.language)
+                busqueda.setStars(fq.filtrosQuery.stars)
+                busqueda.setForks(fq.filtrosQuery.forks)
+                busqueda.setCreated(fq.filtrosQuery.created)
+                busqueda.setPushed(fq.filtrosQuery.pushed)
+                busqueda.setArchived(fq.filtrosQuery.archived)
+                busqueda.setPublic(fq.filtrosQuery.qIs)
                 busqueda.setResearch(conf.config.cResearch + ".xlsx")
                 busqueda.setContadores(conf.config.cContadores + ".xlsx")
                 idBusqueda = auxiliares.guardarBusquedaBD(busqueda)

@@ -16,6 +16,7 @@ import repoBD
 import executeQuery
 
 def crearCarpetasLocal():
+    print("Generando carpetas necesarias en local...")
     # CREAR CARPETAS NECESARIAS EN LOCAL
     # Creamos la carpeta donde van los logs (si no existe)
     if not os.path.exists(conf.config.cLogs):
@@ -35,11 +36,13 @@ def crearCarpetasLocal():
     # FIN CREAR CARPETAS NECESARIAS EN LOCAL
 
 def imprimirListaRepositorios(repositorios):
+    print("Imprimiendo lista de repositorios...")
     for project in repositorios:
         project_name = project.full_name.split("/")[1]
         print(project.full_name)
 
 def imprimirRepositorio(project):
+    print("Imprimiendo repositorio...")
     project_name = project.full_name.split("/")[1]
     print(project.full_name)
 
@@ -51,6 +54,7 @@ def listarReposDataFrame(listaRepositorios):
     return listaStr[0:longitud-1]
 
 def generarDataFrame(listaRepositorios):
+    print("Generando DataFrame...")
     repo1 = listaRepositorios[0]
     df = pd.DataFrame([],
                       index=[repo1.full_name],
@@ -194,6 +198,7 @@ def actualizarDataFrame(criterio, nombreRepo, path, df):
         print("Criterio no definido")
 
 def actualizarDataFrameAux(criterio, nombreRepo, path, df):
+    print("Actualizando DataFrame...")
     valor = str(df.at[nombreRepo, criterio])
     if valor == "nan":
         df.at[nombreRepo, criterio] = "[" + path + "]\n"
@@ -218,6 +223,7 @@ def actualizarDataFrameCommitID(listaRepos, df):
         guardarRepoEnBD(repoBBDD)
 
 def generarDataFrameContadores():
+    print("Generando DataFrame de contadores...")
     df = pd.DataFrame([0, 0, 0, 0, 0],
                       index=[criterios.Criterios.criterio1.value
                              #,criterios.Criterios.criterio2.value
@@ -279,16 +285,19 @@ def obtenerRepoCommitID(repo):
     return commitID
 
 def cargarRepositorios(fichero):
+    print("Cargando repositorios...")
     with open(fichero, 'rb') as f:
         repositories = pickle.load(f)
     return repositories
 
 def generarPickle(nombreFichero, listaRepositorios):
+    print("Generando fichero pickle...")
     with open(nombreFichero, 'wb') as f:
         pickle.dump(listaRepositorios, f)
     print("Fichero " + nombreFichero + " generado")
 
 def generarEXCEL_CSV(df, pFichero, generarExcel, generarCsv):
+    print("Generando fichero Excel/Csv...")
     if generarExcel:
         df.to_excel(pFichero + ".xlsx")
 
@@ -333,6 +342,8 @@ def convertToBinaryData(filename):
     return binaryData
 
 def clonar1ListaRepo(repositorios):
+    print("Clonando repositorios en local...")
+
     # Generamos el directorio 'repositories'
     if not os.path.exists(conf.config.cRepositorios):
         print("Folder %s created!" % conf.config.cRepositorios)
@@ -367,6 +378,8 @@ def clonar1ListaRepo(repositorios):
 
 
 def clonarRepositorios(lRepositorios):
+    print("Clonando repositorios en local...")
+
     # Generamos el directorio 'repositories'
     if not os.path.exists(conf.config.cRepositorios):
         print("Folder %s created!" % conf.config.cRepositorios)
@@ -400,6 +413,7 @@ def clonarRepositorios(lRepositorios):
                         print("***WARN** - Por algún motivo no se ha podido clonar el repositorio: " + project.full_name)
 
 def generarZipRepos():
+    print("Generando fichero Zip con los repositorios utilizados...")
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)s : %(levelname)s : %(message)s',
                         filename='logs/repositories_' + conf.config.fechaEjecucion + '.log',
@@ -413,7 +427,7 @@ def generarZipRepos():
     rmtree("./" + conf.config.cRepositorios)
 
 def guardarRepoEnBD(repoBBDD):
-    print("Actualizando base de datos...")
+    print("Actualizando base de datos: " + repoBBDD.getOrganizacion() + "/" + repoBBDD.getNombre())
     repoFiltro = repoBD.createRepoBD()
     repoFiltro.setNombre(repoBBDD.getNombre())
     repoFiltro.setOrganizacion(repoBBDD.getOrganizacion())
@@ -433,10 +447,12 @@ def guardarRepoEnBD(repoBBDD):
 
 def guardarBusquedaBD(busquedaBD):
     if busquedaBD.getIdBusqueda() > 0:
+        print("Actualizando búsqueda " + busquedaBD.getIdBusqueda() + " en base de datos...")
         update = busquedaBD.getUpdateParam()
         rUpdate = executeQuery.executeWithParams(update)
         return rUpdate
     else:
+        print("Insertando búsqueda en base de datos...")
         insert = busquedaBD.getInsertParam()
         idBusqueda = executeQuery.executeWithParams(insert)
         return idBusqueda
