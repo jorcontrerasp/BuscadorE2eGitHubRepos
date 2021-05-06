@@ -23,7 +23,6 @@ def execute(query):
         cursor = db.cursor()
 
         # Ejecutamos la query.
-        #print(query)
         cursor.execute(query)
 
         filas = cursor.fetchall()

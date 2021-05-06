@@ -60,32 +60,16 @@ def generarDataFrame(listaRepositorios):
                       index=[repo1.full_name],
                       columns=["GitHub_URL", "Lenguaje", "CommitID"
                                ,criterios.Criterios.criterio1.name
-                               #,criterios.Criterios.criterio2.name
                                ,criterios.Criterios.criterio3.name
-                               #,criterios.Criterios.criterio4.name
                                ,criterios.Criterios.criterio5.name
-                               #,criterios.Criterios.criterio6.name
-                               #,criterios.Criterios.criterio7.name
-                               #,criterios.Criterios.criterio8.name
-                               #,criterios.Criterios.criterio9.name
                                ,criterios.Criterios.criterio10.name
-                               #,criterios.Criterios.criterio11.name
-                               #,criterios.Criterios.criterio12.name
                                ])
     df.at[repo1.full_name, "GitHub_URL"] = repo1.html_url
     df.at[repo1.full_name, "Lenguaje"] = repo1.language
     df.at[repo1.full_name, criterios.Criterios.criterio1.name] = " "
-    #df.at[repo1.full_name, criterios.Criterios.criterio2.name] = " "
     df.at[repo1.full_name, criterios.Criterios.criterio3.name] = " "
-    #df.at[repo1.full_name, criterios.Criterios.criterio4.name] = " "
     df.at[repo1.full_name, criterios.Criterios.criterio5.name] = " "
-    #df.at[repo1.full_name, criterios.Criterios.criterio6.name] = " "
-    #df.at[repo1.full_name, criterios.Criterios.criterio7.name] = " "
-    #df.at[repo1.full_name, criterios.Criterios.criterio8.name] = " "
-    #df.at[repo1.full_name, criterios.Criterios.criterio9.name] = " "
     df.at[repo1.full_name, criterios.Criterios.criterio10.name] = " "
-    #df.at[repo1.full_name, criterios.Criterios.criterio11.name] = " "
-    #df.at[repo1.full_name, criterios.Criterios.criterio12.name] = " "
 
     # Actualizamos la BD
     repo1BBDD = repoBD.createRepoBD()
@@ -103,33 +87,16 @@ def generarDataFrame(listaRepositorios):
                           index=[repo.full_name],
                           columns=["GitHub_URL", "Lenguaje", "CommitID"
                                    ,criterios.Criterios.criterio1.name
-                                   #,criterios.Criterios.criterio2.name
                                    ,criterios.Criterios.criterio3.name
-                                   #,criterios.Criterios.criterio4.name
                                    ,criterios.Criterios.criterio5.name
-                                   #,criterios.Criterios.criterio6.name
-                                   #,criterios.Criterios.criterio7.name
-                                   #,criterios.Criterios.criterio8.name
-                                   #,criterios.Criterios.criterio9.name
                                    ,criterios.Criterios.criterio10.name
-                                   #,criterios.Criterios.criterio11.name
-                                   #,criterios.Criterios.criterio12.name
                                    ])
         df2.at[repo.full_name, "GitHub_URL"] = repo.html_url
-        lenguaje = repo.language
         df2.at[repo.full_name, "Lenguaje"] = repo.language
         df2.at[repo.full_name, criterios.Criterios.criterio1.name] = " "
-        # df2.at[repo.full_name, criterios.Criterios.criterio2.name] = " "
         df2.at[repo.full_name, criterios.Criterios.criterio3.name] = " "
-        # df2.at[repo.full_name, criterios.Criterios.criterio4.name] = " "
         df2.at[repo.full_name, criterios.Criterios.criterio5.name] = " "
-        # df2.at[repo.full_name, criterios.Criterios.criterio6.name] = " "
-        # df2.at[repo.full_name, criterios.Criterios.criterio7.name] = " "
-        # df2.at[repo.full_name, criterios.Criterios.criterio8.name] = " "
-        # df2.at[repo.full_name, criterios.Criterios.criterio9.name] = " "
         df2.at[repo.full_name, criterios.Criterios.criterio10.name] = " "
-        # df2.at[repo.full_name, criterios.Criterios.criterio11.name] = " "
-        # df2.at[repo.full_name, criterios.Criterios.criterio12.name] = " "
         df = df.append(df2)
 
         # Actualizamos la BD
@@ -226,17 +193,9 @@ def generarDataFrameContadores():
     print("Generando DataFrame de contadores...")
     df = pd.DataFrame([0, 0, 0, 0, 0],
                       index=[criterios.Criterios.criterio1.value
-                             #,criterios.Criterios.criterio2.value
                              ,criterios.Criterios.criterio3.value
-                             #,criterios.Criterios.criterio4.value
                              ,criterios.Criterios.criterio5.value
-                             #,criterios.Criterios.criterio6.value
-                             #,criterios.Criterios.criterio7.value
-                             #,criterios.Criterios.criterio8.value
-                             #,criterios.Criterios.criterio9.value
                              ,criterios.Criterios.criterio10.value
-                             #,criterios.Criterios.criterio11.value
-                             #,criterios.Criterios.criterio12.value
                              ,"Totales"],
                       columns=['n_encontrados'])
     return df
@@ -246,28 +205,12 @@ def contarRepositoriosAlMenos1Criterio(df):
     for index, row in df.iterrows():
         if (len(str(row[criterios.Criterios.criterio1.name])) > 1):
             cont += 1
-        #elif (len(str(row[criterios.Criterios.criterio2.name])) > 1):
-            #cont += 1
         elif (len(str(row[criterios.Criterios.criterio3.name])) > 1):
             cont += 1
-        #elif (len(str(row[criterios.Criterios.criterio4.name])) > 1):
-            #cont += 1
         elif (len(str(row[criterios.Criterios.criterio5.name])) > 1):
             cont += 1
-        #elif (len(str(row[criterios.Criterios.criterio6.name])) > 1):
-            #cont += 1
-        #elif (len(str(row[criterios.Criterios.criterio7.name])) > 1):
-            #cont += 1
-        #elif (len(str(row[criterios.Criterios.criterio8.name])) > 1):
-            #cont += 1
-        #elif (len(str(row[criterios.Criterios.criterio9.name])) > 1):
-            #cont += 1
         elif (len(str(row[criterios.Criterios.criterio10.name])) > 1):
             cont += 1
-        #elif (len(row[criterios.Criterios.criterio11.name]) > 1):
-            #cont += 1
-        #elif (len(row[criterios.Criterios.criterio12.name]) > 1):
-            #cont += 1
     return cont
 
 def obtenerRepoCommitID(repo):
@@ -458,7 +401,9 @@ def guardarBusquedaBD(busquedaBD):
         return idBusqueda
 
 def getConfiguracion(codigo, campo):
-    query = "Select valor from BD_D_CONFIGURACION WHERE IDCONFIGURACIONTIPO IN(Select IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = :codigo) AND campo = :campo;"
+    query = "Select valor from BD_D_CONFIGURACION " \
+            "WHERE IDCONFIGURACIONTIPO IN(Select IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = :codigo) " \
+            "AND campo = :campo;"
     query = query.replace(":codigo", "'" + codigo + "'")
     query = query.replace(":campo", "'" + campo + "'")
 

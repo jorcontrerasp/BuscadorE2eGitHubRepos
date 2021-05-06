@@ -267,105 +267,76 @@ row+=1
 # ACTUALIZAR BD
 actualizarBDLbl = tk.Label(p1, text="Actualizar BD", bg=backgroudLblColor)
 actualizarBDLbl.grid(column=0, row=row)
-#actualizarBDLbl.pack()
 actualizarBDCheck_state.set(conf.config.actualizarBD)
 actualizarBDCheck = tk.Checkbutton(p1, var=actualizarBDCheck_state, bg=backgroudLblColor)
 actualizarBDCheck.grid(column=1, row=row)
-#actualizarBDCheck.pack()
 row+=1
 
 # BUSCAR REPOS EN LOCAL
 buscarEnLocalReposLbl = tk.Label(p1, text="Buscar repos en LOCAL", bg=backgroudLblColor)
 buscarEnLocalReposLbl.grid(column=0, row=row)
-#buscarEnLocalReposLbl.pack()
 buscarEnLocalCheck_state.set(conf.config.buscarEnLocal)
 buscarEnLocalCheck = tk.Checkbutton(p1, var=buscarEnLocalCheck_state, bg=backgroudLblColor)
 buscarEnLocalCheck.grid(column=1, row=row)
-#buscarEnLocalCheck.pack()
 row+=1
 
 # GENERAR LISTA REPOS
 generarListaReposLbl = tk.Label(p1, text="Generar lista repos ('.pickle')", bg=backgroudLblColor)
 generarListaReposLbl.grid(column=0, row=row)
-#generarListaReposLbl.pack()
 generarListaReposCheck_state.set(conf.config.generarListaRepos)
 generarListaReposCheck = tk.Checkbutton(p1, var=generarListaReposCheck_state, bg=backgroudLblColor)
 generarListaReposCheck.grid(column=1, row=row)
-#generarListaReposCheck.pack()
 row+=1
 
 # ScriptLapseExe
 scriptLapseExeLbl = tk.Label(p1, text="Ejecutar mediante 'ScriptLapseExe'", bg=backgroudLblColor)
-#scriptLapseExeLbl.grid(column=0, row=row)
-#scriptLapseExeLbl.pack()
 scriptLapseExeCheck_state.set(conf.config.lapseExe)
 scriptLapseExeCheck = tk.Checkbutton(p1, var=scriptLapseExeCheck_state, bg=backgroudLblColor)
-#scriptLapseExeCheck.grid(column=1, row=row)
-#scriptLapseExeCheck.pack()
-#row+=1
 
 # Nº LAPSE REPOS
-#nLapseReposLbl = tk.Label(p1, text="Nº lapse repos: ", bg=backgroudLblColor)
-#nLapseReposLbl.grid(column=0, row=row)
-#nLapseReposLbl.pack()
 nLapseRepos_state.set(conf.config.N_LAPSE_REPOS)
 nLapseRepos = tk.Entry(p1, width=5, textvariable=nLapseRepos_state)
-#nLapseRepos.grid(column=2, row=row)
-#nLapseRepos.pack()
 row+=1
 
 # RANDOMIZAR REPOSITORIOS
 randomizarReposLbl = tk.Label(p1, text="Randomizar repositorios", bg=backgroudLblColor)
 randomizarReposLbl.grid(column=0, row=row)
-#randomizarReposLbl.pack()
 randomizarReposCheck_state.set(conf.config.randomizarListaRepos)
 randomizarReposCheck = tk.Checkbutton(p1, var=randomizarReposCheck_state, command=randomizarReposCheck_clicked, bg=backgroudLblColor)
 randomizarReposCheck.grid(column=1, row=row)
-#randomizarReposCheck.pack()
 
 # Nº REPOS RANDOM
-#nRandomReposLbl = tk.Label(p1, text="Nº repos random: ", bg=backgroudLblColor)
-#nRandomReposLbl.grid(column=0, row=row)
-#nRandomReposLbl.pack()
 nRandomRepos_state.set(conf.config.N_RANDOM)
 nRandomRepos = tk.Entry(p1, width=5, textvariable=nRandomRepos_state)
 nRandomRepos.grid(column=2, row=row)
-#nRandomRepos.pack()
 row+=1
 
 # CLONAR REPOSITORIOS
 clonarReposLbl = tk.Label(p1, text="Clonar repositorios resultantes", bg=backgroudLblColor)
 clonarReposLbl.grid(column=0, row=row)
-#clonarReposLbl.pack()
 clonarReposCheck_state.set(conf.config.clonarRepositorios)
 clonarReposCheck = tk.Checkbutton(p1, var=clonarReposCheck_state, bg=backgroudLblColor)
 clonarReposCheck.grid(column=1, row=row)
-#clonarReposCheck.pack()
 row+=1
 
 # DO EXCEL
 doExcelLbl = tk.Label(p1, text="Generar Excel", bg=backgroudLblColor)
 doExcelLbl.grid(column=0, row=row)
-#doExcelLbl.pack()
 doExcelCheck_state.set(conf.config.doExcel)
 doExcelCheck = tk.Checkbutton(p1, var=doExcelCheck_state, bg=backgroudLblColor)
 doExcelCheck.grid(column=1, row=row)
-#doExcelCheck.pack()
 row+=1
 
 # DO CSV
 doCsvLbl = tk.Label(p1, text="Generar Csv", bg=backgroudLblColor)
 doCsvLbl.grid(column=0, row=row)
-#doCsvLbl.pack()
 doCsvCheck_state.set(conf.config.doCsv)
 doCsvCheck = tk.Checkbutton(p1, var=doCsvCheck_state, bg=backgroudLblColor)
 doCsvCheck.grid(column=1, row=row)
-#doCsvCheck.pack()
 row+=1
 
 # BOTÓN EJECUTAR
 exeButton = tk.Button(p1, text="EJECUTAR", fg="green",  command=exe, bg=backgroudLblColor)
-#exeButton.pack()
 exeButton.grid(column=1, row=row)
 row+=1
 
@@ -424,16 +395,13 @@ row+=1
 # CON E2E
 boE2eLbl = tk.Label(p2, text="Con e2e", bg=backgroudLblColor)
 boE2eLbl.grid(column=0, row=row)
-#boE2eLbl.pack()
 boE2eCheck_state.set(True)
 boE2eCheck = tk.Checkbutton(p2, var=boE2eCheck_state, bg=backgroudLblColor)
 boE2eCheck.grid(column=1, row=row)
-#boE2eCheck.pack()
 row+=1
 
 # BOTÓN CONSULTA BBDD
 consultaBDButton = tk.Button(p2, text="CONSULTAR BD", fg="green",  command=consultarBD, bg=backgroudLblColor)
-#consultaBDButton.pack()
 consultaBDButton.grid(column=1, row=row)
 row+=1
 
@@ -451,7 +419,6 @@ row+=1
 
 # BOTÓN LIMPIAR RESULTADOS
 limpiarResultadosButton = tk.Button(p2, text="Limpiar", fg="black",  command=limpiarResultados, bg=backgroudLblColor)
-#limpiarResultadosButton.pack()
 limpiarResultadosButton.grid(column=1, row=row)
 row+=1
 
@@ -485,7 +452,6 @@ row+=1
 
 # BOTÓN EJECUTAR PRUEBA
 ejecutaPruebaButton = tk.Button(p3, text="REALIZAR PRUEBA", fg="green",  command=ejecutaPrueba, bg=backgroudLblColor)
-#ejecutaPruebaButton.pack()
 ejecutaPruebaButton.grid(column=1, row=row)
 row+=1
 
@@ -494,7 +460,6 @@ nb.add(p1, text='Buscador')
 nb.add(p2, text='BBDD')
 nb.add(p3, text='PRUEBAS')
 
-#buscarEnLocalCheck_clicked()
 randomizarReposCheck_clicked()
 
 app.mainloop()
