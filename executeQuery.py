@@ -46,7 +46,6 @@ def executeWithParams(query_params):
         cursor = db.cursor()
 
         # Ejecutamos la query.
-        #print(query_params)
         sql = query_params[0]
         params = query_params[1]
 
@@ -72,7 +71,9 @@ def executeWithParams(query_params):
         finalizaConexion(db)
         return resultado
     except:
-        print("Error al ejecutar la sentencia: " + query_params)
+        print("Error al ejecutar la sentencia: ")
+        print(str(query_params[0]))
+        print(str(query_params[1]))
         db.rollback()
         finalizaConexion(db)
         return ""

@@ -18,7 +18,7 @@ def exe():
     df = pd.DataFrame
     df2 = pd.DataFrame
 
-    print(conf.config.fechaEjecucion + " - Iniciando proceso.")
+    print(conf.config.fechaEjecucion + " - Iniciando proceso...")
 
     try:
         # Generamos un token para consultar la API de GitHub a través de la librería.
@@ -27,7 +27,7 @@ def exe():
         g = Github(user, token)
 
         if conf.config.generarListaRepos:
-            print("Generando nueva lista de repositorios.")
+            print("Generando nueva lista de repositorios...")
             # Obtenemos un objeto generador, encargado de realizar las búsquedas al iterar sobre él.
 
             query = """
