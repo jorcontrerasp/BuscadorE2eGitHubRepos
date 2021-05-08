@@ -17,6 +17,7 @@ class Configuracion():
     N_RANDOM = -1
     N_LAPSE_REPOS = -1
     REPO_SIZE_LIMIT = -1
+    ITEMS_FOUND_LIMIT = -1
     cRepositorios = "repositories/repositories_" + fechaEjecucion
     cLogs = "logs"
     cResearch = "research/research_" + fechaEjecucion
@@ -40,6 +41,7 @@ class Configuracion():
         self.N_RANDOM = auxiliares.getConfiguracion("SEARCH_PARAM", "N_RANDOM")
         self.N_LAPSE_REPOS = auxiliares.getConfiguracion("SEARCH_PARAM", "N_LAPSE_REPOS")
         self.REPO_SIZE_LIMIT = auxiliares.getConfiguracion("SEARCH_PARAM", "REPO_SIZE_LIMIT")
+        self.ITEMS_FOUND_LIMIT = auxiliares.getConfiguracion("SEARCH_PARAM", "ITEMS_FOUND_LIMIT")
 
     # GETTER & SETTER
     def getUser(self):

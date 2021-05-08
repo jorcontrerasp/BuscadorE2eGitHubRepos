@@ -116,6 +116,7 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
+    contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -124,11 +125,15 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
             if criterio == fActual:
-                f.write("Adding " + e)
-                f.write("\n")
-                repo = repo.replace("*_*", "/")
-                auxiliares.actualizarDataFrame(criterio, repo, e, df)
-                encontrado = True
+                if contador >= conf.config.ITEMS_FOUND_LIMIT:
+                    break
+                else:
+                    f.write("Adding " + e)
+                    f.write("\n")
+                    repo = repo.replace("*_*", "/")
+                    auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                    encontrado = True
+                    contador = contador + 1
             else:
                 contentAux = os.listdir(e)
                 content = obtenerRutaCompletaE(e, contentAux)
@@ -137,11 +142,15 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
         elif os.path.isfile(e):
             #print(e + "[FICHERO]")
             if criterio == e.lower():
-                f.write("Adding " + e)
-                f.write("\n")
-                repo = repo.replace("*_*", "/")
-                auxiliares.actualizarDataFrame(criterio, repo, e, df)
-                encontrado = True
+                if contador >= conf.config.ITEMS_FOUND_LIMIT:
+                    break
+                else:
+                    f.write("Adding " + e)
+                    f.write("\n")
+                    repo = repo.replace("*_*", "/")
+                    auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                    encontrado = True
+                    contador = contador + 1
     f.close()
     return encontrado
 
@@ -152,6 +161,7 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
+    contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -160,11 +170,15 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
             if criterio in e.lower():
-                f.write("Adding " + e)
-                f.write("\n")
-                repo = repo.replace("*_*", "/")
-                auxiliares.actualizarDataFrame(criterio, repo, e, df)
-                encontrado = True
+                if contador >= conf.config.ITEMS_FOUND_LIMIT:
+                    break
+                else:
+                    f.write("Adding " + e)
+                    f.write("\n")
+                    repo = repo.replace("*_*", "/")
+                    auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                    encontrado = True
+                    contador = contador + 1
             else:
                 contentAux = os.listdir(e)
                 content = obtenerRutaCompletaE(e, contentAux)
@@ -173,11 +187,15 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
         elif os.path.isfile(e):
             #print(e + "[FICHERO]")
             if criterio in e.lower():
-                f.write("Adding " + e)
-                f.write("\n")
-                repo = repo.replace("*_*", "/")
-                auxiliares.actualizarDataFrame(criterio, repo, e, df)
-                encontrado = True
+                if contador >= conf.config.ITEMS_FOUND_LIMIT:
+                    break
+                else:
+                    f.write("Adding " + e)
+                    f.write("\n")
+                    repo = repo.replace("*_*", "/")
+                    auxiliares.actualizarDataFrame(criterio, repo, e, df)
+                    encontrado = True
+                    contador = contador + 1
     f.close()
     return encontrado
 
@@ -187,6 +205,7 @@ def buscarC10_Local(repo, lFicheros, df):
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
+    contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -204,12 +223,16 @@ def buscarC10_Local(repo, lFicheros, df):
                     or "e2e" in fActual \
                     or "integration_test" in fActual \
                     or "integrationtest" in fActual:
-                f.write("Adding " + e)
-                f.write("\n")
-                repo = repo.replace("*_*", "/")
-                auxiliares.actualizarDataFrame(Criterios.criterio10.value, repo, e, df)
-                encontrado = True
-                #break
+                if contador >= conf.config.ITEMS_FOUND_LIMIT:
+                    break
+                else:
+                    f.write("Adding " + e)
+                    f.write("\n")
+                    repo = repo.replace("*_*", "/")
+                    auxiliares.actualizarDataFrame(Criterios.criterio10.value, repo, e, df)
+                    encontrado = True
+                    contador = contador + 1
+                    #break
     return encontrado
 
 def buscarC11_Local(repo, lFicheros, df):
@@ -218,6 +241,7 @@ def buscarC11_Local(repo, lFicheros, df):
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
+    contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -236,12 +260,16 @@ def buscarC11_Local(repo, lFicheros, df):
                 xmlContent = fXml.read()
                 fXml.close()
                 if "selenium-java" in xmlContent or "rest-assured" in xmlContent:
-                    f.write("Adding " + e)
-                    f.write("\n")
-                    repo = repo.replace("*_*", "/")
-                    auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo, e, df)
-                    encontrado = True
-                    #break
+                    if contador >= conf.config.ITEMS_FOUND_LIMIT:
+                        break
+                    else:
+                        f.write("Adding " + e)
+                        f.write("\n")
+                        repo = repo.replace("*_*", "/")
+                        auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo, e, df)
+                        encontrado = True
+                        contador = contador + 1
+                        #break
     return encontrado
 
 def buscarFicherosCI_Local(repo, lFicheros, df):
@@ -250,6 +278,7 @@ def buscarFicherosCI_Local(repo, lFicheros, df):
     f.write("--> Analizando repositorio: " + repo)
     f.write("\n")
     encontrado = False
+    contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
         f.write(e)
@@ -270,12 +299,16 @@ def buscarFicherosCI_Local(repo, lFicheros, df):
                     or ".github/workflows/pipeline.yml" in e.lower() \
                     or ".azure-pipelines/pipelines.yml" in e.lower() \
                     or ".gitlab-ci.yml" in e.lower():
-                f.write("Adding " + e)
-                f.write("\n")
-                repo = repo.replace("*_*", "/")
-                auxiliares.actualizarDataFrame(Criterios.criterio12.value, repo, e, df)
-                encontrado = True
-                #break
+                if contador >= conf.config.ITEMS_FOUND_LIMIT:
+                    break
+                else:
+                    f.write("Adding " + e)
+                    f.write("\n")
+                    repo = repo.replace("*_*", "/")
+                    auxiliares.actualizarDataFrame(Criterios.criterio12.value, repo, e, df)
+                    encontrado = True
+                    contador = contador + 1
+                    #break
     return encontrado
 
 # FUNCIONES DE BÚSQUEDA (API de GitHub)
