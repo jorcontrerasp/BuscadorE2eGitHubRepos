@@ -390,7 +390,7 @@ def guardarRepoEnBD(repoBBDD):
 
 def guardarBusquedaBD(busquedaBD):
     if busquedaBD.getIdBusqueda() > 0:
-        print("Actualizando búsqueda " + busquedaBD.getIdBusqueda() + " en base de datos...")
+        print("Actualizando búsqueda " + str(busquedaBD.getIdBusqueda()) + " en base de datos...")
         update = busquedaBD.getUpdateParam()
         rUpdate = executeQuery.executeWithParams(update)
         return rUpdate

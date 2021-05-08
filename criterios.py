@@ -378,7 +378,6 @@ def buscarEnRaiz(repo, criterio, df):
     encontrado = False
     log = conf.config.cLogs + "/log_buscarEnRaiz_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
-
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
     f.write("\n")
     contents = repo.get_contents("")
@@ -400,7 +399,6 @@ def buscarEnTests(repo, criterio, df):
     encontrado = False
     log = conf.config.cLogs + "/log_buscarEnTests_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
-
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
     f.write("\n")
     contents = repo.get_contents("")
@@ -427,7 +425,6 @@ def buscarEnTests(repo, criterio, df):
                         break
             break
     f.write("\n")
-
     f.close()
     return encontrado
 
@@ -436,7 +433,6 @@ def buscarEnSrcTests(repo, criterio, df):
     encontrado = False
     log = conf.config.cLogs + "/log_buscarEnSrcTests_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
-
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
     f.write("\n")
     contents = repo.get_contents("")
@@ -473,7 +469,6 @@ def buscarEnSrcTests(repo, criterio, df):
                                         contents.extend(repo.get_contents(content_file.path))
                         break
     f.write("\n")
-
     f.close()
     return encontrado
 
@@ -483,7 +478,6 @@ def buscarC10(repo, df):
     encontrado = False
     log = conf.config.cLogs + "/log_buscarC10_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
-
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
     f.write("\n")
     contents = repo.get_contents("")
@@ -525,7 +519,6 @@ def buscarC11(repo, df):
     encontrado = False
     log = conf.config.cLogs + "/log_buscarC11_" + conf.config.fechaEjecucion + ".log"
     f = open(log, "a")
-
     f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
     f.write("\n")
     contents = repo.get_contents("")
