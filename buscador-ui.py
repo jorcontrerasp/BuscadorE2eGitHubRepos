@@ -4,6 +4,7 @@ import filtrosQuery as fq
 import tkinter as tk
 from tkinter import ttk
 from tkinter import font
+from tkinter import messagebox
 from PIL import Image
 from PIL import ImageTk
 import pruebas
@@ -98,6 +99,7 @@ def exe():
     conf.config.N_LAPSE_REPOS = conf.config.N_LAPSE_REPOS
     conf.config.REPO_SIZE_LIMIT = sizeLimit_state.get()
     main.exe()
+    messagebox.showinfo(message="Proceso finalizado", title="Aviso")
 
 def ejecutaPrueba():
     pruebas.RepoPruebas.organizacion = organizacion_state.get()
