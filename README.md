@@ -41,7 +41,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   pushed varchar(100), 
   archived int(1), 
   public int(1), 
-  research BLOB,
+  research LONGBLOB,
   contadores BLOB,
   tstbd varchar(100), 
   PRIMARY KEY (idbusqueda));
@@ -50,7 +50,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   VALUES ("PLenguaje", "pStars", "pForks", "pCreated", "pPushed", 0, 1, "pTstbd");
 
   CREATE TABLE IF NOT EXISTS BD_D_REPO(idrepo int(11) NOT NULL AUTO_INCREMENT, 
-  nombre varchar(50), 
+  nombre varchar(200), 
   organizacion varchar(200), 
   lenguaje varchar(50), 
   url varchar(1000), 
@@ -101,7 +101,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
   VALUES(
     "token", 
-    "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", 
+    "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", 
     "Token de autenticación GitHub", 
     (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'CREDENCIALES')
   );
@@ -166,6 +166,14 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   -- Configuración de los parámetros de búsqueda
   INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
   VALUES(
+    "actualizarBD", 
+    "True", 
+    "Indica si se actualiza la BD en la ejecución del proceso", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
+
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
     "buscarEnLocal", 
     "True", 
     "Indica si el proceso se realiza en local o no", 
@@ -222,6 +230,14 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 
   INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
   VALUES(
+    "escribirEnLog", 
+    "False", 
+    "Indica si se escribe en log o no", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
+
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
     "N_RANDOM", 
     "30", 
     "Número de repositorios random que se van a seleccionar", 
@@ -246,9 +262,9 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 
   INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
   VALUES(
-    "actualizarBD", 
-    "True", 
-    "Indica si se actualiza la BD en la ejecución del proceso", 
+    "ITEMS_FOUND_LIMIT", 
+    "50", 
+    "Límite de elementos que va a poder encontrar por cada criterio", 
     (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
   );
 
@@ -268,6 +284,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 - Clonar repositorios resultantes: si se marca esta opción se clonan en local los repositorios que hayan cumplido algún criterio.
 - Generar excel: si se marca esta opción se guarda el resultado de la búsqueda en un fichero en formato excel.
 - Generar Csv: si se marca esta opción se guarda el resultado de la búsqueda en un fichero en formato csv.
+- Escribir en LOG: si se marca esta opción se escribirán ficheros de LOG relacionados con el análisis de cada repositorio al que se le aplica el heurístico.
 
 <p>Pestaña 1:</p>
 <img src="imgs/interfaz_p1.png" alt=“interfaz” width="450"/>
