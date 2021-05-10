@@ -116,8 +116,7 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
     contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
-        f.write(e)
-        f.write("\n")
+        auxiliares.escribirLog(f, e)
         fActual = auxiliares.obtenerFicheroIt(e)
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
@@ -158,8 +157,7 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
     contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
-        f.write(e)
-        f.write("\n")
+        auxiliares.escribirLog(f, e)
         fActual = auxiliares.obtenerFicheroIt(e)
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
@@ -199,8 +197,7 @@ def buscarC10_Local(repo, lFicheros, df):
     contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
-        f.write(e)
-        f.write("\n")
+        auxiliares.escribirLog(f, e)
         fActual = auxiliares.obtenerFicheroIt(e)
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
@@ -234,8 +231,7 @@ def buscarC11_Local(repo, lFicheros, df):
     contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
-        f.write(e)
-        f.write("\n")
+        auxiliares.escribirLog(f, e)
         fActual = auxiliares.obtenerFicheroIt(e.lower())
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
@@ -270,8 +266,7 @@ def buscarFicherosCI_Local(repo, lFicheros, df):
     contador = 0
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
-        f.write(e)
-        f.write("\n")
+        auxiliares.escribirLog(f, e)
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
             contentAux = os.listdir(e)
@@ -347,8 +342,7 @@ def buscarEnRepo(repo, criterio, df):
     contents = repo.get_contents("")
     while contents:
         content_file = contents.pop(0)
-        f.write(str(content_file))
-        f.write("\n")
+        auxiliares.escribirLog(f, str(content_file))
         if criterio in content_file.path.lower():
             auxiliares.escribirLog(f, "Adding " + content_file.path)
             encontrado = True
@@ -368,8 +362,7 @@ def buscarEnRaiz(repo, criterio, df):
     auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo.full_name.split("/")[1])
     contents = repo.get_contents("")
     for content_file in contents:
-        f.write(str(content_file))
-        f.write("\n")
+        auxiliares.escribirLog(f, str(content_file))
         if criterio in content_file.path.lower():
             auxiliares.escribirLog(f, "Adding " + content_file.path)
             encontrado = True
@@ -446,16 +439,14 @@ def buscarC10(repo, df):
     contents = repo.get_contents("")
     while contents:
         content_file = contents.pop(0)
-        f.write(str(content_file))
-        f.write("\n")
+        auxiliares.escribirLog(f, str(content_file))
         if "test" in content_file.path.lower() or "tests" in content_file.path.lower():
             if content_file.type == "dir":
                 auxiliares.escribirLog(f, "Accediendo a carpeta " + content_file.path)
                 contents2 = repo.get_contents(content_file.path)
                 while contents2:
                     content_file = contents2.pop(0)
-                    f.write(str(content_file))
-                    f.write("\n")
+                    auxiliares.escribirLog(f, str(content_file))
 
                     # Obtenemos el fichero en el que nos encontramos, no la ruta completa.
                     fActual = auxiliares.obtenerFicheroIt(content_file.path.lower())
@@ -506,8 +497,7 @@ def buscarC11(repo, df):
                     #Quitándolo, si el primer 'pom.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'pom.xml' que cumpla la condición.
                     break
             except:
-                f.write("Error obteniendo el contenido del pom.xml")
-                f.write("\n")
+                auxiliares.escribirLog(f, "Error obteniendo el contenido del pom.xml")
                 raise
         elif "build.xml" in fActual:
             try:
