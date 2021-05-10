@@ -76,9 +76,8 @@ def recorrerRepositoriosLocal(listaRepositorios, df, df2):
 # El primer fichero o carpeta que cumpla el criterio será el que devuelva
 def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
     log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo)
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
     encontrado = True
     while len(lFicheros)>0:
         e = lFicheros.pop(0)
@@ -87,8 +86,7 @@ def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
             if criterio in e.lower():
-                f.write("Adding " + e)
-                f.write("\n")
+                auxiliares.escribirLog(f, "Adding " + e)
                 repo = repo.replace("*_*", "/")
                 auxiliares.actualizarDataFrame(criterio, repo, e, df)
                 encontrado = True
@@ -101,20 +99,19 @@ def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
         elif os.path.isfile(e):
             #print(e + "[FICHERO]")
             if criterio in e.lower():
-                f.write("Adding " + e)
-                f.write("\n")
+                auxiliares.escribirLog(f, "Adding " + e)
                 repo = repo.replace("*_*", "/")
                 auxiliares.actualizarDataFrame(criterio, repo, e, df)
                 encontrado = True
                 break
+    auxiliares.cerrarLog(f)
     return encontrado
 
 # Busca todas los ficheros/carpetas que coinciden (no que contengan) con el criterio.
 def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
     log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo)
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
     encontrado = False
     contador = 0
     while len(lFicheros)>0:
@@ -128,8 +125,7 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
                 if contador >= conf.config.ITEMS_FOUND_LIMIT:
                     break
                 else:
-                    f.write("Adding " + e)
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Adding " + e)
                     repo = repo.replace("*_*", "/")
                     auxiliares.actualizarDataFrame(criterio, repo, e, df)
                     encontrado = True
@@ -145,21 +141,19 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
                 if contador >= conf.config.ITEMS_FOUND_LIMIT:
                     break
                 else:
-                    f.write("Adding " + e)
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Adding " + e)
                     repo = repo.replace("*_*", "/")
                     auxiliares.actualizarDataFrame(criterio, repo, e, df)
                     encontrado = True
                     contador = contador + 1
-    f.close()
+    auxiliares.cerrarLog(f)
     return encontrado
 
 # Busca todas los ficheros/carpetas que contengan en su nombre el value del criterio.
 def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
     log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo)
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
     encontrado = False
     contador = 0
     while len(lFicheros)>0:
@@ -173,8 +167,7 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
                 if contador >= conf.config.ITEMS_FOUND_LIMIT:
                     break
                 else:
-                    f.write("Adding " + e)
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Adding " + e)
                     repo = repo.replace("*_*", "/")
                     auxiliares.actualizarDataFrame(criterio, repo, e, df)
                     encontrado = True
@@ -190,20 +183,18 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
                 if contador >= conf.config.ITEMS_FOUND_LIMIT:
                     break
                 else:
-                    f.write("Adding " + e)
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Adding " + e)
                     repo = repo.replace("*_*", "/")
                     auxiliares.actualizarDataFrame(criterio, repo, e, df)
                     encontrado = True
                     contador = contador + 1
-    f.close()
+    auxiliares.cerrarLog(f)
     return encontrado
 
 def buscarC10_Local(repo, lFicheros, df):
     log = conf.config.cLogs + "/log_buscarC10Local_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo)
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
     encontrado = False
     contador = 0
     while len(lFicheros)>0:
@@ -226,20 +217,19 @@ def buscarC10_Local(repo, lFicheros, df):
                 if contador >= conf.config.ITEMS_FOUND_LIMIT:
                     break
                 else:
-                    f.write("Adding " + e)
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Adding " + e)
                     repo = repo.replace("*_*", "/")
                     auxiliares.actualizarDataFrame(Criterios.criterio10.value, repo, e, df)
                     encontrado = True
                     contador = contador + 1
                     #break
+    auxiliares.cerrarLog(f)
     return encontrado
 
 def buscarC11_Local(repo, lFicheros, df):
     log = conf.config.cLogs + "/log_buscarC11Local_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo)
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
     encontrado = False
     contador = 0
     while len(lFicheros)>0:
@@ -263,20 +253,19 @@ def buscarC11_Local(repo, lFicheros, df):
                     if contador >= conf.config.ITEMS_FOUND_LIMIT:
                         break
                     else:
-                        f.write("Adding " + e)
-                        f.write("\n")
+                        auxiliares.escribirLog(f, "Adding " + e)
                         repo = repo.replace("*_*", "/")
                         auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo, e, df)
                         encontrado = True
                         contador = contador + 1
                         #break
+    auxiliares.cerrarLog(f)
     return encontrado
 
 def buscarFicherosCI_Local(repo, lFicheros, df):
     log = conf.config.cLogs + "/log_buscarC12Local_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo)
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
     encontrado = False
     contador = 0
     while len(lFicheros)>0:
@@ -302,13 +291,13 @@ def buscarFicherosCI_Local(repo, lFicheros, df):
                 if contador >= conf.config.ITEMS_FOUND_LIMIT:
                     break
                 else:
-                    f.write("Adding " + e)
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Adding " + e)
                     repo = repo.replace("*_*", "/")
                     auxiliares.actualizarDataFrame(Criterios.criterio12.value, repo, e, df)
                     encontrado = True
                     contador = contador + 1
                     #break
+    auxiliares.cerrarLog(f)
     return encontrado
 
 # FUNCIONES DE BÚSQUEDA (API de GitHub)
@@ -353,123 +342,98 @@ def buscarEnRepo(repo, criterio, df):
     print("Buscando repositorios recursivamente: '" + criterio + "' en el repo: " + repo.full_name)
     encontrado = False
     log = conf.config.cLogs + "/log_buscarEnRepo_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo.full_name.split("/")[1])
     contents = repo.get_contents("")
     while contents:
         content_file = contents.pop(0)
         f.write(str(content_file))
         f.write("\n")
         if criterio in content_file.path.lower():
-            f.write("Adding " + content_file.path)
-            f.write("\n")
+            auxiliares.escribirLog(f, "Adding " + content_file.path)
             encontrado = True
             auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
             break
         else:
             if content_file.type == "dir":
                 contents.extend(repo.get_contents(content_file.path))
-    f.close()
+    auxiliares.cerrarLog(f)
     return encontrado
 
 def buscarEnRaiz(repo, criterio, df):
     print("Buscando '" + criterio +"' en la raiz del repo: " + repo.full_name)
     encontrado = False
     log = conf.config.cLogs + "/log_buscarEnRaiz_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo.full_name.split("/")[1])
     contents = repo.get_contents("")
     for content_file in contents:
         f.write(str(content_file))
         f.write("\n")
         if criterio in content_file.path.lower():
-            f.write("Adding " + content_file.path)
-            f.write("\n")
+            auxiliares.escribirLog(f, "Adding " + content_file.path)
             encontrado = True
             auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
             break
 
-    f.close()
+    auxiliares.cerrarLog(f)
     return encontrado
 
 def buscarEnTests(repo, criterio, df):
     print("Buscando '" + criterio + "' en carpeta test/tests del repo: " + repo.full_name)
     encontrado = False
     log = conf.config.cLogs + "/log_buscarEnTests_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo.full_name.split("/")[1])
     contents = repo.get_contents("")
     while contents:
         content_file = contents.pop(0)
-        #print(content_file)
-        f.write(str(content_file))
-        f.write("\n")
         if "test" in content_file.path.lower():
             if content_file.type == "dir":
                 #contents.extend(repo.get_contents(content_file.path))
                 contents = repo.get_contents(content_file.path)
                 while contents:
                     content_file = contents.pop(0)
-                    #print(content_file)
-                    f.write(str(content_file))
-                    f.write("\n")
                     if "test/" + criterio in content_file.path.lower() or "tests/" + criterio in content_file.path.lower():
-                        #print("Adding " + content_file.path)
-                        f.write("Adding " + content_file.path)
-                        f.write("\n")
+                        auxiliares.escribirLog(f, "Adding " + content_file.path)
                         encontrado = True
                         auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
                         break
             break
-    f.write("\n")
-    f.close()
+    auxiliares.cerrarLog(f)
     return encontrado
 
 def buscarEnSrcTests(repo, criterio, df):
     print("Buscando '" + criterio +"' en carpeta src/test del repo: " + repo.full_name)
     encontrado = False
     log = conf.config.cLogs + "/log_buscarEnSrcTests_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo.full_name.split("/")[1])
     contents = repo.get_contents("")
     while contents:
         content_file = contents.pop(0)
-        f.write(str(content_file))
-        f.write("\n")
         if content_file.path.lower() == "src":
             if content_file.type == "dir":
-                #contents.extend(repo.get_contents(content_file.path))
                 contents = repo.get_contents(content_file.path)
                 while contents:
                     content_file = contents.pop(0)
-                    f.write(str(content_file))
-                    f.write("\n")
                     if content_file.path.lower() in ["src/test"]:
-                        f.write("Accediendo a carpeta " + content_file.path)
-                        f.write("\n")
+                        auxiliares.escribirLog(f, "Accediendo a carpeta " + content_file.path)
                         if content_file.type == "dir":
                             #contents.extend(repo.get_contents(content_file.path))
                             contents = repo.get_contents(content_file.path)
                             while contents:
                                 content_file = contents.pop(0)
-                                f.write(str(content_file))
-                                f.write("\n")
                                 if content_file.type == "dir":
                                     if criterio in content_file.path.lower():
-                                        f.write("Adding " + content_file.path)
-                                        f.write("\n")
+                                        auxiliares.escribirLog(f, "Adding " + content_file.path)
                                         encontrado = True
                                         auxiliares.actualizarDataFrame(criterio, repo.full_name, content_file.path, df)
                                         break
                                     else:
                                         contents.extend(repo.get_contents(content_file.path))
                         break
-    f.write("\n")
-    f.close()
+    auxiliares.cerrarLog(f)
     return encontrado
 
 # Criterio 10:
@@ -477,9 +441,8 @@ def buscarC10(repo, df):
     print("Iniciando criterio de búsqueda nº 10 en el repo: " + repo.full_name)
     encontrado = False
     log = conf.config.cLogs + "/log_buscarC10_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo.full_name.split("/")[1])
     contents = repo.get_contents("")
     while contents:
         content_file = contents.pop(0)
@@ -487,8 +450,7 @@ def buscarC10(repo, df):
         f.write("\n")
         if "test" in content_file.path.lower() or "tests" in content_file.path.lower():
             if content_file.type == "dir":
-                f.write("Accediendo a carpeta " + content_file.path)
-                f.write("\n")
+                auxiliares.escribirLog(f, "Accediendo a carpeta " + content_file.path)
                 contents2 = repo.get_contents(content_file.path)
                 while contents2:
                     content_file = contents2.pop(0)
@@ -503,14 +465,13 @@ def buscarC10(repo, df):
                             or "e2e" in fActual \
                             or "system" in fActual \
                             or "itest" in fActual:
-                        f.write("Adding " + content_file.path)
-                        f.write("\n")
+                        auxiliares.escribirLog(f, "Adding " + content_file.path)
                         encontrado = True
                         auxiliares.actualizarDataFrame(Criterios.criterio10.value, repo.full_name, content_file.path, df)
                         break
             break
 
-    f.close()
+    auxiliares.cerrarLog(f)
     return encontrado
 
 # Criterio 11:
@@ -518,14 +479,11 @@ def buscarC11(repo, df):
     print("Iniciando criterio de búsqueda nº 11 en el repo: " + repo.full_name)
     encontrado = False
     log = conf.config.cLogs + "/log_buscarC11_" + conf.config.fechaEjecucion + ".log"
-    f = open(log, "a")
-    f.write("--> Analizando repositorio: " + repo.full_name.split("/")[1])
-    f.write("\n")
+    f = auxiliares.abrirLog(log)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo.full_name.split("/")[1])
     contents = repo.get_contents("")
     while contents:
         content_file = contents.pop(0)
-        f.write(str(content_file))
-        f.write("\n")
 
         # Con esto se consigue que busque el fichero "pom.xml" y "build.xml" y no que contenga dichos literales.
         # Por ejemplo: HolaQueTal_pom.xml no lo tendría en cuenta. ¿Debería tenerlos en cuenta?
@@ -538,14 +496,12 @@ def buscarC11(repo, df):
                 isSelenium = 'selenium' in str(decoded)
                 isRestassured = 'rest-assured' in str(decoded)
                 if isSelenium or isRestassured:
-                    f.write("Adding " + content_file.path)
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Adding " + content_file.path)
                     encontrado = True
                     auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
                     break
                 else:
-                    f.write("Literales 'selenium' y 'rest-assured' no encontrados")
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Literales 'selenium' y 'rest-assured' no encontrados")
                     #Con el siguiente break el programa solamente comprobaría el primer 'pom.xml' que encuentre.
                     #Quitándolo, si el primer 'pom.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'pom.xml' que cumpla la condición.
                     break
@@ -559,24 +515,21 @@ def buscarC11(repo, df):
                 isSelenium = 'selenium' in str(decoded)
                 isRestassured = 'restassured' in str(decoded)
                 if isSelenium or isRestassured:
-                    f.write("Adding " + content_file.path)
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Adding " + content_file.path)
                     encontrado = True
                     auxiliares.actualizarDataFrame(Criterios.criterio11.value, repo.full_name, content_file.path, df)
                     break
                 else:
-                    f.write("Literales 'selenium' y 'rest-assured' no encontrados")
-                    f.write("\n")
+                    auxiliares.escribirLog(f, "Literales 'selenium' y 'rest-assured' no encontrados")
                     # Con el siguiente break el programa solamente comprobaría el primer 'build.xml' que encuentre.
                     # Quitándolo, si el primer 'build.xml' que encuentre no es ni selenium ni restassured, seguiría buscando algún 'build.xml' que cumpla la condición.
                     break
             except:
-                f.write("Error obteniendo el contenido del build.xml")
-                f.write("\n")
+                auxiliares.escribirLog(f, "Error obteniendo el contenido del build.xml")
                 raise
         else:
             if content_file.type == "dir":
                 contents.extend(repo.get_contents(content_file.path))
 
-    f.close()
+    auxiliares.cerrarLog(f)
     return encontrado

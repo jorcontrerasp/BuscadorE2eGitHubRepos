@@ -4,6 +4,7 @@ import auxiliares
 import criterios
 import datetime
 import os
+import pandas as pd
 from github import Github
 
 class RepoPruebas():
@@ -23,18 +24,20 @@ def ejecutaPrueba():
     repo = g.get_repo(RepoPruebas.organizacion + "/" + RepoPruebas.nombre)
     filteredRepos = [repo]
 
+    df = auxiliares.generarDataFrame(filteredRepos)
+    df2 = auxiliares.generarDataFrameContadores()
+
+    # Clonar
     auxiliares.clonar1ListaRepo(filteredRepos)
+
+    # Actualizar CommitID
+    auxiliares.actualizarDataFrameCommitID(filteredRepos, df)
 
     reposEnLocal = os.listdir(conf.config.cRepositorios)
 
-    df = auxiliares.generarDataFrame(filteredRepos)
-
     # Aplicamos criterios
     print("Nº repos en local: " + str(len(reposEnLocal)))
-    repos1 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio1.value, df)
-    repos3 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio3.value, df)
-    repos5 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio5.value, df)
-    repos10 = criterios.recorrerRepositoriosLocal(reposEnLocal, criterios.Criterios.criterio10.value, df)
+    lReposEncontrados = criterios.recorrerRepositoriosLocal(reposEnLocal, df, df2)
 
     auxiliares.generarEXCEL_CSV(df, "research", conf.config.doExcel, conf.config.doCsv)
 

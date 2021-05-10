@@ -15,7 +15,7 @@ import datetime
 app = tk.Tk()
 app.title("BuscadorGitHubRepos")
 width = '650'
-height = '675'
+height = '700'
 app.geometry(width + 'x' + height)
 app.resizable(False, False)
 
@@ -52,6 +52,7 @@ randomizarReposCheck_state = tk.BooleanVar()
 clonarReposCheck_state = tk.BooleanVar()
 doExcelCheck_state = tk.BooleanVar()
 doCsvCheck_state = tk.BooleanVar()
+escribirEnLogCheck_state = tk.BooleanVar()
 scriptLapseExeCheck_state = tk.BooleanVar()
 
 # STATE (Base de datos)
@@ -95,6 +96,7 @@ def exe():
     conf.config.clonarRepositorios = clonarReposCheck_state.get()
     conf.config.doExcel = doExcelCheck_state.get()
     conf.config.doCsv = doCsvCheck_state.get()
+    conf.config.escribirEnLog = escribirEnLogCheck_state.get()
     conf.config.N_RANDOM = nRandomRepos_state.get()
     conf.config.N_LAPSE_REPOS = conf.config.N_LAPSE_REPOS
     conf.config.REPO_SIZE_LIMIT = sizeLimit_state.get()
@@ -105,6 +107,7 @@ def ejecutaPrueba():
     pruebas.RepoPruebas.organizacion = organizacion_state.get()
     pruebas.RepoPruebas.nombre = nombreRepo_state.get()
     pruebas.ejecutaPrueba()
+    messagebox.showinfo(message="Prueba finalizada", title="Aviso")
 
 def consultarBD():
     print("Consultando base de datos...")
@@ -335,6 +338,14 @@ doCsvLbl.grid(column=0, row=row)
 doCsvCheck_state.set(conf.config.doCsv)
 doCsvCheck = tk.Checkbutton(p1, var=doCsvCheck_state, bg=backgroudLblColor)
 doCsvCheck.grid(column=1, row=row)
+row+=1
+
+# ESCRIBIR EN LOG
+escribirEnLogLbl = tk.Label(p1, text="Escribir en LOG", bg=backgroudLblColor)
+escribirEnLogLbl.grid(column=0, row=row)
+escribirEnLogCheck_state.set(conf.config.escribirEnLog)
+escribirEnLogCheck = tk.Checkbutton(p1, var=escribirEnLogCheck_state, bg=backgroudLblColor)
+escribirEnLogCheck.grid(column=1, row=row)
 row+=1
 
 # BOTÓN EJECUTAR

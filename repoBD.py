@@ -8,7 +8,7 @@ class RepoBD:
     size = 0
     commitID = ""
     url = ""
-    boE2e = False
+    boE2e = None
     idbusqueda = -1
     tstbd = ""
 
@@ -20,9 +20,9 @@ class RepoBD:
         self.size = 0
         self.commitID = ""
         self.url = ""
-        self.boE2e = False
+        self.boE2e = None
         self.idbusqueda = -1
-        self.tstbd = conf.config.fechaEjecucion
+        self.tstbd = ""
 
     def getInsert(self):
 
@@ -57,12 +57,13 @@ class RepoBD:
             campos += "URL,"
             values += "'" + str(self.url) + "',"
 
-        if (self.boE2e):
-            campos += "BOE2E,"
-            values += "1" + ","
-        else:
-            campos += "BOE2E,"
-            values += "0" + ","
+        if str(self.boE2e)!= "None":
+            if (self.boE2e):
+                campos += "BOE2E,"
+                values += "1" + ","
+            else:
+                campos += "BOE2E,"
+                values += "0" + ","
 
         if (self.idbusqueda > 0):
             campos += "IDBUSQUEDA,"
@@ -104,10 +105,11 @@ class RepoBD:
         if (len(str(self.url)) > 0):
             values += "URL='" + str(self.url) + "',"
 
-        if (self.boE2e):
-            values += "BOE2E=1,"
-        else:
-            values += "BOE2E=0,"
+        if str(self.boE2e)!= "None":
+            if (self.boE2e):
+                values += "BOE2E=1,"
+            else:
+                values += "BOE2E=0,"
 
         if (self.idbusqueda > 0):
             values += "IDBUSQUEDA=" + str(self.idbusqueda) + ","
@@ -146,10 +148,11 @@ class RepoBD:
         if (len(str(self.url)) > 0):
             select += " AND URL='" + str(self.url) + "'"
 
-        if (self.boE2e):
-            select += " AND BOE2E=1"
-        else:
-            select += " AND BOE2E=0"
+        if str(self.boE2e)!= "None":
+            if (self.boE2e):
+                select += " AND BOE2E=1"
+            else:
+                select += " AND BOE2E=0"
 
         if (self.idbusqueda > 0):
             select += " AND IDBUSQUEDA=" + str(self.idbusqueda)
@@ -185,10 +188,11 @@ class RepoBD:
         if (len(str(self.url)) > 0):
             delete += " AND URL='" + str(self.url) + "'"
 
-        if (self.boE2e):
-            delete += " AND BOE2E=1"
-        else:
-            delete += " AND BOE2E=0"
+        if str(self.boE2e)!= "None":
+            if (self.boE2e):
+                delete += " AND BOE2E=1"
+            else:
+                delete += " AND BOE2E=0"
 
         if (self.idbusqueda > 0):
             delete += " AND IDBUSQUEDA=" + str(self.idbusqueda)

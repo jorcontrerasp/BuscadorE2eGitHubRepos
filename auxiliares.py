@@ -15,6 +15,18 @@ from github import GithubException
 import repoBD
 import executeQuery
 
+def abrirLog(fLog):
+    f = open(fLog, "a")
+    return f
+
+def escribirLog(f, mensaje):
+    if conf.config.escribirEnLog:
+        f.write(mensaje)
+        f.write("\n")
+
+def cerrarLog(f):
+    f.close()
+
 def crearCarpetasLocal():
     print("Generando carpetas necesarias en local...")
     # CREAR CARPETAS NECESARIAS EN LOCAL
@@ -78,8 +90,10 @@ def generarDataFrame(listaRepositorios):
     repo1BBDD.setLenguaje(repo1.language)
     repo1BBDD.setUrl(repo1.html_url)
     repo1BBDD.setSize(repo1.size)
-    repo1BBDD.setBoE2e(0)
-    repo1BBDD.setIdBusqueda(conf.config.idBusqueda)
+    repo1BBDD.setBoE2e(False)
+    repo1BBDD.setTstbd(conf.config.fechaEjecucion)
+    if conf.config.idBusqueda > 0:
+        repo1BBDD.setIdBusqueda(conf.config.idBusqueda)
     guardarRepoEnBD(repo1BBDD)
 
     for repo in listaRepositorios[1:len(listaRepositorios)]:
@@ -106,8 +120,10 @@ def generarDataFrame(listaRepositorios):
         repoBBDD.setLenguaje(repo.language)
         repoBBDD.setUrl(repo.html_url)
         repoBBDD.setSize(repo.size)
-        repoBBDD.setBoE2e(0)
-        repoBBDD.setIdBusqueda(conf.config.idBusqueda)
+        repoBBDD.setBoE2e(False)
+        repoBBDD.setTstbd(conf.config.fechaEjecucion)
+        if conf.config.idBusqueda > 0:
+            repo1BBDD.setIdBusqueda(conf.config.idBusqueda)
         guardarRepoEnBD(repoBBDD)
 
     return df
@@ -185,8 +201,10 @@ def actualizarDataFrameCommitID(listaRepos, df):
         repoBBDD.setUrl(repo.html_url)
         repoBBDD.setSize(repo.size)
         repoBBDD.setCommitID(commitID)
-        repoBBDD.setBoE2e(0)
-        repoBBDD.setIdBusqueda(conf.config.idBusqueda)
+        repoBBDD.setBoE2e(False)
+        repoBBDD.setTstbd(conf.config.fechaEjecucion)
+        if conf.config.idBusqueda > 0:
+            repoBBDD.setIdBusqueda(conf.config.idBusqueda)
         guardarRepoEnBD(repoBBDD)
 
 def generarDataFrameContadores():

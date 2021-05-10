@@ -77,7 +77,7 @@ def executeWithParams(query_params):
         finalizaConexion(db)
         return ""
 
-def formatearBD():
+def formatearInfoBD():
     sql = "DELETE * FROM BD_D_REPO WHERE 1=1"
     sql2 = "DELETE * FROM BD_D_BUSQUEDA WHERE 1=1"
     execute(sql)

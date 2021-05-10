@@ -6,6 +6,7 @@ class Configuracion():
     user = None
     token = None
     fechaEjecucion = str(datetime.datetime.now())[0:19].replace(" ", "_").replace(":", "h", 1).replace(":", "m", 1) + "s"
+    actualizarBD = None
     buscarEnLocal = None
     generarListaRepos = None
     randomizarListaRepos = None
@@ -13,7 +14,7 @@ class Configuracion():
     clonarRepositorios = None
     doExcel = None
     doCsv = None
-    actualizarBD = None
+    escribirEnLog = None
     N_RANDOM = -1
     N_LAPSE_REPOS = -1
     REPO_SIZE_LIMIT = -1
@@ -30,6 +31,7 @@ class Configuracion():
     def inicializaConfiguracion(self):
         self.user = auxiliares.getConfiguracion("CREDENCIALES", "user")
         self.token = auxiliares.getConfiguracion("CREDENCIALES", "token")
+        self.actualizarBD = auxiliares.getConfiguracion("SEARCH_PARAM", "actualizarBD")
         self.buscarEnLocal = auxiliares.getConfiguracion("SEARCH_PARAM", "buscarEnLocal")
         self.generarListaRepos = auxiliares.getConfiguracion("SEARCH_PARAM", "generarListaRepos")
         self.randomizarListaRepos = auxiliares.getConfiguracion("SEARCH_PARAM", "randomizarListaRepos")
@@ -37,7 +39,7 @@ class Configuracion():
         self.clonarRepositorios = auxiliares.getConfiguracion("SEARCH_PARAM", "clonarRepositorios")
         self.doExcel = auxiliares.getConfiguracion("SEARCH_PARAM", "doExcel")
         self.doCsv = auxiliares.getConfiguracion("SEARCH_PARAM", "doCsv")
-        self.actualizarBD = auxiliares.getConfiguracion("SEARCH_PARAM", "actualizarBD")
+        self.escribirEnLog = auxiliares.getConfiguracion("SEARCH_PARAM", "escribirEnLog")
         self.N_RANDOM = auxiliares.getConfiguracion("SEARCH_PARAM", "N_RANDOM")
         self.N_LAPSE_REPOS = auxiliares.getConfiguracion("SEARCH_PARAM", "N_LAPSE_REPOS")
         self.REPO_SIZE_LIMIT = auxiliares.getConfiguracion("SEARCH_PARAM", "REPO_SIZE_LIMIT")
@@ -133,5 +135,14 @@ class Configuracion():
 
     def setActualizarBD(self, actualizarBD):
         self.actualizarBD = actualizarBD
+
+    def getEscribirEnLog(self):
+        return self.escribirEnLog
+
+    def getEscribirEnLogSql(self):
+        return auxiliares.getConfiguracion("SEARCH_PARAM", "escribirEnLog")
+
+    def setEscribirEnLog(self, escribirEnLog):
+        self.escribirEnLog = escribirEnLog
 
 config = Configuracion()
