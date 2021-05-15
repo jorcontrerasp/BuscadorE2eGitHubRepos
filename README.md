@@ -101,7 +101,7 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
   INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
   VALUES(
     "token", 
-    "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", 
+    "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", 
     "Token de autenticación GitHub", 
     (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'CREDENCIALES')
   );
@@ -265,6 +265,14 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
     "ITEMS_FOUND_LIMIT", 
     "50", 
     "Límite de elementos que va a poder encontrar por cada criterio", 
+    (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
+  );
+
+  INSERT INTO BD_D_CONFIGURACION(campo, valor, descripcion, idconfiguraciontipo)
+  VALUES(
+    "SEARCH_TIME_LIMIT", 
+    "60", 
+    "Límite de tiempo (en minutos) que va a estar el programa buscando un criterio en cada repositorio", 
     (SELECT IDCONFIGURACIONTIPO FROM BD_D_CONFIGURACIONTIPO WHERE CODIGO = 'SEARCH_PARAM')
   );
 
