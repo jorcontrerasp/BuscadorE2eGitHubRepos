@@ -3,6 +3,7 @@ import configuracion as conf
 import auxiliares
 import os
 import repoBD
+import time
 
 class Criterios(Enum):
     criterio1 = "integration"
@@ -77,9 +78,15 @@ def recorrerRepositoriosLocal(listaRepositorios, df, df2):
 def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
     log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = auxiliares.abrirLog(log)
-    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo + ", criterio: " + criterio)
+    print("--> Analizando repositorio: " + repo + ", criterio: " + criterio)
     encontrado = True
-    while len(lFicheros)>0:
+    minLimit = conf.config.SEARCH_TIME_LIMIT  # minutos
+    segLimit = minLimit * 60  # segundos
+    tIni = time.perf_counter()
+    tFin = tIni + 1
+    while len(lFicheros) > 0 and (tFin - tIni) <= segLimit:
+        tFin = time.perf_counter()
         e = lFicheros.pop(0)
         f.write(e)
         f.write("\n")
@@ -111,10 +118,16 @@ def buscarPrimeroEnRepoLocal(repo, lFicheros, criterio, df):
 def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
     log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = auxiliares.abrirLog(log)
-    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo + ", criterio: " + criterio)
+    print("--> Analizando repositorio: " + repo + ", criterio: " + criterio)
     encontrado = False
     contador = 0
-    while len(lFicheros)>0:
+    minLimit = conf.config.SEARCH_TIME_LIMIT  # minutos
+    segLimit = minLimit * 60  # segundos
+    tIni = time.perf_counter()
+    tFin = tIni + 1
+    while len(lFicheros) > 0 and (tFin - tIni) <= segLimit:
+        tFin = time.perf_counter()
         e = lFicheros.pop(0)
         auxiliares.escribirLog(f, e)
         fActual = auxiliares.obtenerFicheroIt(e)
@@ -152,17 +165,25 @@ def buscarTodaCarpetaEnRepoLocal(repo, lFicheros, criterio, df):
 def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
     log = conf.config.cLogs + "/log_buscarEnRepoLocal_" + criterio + "_" + conf.config.fechaEjecucion + ".log"
     f = auxiliares.abrirLog(log)
-    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo + ", criterio: " + criterio)
+    print("--> Analizando repositorio: " + repo + ", criterio: " + criterio)
     encontrado = False
     contador = 0
-    while len(lFicheros)>0:
+    minLimit = conf.config.SEARCH_TIME_LIMIT  # minutos
+    segLimit = minLimit * 60  # segundos
+    tIni = time.perf_counter()
+    tFin = tIni + 1
+    while len(lFicheros)>0 and (tFin - tIni) <= segLimit:
+        tFin = time.perf_counter()
         e = lFicheros.pop(0)
         auxiliares.escribirLog(f, e)
         fActual = auxiliares.obtenerFicheroIt(e)
+        print(e)
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
             if criterio in e.lower():
                 if contador >= conf.config.ITEMS_FOUND_LIMIT:
+                    lFicheros = []
                     break
                 else:
                     auxiliares.escribirLog(f, "Adding " + e)
@@ -192,13 +213,20 @@ def buscarTodaCarpetaEnRepoLocal2(repo, lFicheros, criterio, df):
 def buscarC10_Local(repo, lFicheros, df):
     log = conf.config.cLogs + "/log_buscarC10Local_" + conf.config.fechaEjecucion + ".log"
     f = auxiliares.abrirLog(log)
-    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo + ", criterio 10" )
+    print("--> Analizando repositorio: " + repo + ", criterio 10")
     encontrado = False
     contador = 0
-    while len(lFicheros)>0:
+    minLimit = conf.config.SEARCH_TIME_LIMIT  # minutos
+    segLimit = minLimit * 60  # segundos
+    tIni = time.perf_counter()
+    tFin = tIni + 1
+    while len(lFicheros) > 0 and (tFin - tIni) <= segLimit:
+        tFin = time.perf_counter()
         e = lFicheros.pop(0)
         auxiliares.escribirLog(f, e)
         fActual = auxiliares.obtenerFicheroIt(e)
+        print(e)
         if os.path.isdir(e):
             #print(e + "[CARPETA]")
             contentAux = os.listdir(e)
@@ -226,10 +254,16 @@ def buscarC10_Local(repo, lFicheros, df):
 def buscarC11_Local(repo, lFicheros, df):
     log = conf.config.cLogs + "/log_buscarC11Local_" + conf.config.fechaEjecucion + ".log"
     f = auxiliares.abrirLog(log)
-    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo + ", criterio 11")
+    print("--> Analizando repositorio: " + repo + ", criterio 10")
     encontrado = False
     contador = 0
-    while len(lFicheros)>0:
+    minLimit = conf.config.SEARCH_TIME_LIMIT  # minutos
+    segLimit = minLimit * 60  # segundos
+    tIni = time.perf_counter()
+    tFin = tIni + 1
+    while len(lFicheros) > 0 and (tFin - tIni) <= segLimit:
+        tFin = time.perf_counter()
         e = lFicheros.pop(0)
         auxiliares.escribirLog(f, e)
         fActual = auxiliares.obtenerFicheroIt(e.lower())
@@ -261,10 +295,16 @@ def buscarC11_Local(repo, lFicheros, df):
 def buscarFicherosCI_Local(repo, lFicheros, df):
     log = conf.config.cLogs + "/log_buscarC12Local_" + conf.config.fechaEjecucion + ".log"
     f = auxiliares.abrirLog(log)
-    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo)
+    auxiliares.escribirLog(f, "--> Analizando repositorio: " + repo + ", criterio 12 (ci-files)")
+    print("--> Analizando repositorio: " + repo + ", criterio 12 (ci-files)")
     encontrado = False
     contador = 0
-    while len(lFicheros)>0:
+    minLimit = conf.config.SEARCH_TIME_LIMIT  # minutos
+    segLimit = minLimit * 60  # segundos
+    tIni = time.perf_counter()
+    tFin = tIni + 1
+    while len(lFicheros) > 0 and (tFin - tIni) <= segLimit:
+        tFin = time.perf_counter()
         e = lFicheros.pop(0)
         auxiliares.escribirLog(f, e)
         if os.path.isdir(e):

@@ -181,7 +181,7 @@ def actualizarDataFrame(criterio, nombreRepo, path, df):
         print("Criterio no definido")
 
 def actualizarDataFrameAux(criterio, nombreRepo, path, df):
-    print("Actualizando DataFrame...")
+    print("Actualizando DataFrame (" + nombreRepo + "/" + criterio + " --> " + path + ")")
     valor = str(df.at[nombreRepo, criterio])
     if valor == "nan":
         df.at[nombreRepo, criterio] = "[" + path + "]\n"
