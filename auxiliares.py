@@ -16,8 +16,9 @@ import repoBD
 import executeQuery
 
 def abrirLog(fLog):
-    f = open(fLog, "a")
-    return f
+    if conf.config.escribirEnLog:
+        f = open(fLog, "a")
+        return f
 
 def escribirLog(f, mensaje):
     if conf.config.escribirEnLog:
@@ -25,7 +26,8 @@ def escribirLog(f, mensaje):
         f.write("\n")
 
 def cerrarLog(f):
-    f.close()
+    if conf.config.escribirEnLog:
+        f.close()
 
 def crearCarpetasLocal():
     print("Generando carpetas necesarias en local...")
@@ -375,10 +377,11 @@ def clonarRepositorios(lRepositorios):
 
 def generarZipRepos():
     print("Generando fichero Zip con los repositorios utilizados...")
-    logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)s : %(levelname)s : %(message)s',
-                        filename='logs/repositories_' + conf.config.fechaEjecucion + '.log',
-                        filemode='w', )
+    if conf.config.escribirEnLog:
+        logging.basicConfig(level=logging.DEBUG,
+                            format='%(asctime)s : %(levelname)s : %(message)s',
+                            filename='logs/repositories_' + conf.config.fechaEjecucion + '.log',
+                            filemode='w', )
 
     archivo_zip = shutil.make_archive("repos_snapshots/repositories_" + conf.config.fechaEjecucion,
                                       "zip",
