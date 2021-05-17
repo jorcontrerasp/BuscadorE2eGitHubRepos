@@ -36,9 +36,19 @@ def recorrerRepositoriosLocal(listaRepositorios, df, df2):
         rutaIni = content[0]
         if os.path.exists(rutaIni):
 
+            # Buscamos C1
             boC1 = buscarTodaCarpetaEnRepoLocal2(repo, content, Criterios.criterio1.value, df)
+
+            # Buscamos C3
+            content = obtenerRutaCompletaE("./" + conf.config.cRepositorios, [repo])
             boC3 = buscarTodaCarpetaEnRepoLocal2(repo, content, Criterios.criterio3.value, df)
+
+            # Buscamos C5
+            content = obtenerRutaCompletaE("./" + conf.config.cRepositorios, [repo])
             boC5 = buscarTodaCarpetaEnRepoLocal2(repo, content, Criterios.criterio5.value, df)
+
+            # Buscamos C10
+            content = obtenerRutaCompletaE("./" + conf.config.cRepositorios, [repo])
             boC10 = buscarC10_Local(repo, content, df)
 
             # Si lo ha encontrado:
