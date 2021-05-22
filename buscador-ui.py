@@ -107,7 +107,7 @@ def ejecutaPrueba():
     pruebas.RepoPruebas.organizacion = organizacion_state.get()
     pruebas.RepoPruebas.nombre = nombreRepo_state.get()
     pruebas.ejecutaPrueba()
-    messagebox.showinfo(message="Prueba finalizada", title="Aviso")
+    messagebox.showinfo(message="Proceso finalizado", title="Aviso")
 
 def consultarBD():
     print("Consultando base de datos...")
