@@ -5,12 +5,9 @@ Se trata de encontrar repositorios de GitHub que puedan tener pruebas ent-to-end
 
 ### Pre-requisitos 📋
 
-<p>pip install PyGithub</p>
-<p>pip install pandas</p>
-<p>pip install openpyxl</p>
-<p>pip install pillow</p>
-<p>xcode-select —install (para corregir un posible xcrun error)</p>
-<p>pip install pymysql</p>
+```
+  pip install -r requirements.txt
+```
 
 ### Variables de configuración 🔧
 
