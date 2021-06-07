@@ -1,4 +1,4 @@
-PyGithub
+pygithub
 pandas
 openpyxl
 pillow
