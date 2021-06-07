@@ -7,7 +7,7 @@ The aim is to find GitHub repositories that may have end-to-end (e2e) tests.
 
 Pre-requisites to reproduce the work:
 
-- Docker 19+
+- Docker 19+ or MySql Community Server 8.0.25
 - Python 3.9
 
 Install Python libraries
@@ -22,6 +22,12 @@ Run local databse (MySQL) with Docker
 docker run --name master-mysql -d -p 3306:3306 \
            -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=buscadorGitHubRepos \
            -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql mysql:5.7
+```
+
+Run local databse (MySQL) with MySQL Community Server 8.0.25
+
+```
+Texto
 ```
 
 ## Variables de configuración 🔧
