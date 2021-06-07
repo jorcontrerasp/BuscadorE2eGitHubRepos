@@ -1,7 +1,7 @@
 # SearchGitHubRepos
 
 Search for GitHub repositories based on a previously developed heuristic. 
-The aim is to find GitHub repositories that may have ent-to-end (e2e) tests.
+The aim is to find GitHub repositories that may have end-to-end (e2e) tests.
 
 ## Set Up 📋
 
