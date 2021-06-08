@@ -7,7 +7,7 @@ The aim is to find GitHub repositories that may have end-to-end (e2e) tests.
 
 Pre-requisites to reproduce the work:
 
-- Docker 19+ or MySql Community Server 8.0.25
+- Docker 19+ or MySql Community Server 8+
 - Python 3.9
 
 Install Python libraries
