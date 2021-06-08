@@ -24,11 +24,15 @@ docker run --name master-mysql -d -p 3306:3306 \
            -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql mysql:5.7
 ```
 
-Run local databse (MySQL) with MySQL Community Server 8.0.25
+Run local databse (MySQL) with MySQL Community Server 8.X
+1) Instalar MySQL Community Server 8.X: https://dev.mysql.com/downloads/mysql/
+2) Mediante un terminal de comandos, acceder a la carpeta donde se haya instalado MySql (p.Ej: C:\Program Files\MySQL\MySQL Server 8.0\bin) y ejecutar el siguiente comando:
 
 ```
-Texto
+mysql -u root -p
 ```
+3) Introducir contraseña establecida en la instalación de MySQL Community Server.
+4) Una vez accedido a la consola de MySQL, ejecutar el fichero init.sql para inicializar la base de datos.
 
 ## Variables de configuración 🔧
 
