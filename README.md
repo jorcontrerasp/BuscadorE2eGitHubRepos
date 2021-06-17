@@ -19,9 +19,7 @@ $ pip install -r requirements.txt
 Run local databse (MySQL) with Docker
 
 ```
-docker run --name master-mysql -d -p 3306:3306 \
-           -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=buscadorGitHubRepos \
-           -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql mysql:5.7
+docker run --name master-mysql -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=buscadorGitHubRepos -v "$(pwd)"/init.sql:/docker-entrypoint-initdb.d/init.sql mysql:5.7
 ```
 
 ## Variables de configuración 🔧
