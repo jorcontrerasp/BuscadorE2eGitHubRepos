@@ -1,5 +1,3 @@
-CREATE DATABASE buscadorGitHubRepos;
-
 USE buscadorGitHubRepos;
 
 -- Script generador del esquema:
