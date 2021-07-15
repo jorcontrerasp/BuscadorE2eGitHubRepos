@@ -22,27 +22,28 @@ class FiltrosQuery():
         self.qIs = auxiliares.getConfiguracion("FILTROS_PARAM", "qIs")
 
     def getQueryIni(self):
-        queryIni = ""
+        queryIni = "    " \
+                   ""
         if len(self.language)>0:
-            queryIni += "language:" + self.language + "\n"
+            queryIni += "   language:" + self.language + "\n"
 
         if len(self.stars)>0:
-            queryIni += "stars:" + self.stars + "\n"
+            queryIni += "   stars:" + self.stars + "\n"
 
         if len(self.forks)>0:
-            queryIni += "forks:" + self.forks + "\n"
+            queryIni += "   forks:" + self.forks + "\n"
 
         if len(self.created)>0:
-            queryIni += "created:" + self.created + "\n"
+            queryIni += "   created:" + self.created + "\n"
 
         if len(self.pushed)>0:
-            queryIni += "pushed:" + self.pushed + "\n"
+            queryIni += "   pushed:" + self.pushed + "\n"
 
         if len(self.archived)>0:
-            queryIni += "archived:" + self.archived + "\n"
+            queryIni += "   archived:" + self.archived + "\n"
 
         if len(self.qIs)>0:
-            queryIni += "is:" + self.qIs + "\n"
+            queryIni += "   is:" + self.qIs + "\n"
 
         return queryIni
 
