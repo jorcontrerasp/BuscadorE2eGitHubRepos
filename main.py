@@ -25,8 +25,6 @@ def exe():
         user = conf.config.user
         token = conf.config.token
         g = Github(user, token)
-        print(user)
-        print(token)
 
         if conf.config.generarListaRepos:
             print("Generando nueva lista de repositorios...")
