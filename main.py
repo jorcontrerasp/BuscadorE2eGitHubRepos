@@ -25,6 +25,8 @@ def exe():
         user = conf.config.user
         token = conf.config.token
         g = Github(user, token)
+        print(user)
+        print(token)
 
         if conf.config.generarListaRepos:
             print("Generando nueva lista de repositorios...")
@@ -46,6 +48,7 @@ def exe():
             f.write("QUERY INICIAL:")
             f.write("\n")
             f.write(queryConf)
+            f.close()
             generator = g.search_repositories(query=queryConf)
 
             # Convertimos el generador en una lista de repositorios.
